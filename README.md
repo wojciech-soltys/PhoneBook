@@ -2,7 +2,7 @@ PhoneBook
 =========
 Eclipse PHP Project.
 
-The simplest way to create project:
+The simplest way to create project:</br>
 1. Download and Install Eclipse Luna
 2. Install http://projects.eclipse.org/projects/tools.pdt/releases/3.4.1
 3. Install GitHub For Windows and Clone Project into Your repository.
