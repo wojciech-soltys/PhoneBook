@@ -1,6 +1,38 @@
 .patrons li {
 margin-top: 40px;
 }
+
+/*TABLE*/
+table {
+  max-width: 100%;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+table {
+  width: 100%;
+  margin-bottom: 14pt;
+}
+table th,
+table td {
+  padding: 8px;
+  font-size: 14px;
+  line-height: 14pt;
+  border-bottom: 1px #eaeaea solid;
+}
+
+table th.center,
+table td.center {
+	text-align: center;
+}
+
+table.hovered tbody tr:hover {
+  background-color: rgba(28, 183, 236, 0.1);
+}
+table.border {
+  border: 1px #eaeaea solid !important;
+}
+
 /*TESTIMONIAL*/
 div.testimonial  {
 font-family: Georgia, serif;
