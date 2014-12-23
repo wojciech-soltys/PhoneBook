@@ -49,7 +49,7 @@ $result = mysql_query($query);
 							Zalogowany:
 						</p>
             			<p>
-           					<input name="submit" value="Wyloguj" class="" type="submit">
+           					<a class="redButton" href="logout.php">Wyloguj</a>
        					</p>
            			</form>
 				</div>	

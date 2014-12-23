@@ -32,7 +32,7 @@ include ('login.php'); // Includes Login Script
 							<span><?php echo $error; ?></span>
 						</p>
             			<p>
-           					<input name="submit" value="Zaloguj" class="" type="submit">
+           					<input name="submit" value="Zaloguj" class="redButton" type="submit">
        					</p>
            			</form>
 				</div>	
