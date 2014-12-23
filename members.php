@@ -18,8 +18,6 @@ if (!mysql_select_db($databaseName)) {
 	echo '</script>';
 	exit (0);
 }
-$query = "SELECT * FROM `Members`";
-$result = mysql_query($query);
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,6 +56,46 @@ $result = mysql_query($query);
 		</div>
 	</div>
 	<div id="site-container">
+		<h3 class="colour blue">Statystyki</h3>
+		<label> </label>
+			<?php
+			date_default_timezone_set('UTC');
+			$year = date("Y");
+			$query = "SELECT count(id) FROM `Members` WHERE id > 0";
+			$result = mysql_query($query);
+			$currentDate = date("Y-m-d");
+			echo "<label>Liczba członków w antenie: </label>" . mysql_result($result, 0);
+			if ($currentDate > $year."-10-01") {
+				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND id IN (
+						SELECT userID
+						FROM `Payments`
+						WHERE (type = 2 AND paymentDate > STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d'))
+						OR (type = 3 AND paymentDate > STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-01-01','%Y-%m-%d'))
+					)";
+			} else {
+				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND id IN (
+						SELECT userID
+						FROM `Payments`
+						WHERE (type = 1 AND paymentDate > STR_TO_DATE('" . $year . "-03-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d'))
+						OR (type = 3 AND paymentDate > STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-01-01','%Y-%m-%d'))
+					)";
+			}
+			$result = mysql_query($query);
+			echo "<br><label>Liczba członków z aktualnie opłaconą składką: </label>" . mysql_result($result, 0);
+			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND aegeeEmail = 1";
+			$result = mysql_query($query);
+			echo "<br><label>Liczba członków posiadających adres w domenie aegee-gliwice.org: </label>" . mysql_result($result, 0);
+			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND declaration = 1";
+			$result = mysql_query($query);
+			echo "<br><label>Liczba członków, którzy wypełnili ankietę: </label>" . mysql_result($result, 0);
+			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND connectedToList = 1";
+			$result = mysql_query($query);
+			echo "<br><label>Liczba członków podłączonych do listy ogólnej AEGEE Gliwice: </label>" . mysql_result($result, 0);
+			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND mentorID = 0";
+			$result = mysql_query($query);
+			echo "<br><label>Liczba mentorów: </label>" . mysql_result($result, 0) . "<br>";
+			?>
+			
 		<h3 class="colour blue">Lista członków</h3>
 		<table class="hovered">
 			<col width="1%">
@@ -84,6 +122,8 @@ $result = mysql_query($query);
 			</tr>
 			<?php 
 			$index = 1;
+			$query = "SELECT * FROM `Members` WHERE id > 0";
+			$result = mysql_query($query);
 			while ( $row = mysql_fetch_array($result) ) {
 				echo "<tr onclick='details(".$row["id"].")'>";
 				echo "<td>" . $index++ . "</td>";
@@ -107,15 +147,15 @@ $result = mysql_query($query);
 				} else {
 					echo "<td class='center'><input type='checkbox' name='connectedToList' value='connectedToList' disabled/></td>";
 				}
+				$query = "SELECT firstName, lastName FROM `Members` WHERE id = ".$row["mentorID"];
+				$mentorResult = mysql_query($query);
+				$mentor = mysql_fetch_array($mentorResult);
 				if ($row["mentorID"] != 0 && $row["mentorID"] != -1) {
-					$query = "SELECT firstName, lastName FROM `Members` WHERE id = ".$row["mentorID"];
-					$mentorResult = mysql_query($query);
-					$mentor = mysql_fetch_array($mentorResult);
 					echo "<td>" . $mentor["firstName"] . " " . $mentor["lastName"] . "</td>";
 				} else if ($row["mentorID"] == 0){
-					echo "<td>" . "<b>Mentor</b>" . "</td>";
+					echo "<td><b>" . $mentor["firstName"] . "</b>" . "</td>";
 				} else if ($row["mentorID"] == -1){
-					echo "<td>" . "-" . "</td>";
+					echo "<td>" . $mentor["firstName"] . "</td>";
 				}
 				echo "</tr>";
 			}
