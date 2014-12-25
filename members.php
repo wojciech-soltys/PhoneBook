@@ -43,12 +43,12 @@ if (!mysql_select_db($databaseName)) {
 			<div id="site-header-right">		
 				<div id="intranet_login">
 					<p class="login_title">Portal członków</p>
-					<form class="" action="" method="post" enctype="multipart/form-data">
+					<form class="" action="logout.php" method="post" enctype="multipart/form-data">
 						<p>
 							Zalogowany: <?php echo $login_session; ?>
 						</p>
             			<p>
-           					<a class="redButton" href="logout.php">Wyloguj</a>
+           					<input name="submit" value="Wyloguj" class="redButton" type="submit"/>
        					</p>
            			</form>
 				</div>	

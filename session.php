@@ -10,12 +10,16 @@ $db = mysql_select_db($databaseName, $connection);
 session_start (); // Starting Session
                   // Storing Session
 $user_check = $_SESSION ['login_user'];
+if (! isset ( $user_check )) {
+	mysql_close ( $connection ); // Closing Connection
+	header ( 'Location: index.php' ); // Redirecting To Home Page
+}
 // SQL Query To Fetch Complete Information Of User
 mysql_query("SET NAMES utf8");
 $ses_sql = mysql_query ( "select firstName,lastName from Members,Login where username='$user_check' and members_id = id", $connection );
 $row = mysql_fetch_array ( $ses_sql );
 $login_session = $row ['firstName']. " ". $row ['lastName'];
-if (! isset ( $login_session )) {
+if ($login_session == " ") {
 	mysql_close ( $connection ); // Closing Connection
 	header ( 'Location: index.php' ); // Redirecting To Home Page
 }

@@ -1,5 +1,5 @@
 <?php
-include ('login.php'); // Includes Login Script
+include ('session.php');
 
 $databaseAddress = 'db101.nano.pl:3306';
 $databaseName = 'db4_aegee_pl';
@@ -44,12 +44,12 @@ $result = mysql_query($query);
 			<div id="site-header-right">		
 				<div id="intranet_login">
 					<p class="login_title">Portal członków</p>
-					<form class="" action="" method="post" enctype="multipart/form-data">
+					<form class="" action="logout.php" method="post" enctype="multipart/form-data">
 						<p>
-							Zalogowany:
+							Zalogowany: <?php echo $login_session; ?>
 						</p>
             			<p>
-           					<a class="redButton" href="logout.php">Wyloguj</a>
+           					<input name="submit" value="Wyloguj" class="redButton" type="submit"/>
        					</p>
            			</form>
 				</div>	
