@@ -241,8 +241,15 @@ margin-top: 0;
   padding: 10px 22px 10px 22px;
   min-width: 325px;
 }
+
 #intranet_login input{
 width:100px;
+font-size:0.8em;
+  border: 1px solid;
+  border-color: #bbbbbb;
+}
+
+form input{
 font-size:0.8em;
   border: 1px solid;
   border-color: #bbbbbb;
@@ -255,6 +262,23 @@ font-size:0.8em;
 }
 
 #intranet_login input[type=submit] {
+  border:none;
+  background-color: #c94137;
+  color: #fff;
+  background-image:none;
+  text-shadow:none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  padding: 5px;
+  font-weight:normal;
+  font-size:11px;
+}
+
+form input[type=submit] {
+  width:100px;
   border:none;
   background-color: #c94137;
   color: #fff;

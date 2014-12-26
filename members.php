@@ -51,11 +51,9 @@ if (!mysql_select_db($databaseName)) {
            					<input name="submit" value="Wyloguj" class="redButton" type="submit"/>
        					</p>
            			</form>
-           			<form class="" action="createMember.php" method="post" enctype="multipart/form-data">
-           				<p>
-           					<input name="submit" value="Dodaj członka" class="redButton" type="submit"/>
-       					</p>
-       			  	</form>
+           			<p>
+           				<input name="createMember" onclick="window.location.href='createMember.php';" value="Dodaj członka" class="redButton" type="button"/>
+       				</p>
 				</div>	
 			</div>
 		</div>

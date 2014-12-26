@@ -18,6 +18,24 @@ if (!mysql_select_db($databaseName)) {
 	echo '</script>';
 	exit (0);
 }
+
+$error = ''; // Variable To Store Error Message
+if (isset ( $_POST ['submit'] )) {
+	$firstName = $_POST ['firstName'];
+	$lastName = $_POST ['$lastName'];
+	
+	if (empty ( $firstName )) {
+		$error = 'Puste Imię członka';
+	} else if (strlen( $firstName ) > 255 ) {
+		$error = 'Zbyt długie Imię';
+	}
+	
+	if (empty ( $lastName )) {
+		$error = 'Puste Imię członka';
+	} else if (strlen( $firstName ) > 255 ) {
+		$error = 'Zbyt długie Imię';
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,9 +69,9 @@ if (!mysql_select_db($databaseName)) {
            					<input name="submit" value="Wyloguj" class="redButton" type="submit"/>
        					</p>
            			</form>
-           				<p>
-           					<input name="submit" value="Dodaj członka" class="redButton" type="submit"/>
-       					</p>
+           			<p>
+           				<input name="listMembers" onclick="window.location.href='members.php';" value="Lista członków" class="redButton" type="button"/>
+       				</p
 				</div>	
 			</div>
 		</div>
@@ -62,28 +80,28 @@ if (!mysql_select_db($databaseName)) {
 	<form class="" action="createMember.php" method="post" enctype="multipart/form-data">
 		<h3 class="colour blue">Dodaj członka</h3>
 		<label>Imię: </label> 
-		<input id="firstName" name="firstName" value="Imię członka" onfocus="if(this.value == 'Imię członka'){this.value = '';}" type="text" autocomplete="on" />
+		<input id="firstName" name="firstName" placeholder="Imię członka" type="text" autocomplete="on" maxlength="255"/>
 		<br>
 		<label>Nazwisko: </label>
-		<input id="lastName" name="lastName" value="Nazwisko członka" onfocus="if(this.value == 'Nazwisko członka'){this.value = '';}" type="text" autocomplete="on" />
+		<input id="lastName" name="lastName" placeholder="Nazwisko członka" type="text" autocomplete="on" maxlength="255"/>
 		<br>
 		<label>Data wstąpienia: </label>
-		<input id="accesionDate" name="accesionDate" type="date" />
+		<input id="accesionDate" name="accesionDate" placeholder="RRRR-MM-DD" type="text" maxlength="10"/>
 		<br>
 		<label>Numer telefonu: </label>
-		<input id="phoneNumber" name="phoneNumber" value="Numer telefonu" onfocus="if(this.value == 'Numer telefonu'){this.value = '';}" type="text" autocomplete="on" />
+		<input id="phoneNumber" name="phoneNumber" placeholder="123456789" type="text" maxlength="9" />
 		<br>
 		<label>Prywatny adres email: </label>
-		<input id="email" name="email" value="Adres e-mail" onfocus="if(this.value == 'Numer telefonu'){this.value = '';}" type="text" autocomplete="on" />
+		<input id="email" name="email" placeholder="abc@gmail.com" type="text" autocomplete="on" />
 		<br>
 		<label>Adres w domenie aegee-gliwice.org: 
 		</label><input type='checkbox' name='aegeeEmail' value='aegeeEmail'/>
 		<br>
 		<label>Data urodzenia: </label>
-		<input id="birthDay" name="accesionDate" type="date" />
+		<input id="birthDay" name="birthDay" placeholder="RRRR-MM-DD" type="text" maxlength="10" />
 		<br>
 		<label>Numer karty członkowskiej: </label>
-		<input id="cardNumber" name="cardNumber" value="Numer karty członkowskiej" onfocus="if(this.value == 'Numer karty członkowskiej'){this.value = '';}" type="text" autocomplete="on" />
+		<input id="cardNumber" name="cardNumber" placeholder="123456-123456" type="text" maxlength="13"/>
 		<br>
 		<label>Deklaracja: </label>
 		<input type='checkbox' name='declaration' value='declaration' />
@@ -91,6 +109,7 @@ if (!mysql_select_db($databaseName)) {
 		<label>Podłączenie do listy ogólnej: </label>
 		<input type='checkbox' name='connectedToList' value='connectedToList' />
 		<br>
+		<label>Mentor: </label>
 		<select name='mentorID' id='mentorID'>
 			<?php 
 				$query = "SELECT id,firstName, lastName FROM `Members` WHERE mentorID IN (0,-1)";
@@ -107,7 +126,8 @@ if (!mysql_select_db($databaseName)) {
 			?>
 		</select>
 		<br>
-		<input name="submit" value="Dodaj członka" class="redButton" type="submit"/>
+		<p><?php echo $error; ?></p>
+		<input name="submit" value="Dodaj członka" class="red" type="submit"/>
 	</form>
 	</div>
 	</div>
