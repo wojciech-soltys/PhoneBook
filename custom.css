@@ -239,9 +239,10 @@ margin-top: 0;
 
 #intranet_login {
   padding: 10px 22px 10px 22px;
+  min-width: 325px;
 }
 #intranet_login input{
-width:150px;
+width:100px;
 font-size:0.8em;
   border: 1px solid;
   border-color: #bbbbbb;

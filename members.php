@@ -44,13 +44,18 @@ if (!mysql_select_db($databaseName)) {
 				<div id="intranet_login">
 					<p class="login_title">Portal członków</p>
 					<form class="" action="logout.php" method="post" enctype="multipart/form-data">
-						<p>
+						<p style="display: inline-block;width: 202px;">
 							Zalogowany: <?php echo $login_session; ?>
 						</p>
-            			<p>
+            			<p style="display: inline-block;">
            					<input name="submit" value="Wyloguj" class="redButton" type="submit"/>
        					</p>
            			</form>
+           			<form class="" action="createMember.php" method="post" enctype="multipart/form-data">
+           				<p>
+           					<input name="submit" value="Dodaj członka" class="redButton" type="submit"/>
+       					</p>
+       			  	</form>
 				</div>	
 			</div>
 		</div>
