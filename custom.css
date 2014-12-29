@@ -261,7 +261,7 @@ font-size:0.8em;
   font-size: 0.85em;
 }
 
-#intranet_login input[type=submit] {
+#intranet_login input[type=submit], .redButton {
   border:none;
   background-color: #c94137;
   color: #fff;

@@ -5,14 +5,15 @@ $databaseAddress = 'db101.nano.pl:3306';
 $databaseName = 'db4_aegee_pl';
 $databaseUser = 'usr019691';
 $databasePassword = 'aegee_20702';
-if ( !mysql_connect($databaseAddress, $databaseUser, $databasePassword) ) {
+$connection =  mysql_connect($databaseAddress, $databaseUser, $databasePassword);
+if (!$connection) {
 	echo '<script language="javascript">';
 	echo 'alert("Błąd połączenia z baza danych");';
 	echo '</script>';
 	exit (0);
 }
 mysql_query("SET NAMES utf8");
-if (!mysql_select_db($databaseName)) {
+if (!mysql_select_db($databaseName,$connection)) {
 	echo '<script language="javascript">';
 	echo 'alert("Błąd otwarcia bazy danych");';
 	echo '</script>';
@@ -24,9 +25,9 @@ if (!mysql_select_db($databaseName)) {
 <meta charset="UTF-8"> 
 <head>
 <title>AEGEE Gliwice Members Portal</title>
+<script src="jquery-2.1.3.js"></script>
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="custom.css" rel="stylesheet" type="text/css">
-<script src="jquery-2.1.3.js"></script>
 <style>
 #site-wrapper {
   background: #fff;
@@ -38,7 +39,7 @@ if (!mysql_select_db($databaseName)) {
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
 			<div id="site-logo">
-				<a href="/"><img src="logo.png"></a>	
+				<a href="#"><img src="logo.png"></a>	
 			</div>
 			<div id="site-header-right">		
 				<div id="intranet_login">
@@ -172,8 +173,12 @@ if (!mysql_select_db($databaseName)) {
 		</script>
 		<form id="details" method="post" action="selectedMember.php">
     		<input type="hidden" id="selectedId" name="selectedId" value="0">
+    		<input type="hidden" id="editMode" name="editMode" value="0">
 		</form>
 	</div>
 	</div>
+	<?php 
+	mysql_close($connection);
+	?>
 </body>
 </html>

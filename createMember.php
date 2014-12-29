@@ -56,7 +56,7 @@ if (isset ( $_POST ['submit'] )) {
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
 			<div id="site-logo">
-				<a href="/"><img src="logo.png"></a>	
+				<a href="javascript:window.location.href='members.php';"><img src="logo.png"></a>	
 			</div>
 			<div id="site-header-right">		
 				<div id="intranet_login">
@@ -112,7 +112,7 @@ if (isset ( $_POST ['submit'] )) {
 		<label>Mentor: </label>
 		<select name='mentorID' id='mentorID'>
 			<?php 
-				$query = "SELECT id,firstName, lastName FROM `Members` WHERE mentorID IN (0,-1)";
+				$query = "SELECT id, firstName, lastName FROM `Members` WHERE mentorID IN (0,-1)";
 				$mentorResult = mysql_query($query);
 				while ( $row = mysql_fetch_array($mentorResult) ) {
 					if ($row["id"] == -1) {

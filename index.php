@@ -14,7 +14,7 @@ include ('login.php'); // Includes Login Script
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
 			<div id="site-logo">
-				<a href="/"><img src="logo.png"></a>	
+				<a href="#"><img src="logo.png"></a>	
 			</div>
 			<div id="site-header-right">		
 				<div id="intranet_login">
