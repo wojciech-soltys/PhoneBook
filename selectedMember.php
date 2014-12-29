@@ -105,8 +105,10 @@ $result = mysql_query($query);
     		echo "<input type=\"hidden\" id=\"editMode\" name=\"editMode\" value=\"1\">";
     		echo "<input name=\"submit\" value=\"Edytuj dane\" class=\"redButton\" type=\"submit\"/>";
 			echo "</form>";
+			
 		} else if ($_POST["editMode"] == 1) {
-		echo "<label>Id: </label>" . $row["id"] . "<br>";
+			
+			echo "<label>Id: </label>" . $row["id"] . "<br>";
 			echo "<label>Imię: </label><input type=\"text\" id=\"firstName\" name=\"firstName\" value=\"". $row["firstName"] . "\"><br>";
 			echo "<label>Nazwisko: </label><input type=\"text\" id=\"lastName\" name=\"lastName\" value=\"". $row["lastName"] . "\"><br>";
 			echo "<label>Data wstąpienia: </label><input type=\"text\" id=\"accessionDate\" size=\"7\" maxlength=\"10\" name=\"accessionDate\" value=\"". $row["accessionDate"] . "\"><br>";
@@ -117,8 +119,8 @@ $result = mysql_query($query);
 			} else {
 				echo "<label>Adres w domenie aegee-gliwice.org: </label><input type='checkbox' name='aegeeEmail' value='aegeeEmail' /><br>";
 			}
-			echo "<label>Data urodzenia: </label>" . $row["birthDate"] . "<br>";
-			echo "<label>Numer karty członkowskiej: </label>" . $row["cardNumber"] . "<br>";
+			echo "<label>Data urodzenia: </label><input type=\"text\" id=\"birthDate\" size=\"7\" maxlength=\"10\" name=\"birthDate\" value=\"". $row["birthDate"] . "\"><br>";
+			echo "<label>Numer karty członkowskiej: </label><input type=\"text\" id=\"cardNumber\" size=\"11\" maxlength=\"13\" name=\"cardNumber\" value=\"". $row["cardNumber"] . "\"><br>";
 			if ($row["declaration"] == 1) {
 				echo "<label>Deklaracja: </label><input type='checkbox' name='declaration' value='declaration' checked/><br>";
 			} else {
