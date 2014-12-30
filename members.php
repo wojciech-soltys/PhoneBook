@@ -19,6 +19,11 @@ if (!mysql_select_db($databaseName,$connection)) {
 	echo '</script>';
 	exit (0);
 }
+$ses_sql = mysql_query("SELECT members_id FROM Members, Login WHERE username='$user_check'", $connection);
+$ses_row = mysql_fetch_array($ses_sql);
+$ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["members_id"] . "'", $connection);
+$ses_row = mysql_fetch_array($ses_sql);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,13 +58,17 @@ if (!mysql_select_db($databaseName,$connection)) {
        					</p>
            			</form>
            			<p>
+           			<?php  if ($ses_row["type"] == 'Z') {?>
            				<input name="createMember" onclick="window.location.href='createMember.php';" value="Dodaj członka" class="redButton" type="button"/>
+       				<?php }?>
+       					<input name="createMember" onclick="window.location.href='selectedMember.php';" value="Twoje dane" class="redButton" type="button"/>
        				</p>
 				</div>	
 			</div>
 		</div>
 	</div>
 	<div id="site-container">
+	<?php  if ($ses_row["type"] == 'Z') {?>
 		<h3 class="colour blue">Statystyki</h3>
 		<label> </label>
 			<?php
@@ -129,7 +138,13 @@ if (!mysql_select_db($databaseName,$connection)) {
 			$query = "SELECT * FROM `Members` WHERE id > 0";
 			$result = mysql_query($query);
 			while ( $row = mysql_fetch_array($result) ) {
-				echo "<tr onclick='details(".$row["id"].")'>";
+				if ($row["type"] == 'Z') {
+					echo "<tr bgcolor='#bed3f9' onclick='details(".$row["id"].")'>";
+				} else if ($row["type"] == 'K') {
+					echo "<tr bgcolor='#cbeae4' onclick='details(".$row["id"].")'>";
+				} if ($row["type"] == 'C') {
+					echo "<tr onclick='details(".$row["id"].")'>";
+				}
 				echo "<td>" . $index++ . "</td>";
 				echo "<td>" . $row["firstName"] . "</td>";
 				echo "<td>" . $row["lastName"] . "</td>";
@@ -176,6 +191,45 @@ if (!mysql_select_db($databaseName,$connection)) {
     		<input type="hidden" id="selectedId" name="selectedId" value="0">
 		</form>
 	</div>
+	<?php } else  if ($ses_row["type"] == 'C' || $ses_row["type"] == 'K') {?>
+		<h3 class="colour blue">Książka telefoniczna</h3>
+		Wpisz imię i nazwisko członka.
+		<form action="members.php" id="member" method="post" enctype="multipart/form-data">
+			<div>
+				<label>Imię: </label><input type="text" id="firstName" name="firstName" maxlenght="70" value="">
+				<label>Nazwisko: </label><input type="text" id="lastName" name="lastName" maxlenght="70" value="">
+			</div>
+			<br>
+			<input name="search_submit" value="Szukaj" class="red" type="submit"/>
+		</form>
+		<br>
+		<?php 
+		$errorFirstName = '';
+		$errorLastName = '';
+		if (isset($_POST ['search_submit'])) {
+			$firstName = $_POST ['firstName'];
+			$firstName = stripslashes($firstName);
+			$firstName = mysql_real_escape_string($firstName);
+		
+			$lastName = $_POST ['lastName'];
+			$lastName = stripslashes($lastName);
+			$lastName = mysql_real_escape_string($lastName);
+		
+			$errorFirstName = ((empty($firstName)) ? 'Pole imię jest puste. ' : '');
+			$errorFirstName = ((strlen($firstName) > 70) ? 'Zbyt duża liczba znaków w polu imię.' : '');
+			$errorLastName = ((empty($lastName)) ? 'Pole nazwisko jest puste. ' : '');
+			$errorLastName = ((strlen($lastName) > 70) ? 'Zbyt duża liczba znaków w polu nazwisko.' : '');
+			
+			if ((strlen($errorFirstName) == 0) && (strlen($errorLastName) == 0) ) {
+				$query = mysql_query("SELECT firstName, lastName, phone from Members WHERE firstName = '$firstName' AND lastName = '$lastName'", $connection);
+				$row = mysql_fetch_array($query);
+				if (strlen($row["firstName"]) > 0 && strlen($row["lastName"]) > 0 && strlen($row["phone"]) > 0)
+					echo '<h3 class="colour blue">Imię: ' . $row["firstName"] . '&nbsp;&nbsp;&nbsp;&nbsp;Nazwisko: ' . $row["lastName"] . '&nbsp;&nbsp;&nbsp;&nbsp;Numer telefonu: ' . $row["phone"] . '</h3>';
+			}
+		}
+		?>
+		
+	<?php }?>
 	</div>
 	<?php 
 	mysql_close($connection);

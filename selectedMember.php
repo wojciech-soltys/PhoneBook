@@ -19,9 +19,18 @@ if (!mysql_select_db($databaseName, $connection)) {
 	echo '</script>';
 	exit (0);
 }
-$query = "SELECT * FROM `Members` WHERE id=".$_POST["selectedId"];
-$result = mysql_query($query);
 
+
+$ses_sql = mysql_query("SELECT members_id FROM Members, Login WHERE username='$user_check'", $connection);
+$ses_row = mysql_fetch_array($ses_sql);
+$selectedId = $ses_row["members_id"];
+$ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["members_id"] . "'", $connection);
+$ses_row = mysql_fetch_array($ses_sql);
+if ($ses_row["type"] == 'Z') {
+	$selectedId = $_POST["selectedId"];
+}
+$query = "SELECT * FROM `Members` WHERE id=$selectedId";
+$result = mysql_query($query);
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,7 +66,9 @@ $result = mysql_query($query);
            			</form>
            				<p>
            					<input name="listMembers" onclick="window.location.href='members.php';" value="Lista członków" class="redButton" type="button"/>
-           					<input name="createMember" onclick="window.location.href='createMember.php';" value="Dodaj członka" class="redButton" type="button"/>
+           					<?php  if ($ses_row["type"] == 'Z') {?>
+           						<input name="createMember" onclick="window.location.href='createMember.php';" value="Dodaj członka" class="redButton" type="button"/>
+       						<?php }?>
        					</p>
 				</div>	
 			</div>
@@ -100,17 +111,19 @@ $result = mysql_query($query);
 		} else if ($row["mentorID"] == -1){
 			echo "<label>Mentor: </label>" . "-" . "<br>";
 		}	
-		echo "<form id=\"details\" method=\"post\" action=\"selectedMemberEdit.php\">";
-    	echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"".$_POST["selectedId"]."\">";
-    	echo "<br><input name=\"submit\" value=\"Edytuj dane\" class=\"redButton\" type=\"submit\"/>";
-		echo "</form>";
+		if ($ses_row["type"] == 'Z') {
+			echo "<form id=\"details\" method=\"post\" action=\"selectedMemberEdit.php\">";
+    		echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"".$_POST["selectedId"]."\">";
+    		echo "<br><input name=\"submit\" value=\"Edytuj dane\" class=\"redButton\" type=\"submit\"/>";
+			echo "</form>";
+		}
 		echo "<br>";
 	?>
 	</div>
 	<div id="site-container">
 		<h3 class="colour blue">Składki członkowskie</h3>
 		<?php 
-		$query = "SELECT paymentDate, type, amount FROM `Payments` WHERE userID=".$_POST["selectedId"];
+		$query = "SELECT paymentDate, type, amount FROM `Payments` WHERE userID=$selectedId";
 		$result = mysql_query($query);
 		$rowCount = mysql_num_rows($result);
 		if ($rowCount == 0) {
