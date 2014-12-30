@@ -99,7 +99,7 @@ if (!mysql_select_db($databaseName,$connection)) {
 			$result = mysql_query($query);
 			echo "<br><label>Liczba mentorów: </label>" . mysql_result($result, 0) . "<br>";
 			?>
-			
+		<br>
 		<h3 class="colour blue">Lista członków</h3>
 		<table class="hovered">
 			<col width="1%">
@@ -165,6 +165,7 @@ if (!mysql_select_db($databaseName,$connection)) {
 			}
 			?>
 		</table>
+		<br>
 		<script>
 			function details(id) {
 				$("#selectedId").val(id);
@@ -173,7 +174,6 @@ if (!mysql_select_db($databaseName,$connection)) {
 		</script>
 		<form id="details" method="post" action="selectedMember.php">
     		<input type="hidden" id="selectedId" name="selectedId" value="0">
-    		<input type="hidden" id="editMode" name="editMode" value="0">
 		</form>
 	</div>
 	</div>

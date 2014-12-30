@@ -983,9 +983,13 @@ img {
 .post-content .button {
   margin: 0 0 22px 0;
 }
-form input[type='text'] {
+form input[type='text'], form input[type='email'], select {
   outline: 0px;
   color: #888;
+}
+form .invalid {
+  color:red;
+  font-size:12px;
 }
 form textarea {
   color: #888;

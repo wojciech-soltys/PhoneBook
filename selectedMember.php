@@ -21,6 +21,7 @@ if (!mysql_select_db($databaseName, $connection)) {
 }
 $query = "SELECT * FROM `Members` WHERE id=".$_POST["selectedId"];
 $result = mysql_query($query);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -66,87 +67,44 @@ $result = mysql_query($query);
 	<?php 
 		$row = mysql_fetch_array($result);
 		echo "<h3 class=\"colour blue\">Dane osobowe członka " . $row["firstName"] . " " . $row["lastName"] . "</h3>";
-		if ($_POST["editMode"] == 0) {
-			echo "<label>Id: </label>" . $row["id"] . "<br>";
-			echo "<label>Imię: </label>" . $row["firstName"] . "<br>";
-			echo "<label>Nazwisko: </label>" . $row["lastName"] . "<br>";
-			echo "<label>Data wstąpienia: </label>" . $row["accessionDate"] . "<br>";
-			echo "<label>Numer telefonu: </label>" . $row["phone"] . "<br>";
-			echo "<label>Prywatny adres email: </label>" . $row["privateEmail"] . "<br>";
-			if ($row["aegeeEmail"] == 1) {
-				echo "<label>Adres w domenie aegee-gliwice.org: </label><input type='checkbox' name='aegeeEmail' value='aegeeEmail' disabled checked/><br>";
-			} else {
-				echo "<label>Adres w domenie aegee-gliwice.org: </label><input type='checkbox' name='aegeeEmail' value='aegeeEmail' disabled/><br>";
-			}
-			echo "<label>Data urodzenia: </label>" . $row["birthDate"] . "<br>";
-			echo "<label>Numer karty członkowskiej: </label>" . $row["cardNumber"] . "<br>";
-			if ($row["declaration"] == 1) {
-				echo "<label>Deklaracja: </label><input type='checkbox' name='declaration' value='declaration' disabled checked/><br>";
-			} else {
-				echo "<label>Deklaracja: </label><input type='checkbox' name='declaration' value='declaration' disabled/><br>";
-			}
-			if ($row["connectedToList"] == 1) {
-				echo "<label>Podłączenie do listy ogólnej: </label><input type='checkbox' name='connectedToList' value='connectedToList' disabled checked/><br>";
-			} else {
-				echo "<label>Podłączenie do listy ogólnej: </label><input type='checkbox' name='connectedToList' value='connectedToList' disabled/><br>";
-			}
-			if ($row["mentorID"] != 0 && $row["mentorID"] != -1) {
-				$query = "SELECT firstName, lastName FROM `Members` WHERE id = ".$row["mentorID"];
-				$mentorResult = mysql_query($query);
-				$mentor = mysql_fetch_array($mentorResult);
-				echo "<label>Mentor: </label>" . $mentor["firstName"] . " " . $mentor["lastName"] . "<br>";
-			} else if ($row["mentorID"] == 0){
-				echo "<label>Mentor: </label>" . "<b>Mentor</b>" . "<br>";
-			} else if ($row["mentorID"] == -1){
-				echo "<label>Mentor: </label>" . "-" . "<br>";
-			}	
-			echo "<form id=\"details\" method=\"post\" action=\"selectedMember.php\">";
-    		echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"".$_POST["selectedId"]."\">";
-    		echo "<input type=\"hidden\" id=\"editMode\" name=\"editMode\" value=\"1\">";
-    		echo "<input name=\"submit\" value=\"Edytuj dane\" class=\"redButton\" type=\"submit\"/>";
-			echo "</form>";
-			
-		} else if ($_POST["editMode"] == 1) {
-			
-			echo "<label>Id: </label>" . $row["id"] . "<br>";
-			echo "<label>Imię: </label><input type=\"text\" id=\"firstName\" name=\"firstName\" value=\"". $row["firstName"] . "\"><br>";
-			echo "<label>Nazwisko: </label><input type=\"text\" id=\"lastName\" name=\"lastName\" value=\"". $row["lastName"] . "\"><br>";
-			echo "<label>Data wstąpienia: </label><input type=\"text\" id=\"accessionDate\" size=\"7\" maxlength=\"10\" name=\"accessionDate\" value=\"". $row["accessionDate"] . "\"><br>";
-			echo "<label>Numer telefonu: </label><input type=\"text\" id=\"phone\" size=\"7\" maxlength=\"9\" name=\"phone\" value=\"". $row["phone"] . "\"><br>";
-			echo "<label>Prywatny adres email: </label><input type=\"email\" id=\"privateEmail\" size=\"35\" name=\"privateEmail\" value=\"". $row["privateEmail"] . "\"><br>";
-			if ($row["aegeeEmail"] == 1) {
-				echo "<label>Adres w domenie aegee-gliwice.org: </label><input type='checkbox' name='aegeeEmail' value='aegeeEmail' checked/><br>";
-			} else {
-				echo "<label>Adres w domenie aegee-gliwice.org: </label><input type='checkbox' name='aegeeEmail' value='aegeeEmail' /><br>";
-			}
-			echo "<label>Data urodzenia: </label><input type=\"text\" id=\"birthDate\" size=\"7\" maxlength=\"10\" name=\"birthDate\" value=\"". $row["birthDate"] . "\"><br>";
-			echo "<label>Numer karty członkowskiej: </label><input type=\"text\" id=\"cardNumber\" size=\"11\" maxlength=\"13\" name=\"cardNumber\" value=\"". $row["cardNumber"] . "\"><br>";
-			if ($row["declaration"] == 1) {
-				echo "<label>Deklaracja: </label><input type='checkbox' name='declaration' value='declaration' checked/><br>";
-			} else {
-				echo "<label>Deklaracja: </label><input type='checkbox' name='declaration' value='declaration' /><br>";
-			}
-			if ($row["connectedToList"] == 1) {
-				echo "<label>Podłączenie do listy ogólnej: </label><input type='checkbox' name='connectedToList' value='connectedToList' checked/><br>";
-			} else {
-				echo "<label>Podłączenie do listy ogólnej: </label><input type='checkbox' name='connectedToList' value='connectedToList' /><br>";
-			}
-			echo "<label>Mentor: </label>";
-			echo "<select name='mentorID' id='mentorID'>";
-			$mID = $row["mentorID"];
-			$query = "SELECT id, firstName, lastName FROM `Members` WHERE mentorID IN (0,-1)";
-			$mentorResult = mysql_query($query);
-			while ( $row = mysql_fetch_array($mentorResult) ) {
-				if ($row["id"] == -1) {
-					echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
-				} else if ($row["id"] == 0) {
-					echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
-				} else {
-					echo "<option value=\"". $row["id"]."\">".$row["firstName"]." ".$row["lastName"]."</option>";
-				}
-			}
-			echo "</select>";
+		echo "<label>Id: </label>" . $row["id"] . "<br>";
+		echo "<label>Imię: </label>" . $row["firstName"] . "<br>";
+		echo "<label>Nazwisko: </label>" . $row["lastName"] . "<br>";
+		echo "<label>Data wstąpienia: </label>" . $row["accessionDate"] . "<br>";
+		echo "<label>Numer telefonu: </label>" . $row["phone"] . "<br>";
+		echo "<label>Prywatny adres email: </label>" . $row["privateEmail"] . "<br>";
+		if ($row["aegeeEmail"] == 1) {
+			echo "<label>Adres w domenie aegee-gliwice.org: </label><input type='checkbox' name='aegeeEmail' value='aegeeEmail' disabled checked/><br>";
+		} else {
+			echo "<label>Adres w domenie aegee-gliwice.org: </label><input type='checkbox' name='aegeeEmail' value='aegeeEmail' disabled/><br>";
 		}
+		echo "<label>Data urodzenia: </label>" . $row["birthDate"] . "<br>";
+		echo "<label>Numer karty członkowskiej: </label>" . $row["cardNumber"] . "<br>";
+		if ($row["declaration"] == 1) {
+			echo "<label>Deklaracja: </label><input type='checkbox' name='declaration' value='declaration' disabled checked/><br>";
+		} else {
+			echo "<label>Deklaracja: </label><input type='checkbox' name='declaration' value='declaration' disabled/><br>";
+		}
+		if ($row["connectedToList"] == 1) {
+			echo "<label>Podłączenie do listy ogólnej: </label><input type='checkbox' name='connectedToList' value='connectedToList' disabled checked/><br>";
+		} else {
+			echo "<label>Podłączenie do listy ogólnej: </label><input type='checkbox' name='connectedToList' value='connectedToList' disabled/><br>";
+		}
+		if ($row["mentorID"] != 0 && $row["mentorID"] != -1) {
+			$query = "SELECT firstName, lastName FROM `Members` WHERE id = ".$row["mentorID"];
+			$mentorResult = mysql_query($query);
+			$mentor = mysql_fetch_array($mentorResult);
+			echo "<label>Mentor: </label>" . $mentor["firstName"] . " " . $mentor["lastName"] . "<br>";
+		} else if ($row["mentorID"] == 0){
+			echo "<label>Mentor: </label>" . "<b>Mentor</b>" . "<br>";
+		} else if ($row["mentorID"] == -1){
+			echo "<label>Mentor: </label>" . "-" . "<br>";
+		}	
+		echo "<form id=\"details\" method=\"post\" action=\"selectedMemberEdit.php\">";
+    	echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"".$_POST["selectedId"]."\">";
+    	echo "<br><input name=\"submit\" value=\"Edytuj dane\" class=\"redButton\" type=\"submit\"/>";
+		echo "</form>";
+		echo "<br>";
 	?>
 	</div>
 	<div id="site-container">
@@ -181,16 +139,13 @@ $result = mysql_query($query);
 				echo "<td class='center'>" . number_format((float)$row["amount"], 2, ',', '') . "</td>";
 				echo "</tr>";
 			}
+			echo "</table>";
 		}
+		echo "<br>";
 		?>
 	</div>
 	</div>
 	<?php 
-	echo "<script>";
-	echo "$( document ).ready(function() {";
-	echo "$('select').val('". $mID ."');";
-	echo "});";
-	echo "</script>";
 	mysql_close($connection);
 	?>
 </body>
