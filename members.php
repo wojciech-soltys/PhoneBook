@@ -82,15 +82,15 @@ $ses_row = mysql_fetch_array($ses_sql);
 				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND id IN (
 						SELECT userID
 						FROM `Payments`
-						WHERE (type = 2 AND paymentDate > STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d'))
-						OR (type = 3 AND paymentDate > STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-01-01','%Y-%m-%d'))
+						WHERE (type = 2 AND paymentDate >= STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d'))
+						OR (type = 3 AND paymentDate >= STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-12-31','%Y-%m-%d'))
 					)";
 			} else {
 				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND id IN (
 						SELECT userID
 						FROM `Payments`
-						WHERE (type = 1 AND paymentDate > STR_TO_DATE('" . $year . "-03-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d'))
-						OR (type = 3 AND paymentDate > STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-01-01','%Y-%m-%d'))
+						WHERE (type = 1 AND paymentDate >= STR_TO_DATE('" . $year . "-03-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-09-30','%Y-%m-%d'))
+						OR (type = 3 AND paymentDate >= STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-12-31','%Y-%m-%d'))
 					)";
 			}
 			$result = mysql_query($query);
@@ -143,13 +143,13 @@ $ses_row = mysql_fetch_array($ses_sql);
 				$currentDate = date("Y-m-d");
 				if ($currentDate > $year."-10-01") {
 					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.userID AND (
-						(Payments.type = 2 AND paymentDate > STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d'))
-						OR (Payments.type = 3 AND paymentDate > STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-01-01','%Y-%m-%d'))
+						(Payments.type = 2 AND paymentDate >= STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d'))
+						OR (Payments.type = 3 AND paymentDate >= STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-12-31','%Y-%m-%d'))
 					)";
 				} else {
 					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.userID AND (
-						(Payments.type = 1 AND paymentDate > STR_TO_DATE('" . $year . "-03-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d'))
-						OR (Payments.type = 3 AND paymentDate > STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-01-01','%Y-%m-%d'))
+						(Payments.type = 1 AND paymentDate >= STR_TO_DATE('" . $year . "-03-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-09-30','%Y-%m-%d'))
+						OR (Payments.type = 3 AND paymentDate >= STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-12-31','%Y-%m-%d'))
 					)";
 				}
 
