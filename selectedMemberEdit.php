@@ -13,7 +13,7 @@
 }
 </style>
 </head>
-<body class="home page page-id-131 page-template-default rf_wrapper">
+<body>
 <?php
 include ('session.php');
 
@@ -59,6 +59,7 @@ $cardNumber = $row["cardNumber"];
 $declaration = $row["declaration"];
 $connectedToList = $row["connectedToList"];
 $mentorID = $row["mentorID"];
+$type = $row["type"];
 
 if (isset($_POST ['submit_changes'])) {
 	$firstName = $_POST ['firstName'];
@@ -120,7 +121,7 @@ if (isset($_POST ['submit_changes'])) {
 	$errorCardNumber = ((preg_match("/^[A-Z0-9]{6}-[A-Z0-9]{6}$/", $cardNumber) == 0) ? 'Niepoprawna wartość w polu numer karty członkowskiej. Wpisz wartość według schematu: xxxxxx-xxxxxx.' : ''); 
 	if ((strlen($errorFirstName) == 0) && (strlen($errorLastName) == 0) && (strlen($errorAccessionDate) == 0) && (strlen($errorPhone) == 0) && (strlen($errorPrivateEmail) == 0) && (strlen($errorBirthDate) == 0) && (strlen($errorCardNumber) == 0)) {
 		$query = "UPDATE `Members` SET firstName = '$firstName', lastName = '$lastName', accessionDate = '$accessionDate', phone = '$phone', privateEmail = '$privateEmail', aegeeEmail = $aegeeEmail," .
-		"birthDate = '$birthDate', cardNumber = '$cardNumber', declaration = $declaration, connectedToList = $connectedToList, mentorID = $mentorID  WHERE id=".$_POST["selectedId"];
+		"birthDate = '$birthDate', cardNumber = '$cardNumber', declaration = $declaration, connectedToList = $connectedToList, mentorID = $mentorID, type = $type  WHERE id=".$_POST["selectedId"];
 		$retval = mysql_query($query, $connection);
 		if(! $retval )
 		{
@@ -230,6 +231,16 @@ if (isset($_POST ['submit_changes'])) {
 			?>
 			</select>
 		</div>
+		<div>
+			<label>Funkcja: </label>
+			<select name='type' id='type'>
+				<option value="Z">Członek Zarządu</option>
+				<option value="R">Członek Komisji Rewizyjnej</option>
+				<option value="K">Koordynator</option>
+				<option value="C">Członek zwyczajny</option>
+				<option value="H">Członek honorowy</option>
+			</select>
+		</div>
 		<input type="hidden" id="selectedId" name="selectedId" value="<?php echo $_POST["selectedId"]?>">
 		<br><br><input name="submit_changes" value="Zapisz zmiany" class="red" type="submit"/>
 		</form>	
@@ -241,7 +252,8 @@ if (isset($_POST ['submit_changes'])) {
 	</div>
 	<script>
 		$( document ).ready(function() {
-			$('select').val('<?php echo $mentorID ?>');
+			$('select#mentorID').val('<?php echo $mentorID ?>');
+			$('select#type').val('<?php echo $type ?>');
 		});
 		function goBack() {
 			$("#details").submit();

@@ -48,7 +48,7 @@ $result = mysql_query($query);
 }
 </style>
 </head>
-<body class="home page page-id-131 page-template-default rf_wrapper">
+<body>
 	<div id="site-wrapper">
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
@@ -79,7 +79,24 @@ $result = mysql_query($query);
 	<div id="site-container">
 	<?php 
 		$row = mysql_fetch_array($result);
-		echo "<h3 class=\"colour blue\">Dane osobowe członka " . $row["firstName"] . " " . $row["lastName"] . "</h3>";
+		switch ($row["type"]) {
+			case 'Z' :
+				$type = 'członek Zarządu';
+				break;
+			case 'R' :
+				$type = 'członek Komisji Rewizyjnej';
+				break;
+			case 'K' :
+				$type = 'koordynator';
+				break;
+			case 'H' :
+				$type = 'członek honorowy';
+				break;
+			case 'C' :
+				$type = 'członek zwyczajny';
+				break;
+		}
+		echo "<h3 class=\"colour blue\">Dane osobowe członka " . $row["firstName"] . " " . $row["lastName"] . " - $type</h3>";
 		echo "<label>Id: </label>" . $row["id"] . "<br>";
 		echo "<label>Imię: </label>" . $row["firstName"] . "<br>";
 		echo "<label>Nazwisko: </label>" . $row["lastName"] . "<br>";
@@ -115,7 +132,7 @@ $result = mysql_query($query);
 		}	
 		if ($ses_row["type"] == 'Z') {
 			echo "<form id=\"details\" method=\"post\" action=\"selectedMemberEdit.php\">";
-    		echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"".$_POST["selectedId"]."\">";
+    		echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"$selectedId\">";
     		echo "<br><input name=\"submit\" value=\"Edytuj dane\" class=\"redButton\" type=\"submit\"/>";
 			echo "</form>";
 		}

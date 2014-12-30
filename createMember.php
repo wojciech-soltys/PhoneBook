@@ -51,7 +51,7 @@ if (isset ( $_POST ['submit'] )) {
 }
 </style>
 </head>
-<body home page page-id-131 page-template-default rf_wrapper>
+<body>
 	<div id="site-wrapper">
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
@@ -71,7 +71,7 @@ if (isset ( $_POST ['submit'] )) {
            			</form>
            			<p>
            				<input name="listMembers" onclick="window.location.href='members.php';" value="Lista członków" class="redButton" type="button"/>
-       				</p
+       				</p>
 				</div>	
 			</div>
 		</div>

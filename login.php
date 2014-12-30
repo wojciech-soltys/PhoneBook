@@ -28,7 +28,7 @@ if (isset ( $_POST ['submit'] )) {
 			$password = stripslashes ( $password );
 			$username = mysql_real_escape_string ( $username );
 			$password = mysql_real_escape_string ( $password );
-			
+			$password = hash('sha256', $password);
  			// Selecting Database
 			mysql_query("SET NAMES utf8");
 			if (!mysql_select_db($databaseName, $connection)) {

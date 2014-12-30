@@ -39,7 +39,7 @@ $ses_row = mysql_fetch_array($ses_sql);
 }
 </style>
 </head>
-<body class="home page page-id-131 page-template-default rf_wrapper">
+<body>
 	<div id="site-wrapper">
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
@@ -51,7 +51,7 @@ $ses_row = mysql_fetch_array($ses_sql);
 					<p class="login_title">Portal członków</p>
 					<form class="" action="logout.php" method="post" enctype="multipart/form-data">
 						<p style="display: inline-block;width: 202px;">
-							Zalogowany: <?php echo $login_session; ?>
+							Zalogowany: <?php echo $login_session;?>
 						</p>
             			<p style="display: inline-block;">
            					<input name="submit" value="Wyloguj" class="redButton" type="submit"/>
@@ -153,7 +153,7 @@ $ses_row = mysql_fetch_array($ses_sql);
 					)";
 				}
 
-				if (@mysql_num_rows(mysql_query($query_fee))==1) {				
+				if (@mysql_num_rows(mysql_query($query_fee))==1 || $row["type"] == 'H') {				
 					if ($row["type"] == 'Z') {
 						echo "<tr bgcolor='#ddefff' onclick='details(".$row["id"].")'>";
 					}  else if ($row["type"] == 'R') {
