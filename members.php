@@ -39,7 +39,7 @@ $ses_row = mysql_fetch_array($ses_sql);
 }
 </style>
 </head>
-<body home page page-id-131 page-template-default rf_wrapper>
+<body class="home page page-id-131 page-template-default rf_wrapper">
 	<div id="site-wrapper">
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
@@ -58,7 +58,7 @@ $ses_row = mysql_fetch_array($ses_sql);
        					</p>
            			</form>
            			<p>
-           			<?php  if ($ses_row["type"] == 'Z') {?>
+           			<?php  if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {?>
            				<input name="createMember" onclick="window.location.href='createMember.php';" value="Dodaj członka" class="redButton" type="button"/>
        				<?php }?>
        					<input name="createMember" onclick="window.location.href='selectedMember.php';" value="Twoje dane" class="redButton" type="button"/>
@@ -68,16 +68,16 @@ $ses_row = mysql_fetch_array($ses_sql);
 		</div>
 	</div>
 	<div id="site-container">
-	<?php  if ($ses_row["type"] == 'Z') {?>
+	<?php  if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {?>
 		<h3 class="colour blue">Statystyki</h3>
 		<label> </label>
 			<?php
-			date_default_timezone_set('UTC');
-			$year = date("Y");
 			$query = "SELECT count(id) FROM `Members` WHERE id > 0";
 			$result = mysql_query($query);
-			$currentDate = date("Y-m-d");
 			echo "<label>Liczba członków w antenie: </label>" . mysql_result($result, 0);
+			date_default_timezone_set('UTC');
+			$year = date("Y");
+			$currentDate = date("Y-m-d");
 			if ($currentDate > $year."-10-01") {
 				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND id IN (
 						SELECT userID
@@ -138,13 +138,35 @@ $ses_row = mysql_fetch_array($ses_sql);
 			$query = "SELECT * FROM `Members` WHERE id > 0";
 			$result = mysql_query($query);
 			while ( $row = mysql_fetch_array($result) ) {
-				if ($row["type"] == 'Z') {
-					echo "<tr bgcolor='#bed3f9' onclick='details(".$row["id"].")'>";
-				} else if ($row["type"] == 'K') {
-					echo "<tr bgcolor='#cbeae4' onclick='details(".$row["id"].")'>";
-				} if ($row["type"] == 'C') {
-					echo "<tr onclick='details(".$row["id"].")'>";
+				date_default_timezone_set('UTC');
+				$year = date("Y");
+				$currentDate = date("Y-m-d");
+				if ($currentDate > $year."-10-01") {
+					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.userID AND (
+						(Payments.type = 2 AND paymentDate > STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d'))
+						OR (Payments.type = 3 AND paymentDate > STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-01-01','%Y-%m-%d'))
+					)";
+				} else {
+					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.userID AND (
+						(Payments.type = 1 AND paymentDate > STR_TO_DATE('" . $year . "-03-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d'))
+						OR (Payments.type = 3 AND paymentDate > STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-01-01','%Y-%m-%d'))
+					)";
 				}
+
+				if (@mysql_num_rows(mysql_query($query_fee))==1) {				
+					if ($row["type"] == 'Z') {
+						echo "<tr bgcolor='#ddefff' onclick='details(".$row["id"].")'>";
+					}  else if ($row["type"] == 'R') {
+						echo "<tr bgcolor='#ebf5ff' onclick='details(".$row["id"].")'>";
+					} else if ($row["type"] == 'K') {
+						echo "<tr bgcolor='#f3f9ff' onclick='details(".$row["id"].")'>";
+					} else {
+						echo "<tr onclick='details(".$row["id"].")'>";
+					}
+				} else {
+					echo "<tr bgcolor='#ffbebe' onclick='details(".$row["id"].")'>";
+				}
+					
 				echo "<td>" . $index++ . "</td>";
 				echo "<td>" . $row["firstName"] . "</td>";
 				echo "<td>" . $row["lastName"] . "</td>";

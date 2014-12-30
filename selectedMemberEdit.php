@@ -13,7 +13,7 @@
 }
 </style>
 </head>
-<body home page page-id-131 page-template-default rf_wrapper>
+<body class="home page page-id-131 page-template-default rf_wrapper">
 <?php
 include ('session.php');
 

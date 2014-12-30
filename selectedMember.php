@@ -26,8 +26,10 @@ $ses_row = mysql_fetch_array($ses_sql);
 $selectedId = $ses_row["members_id"];
 $ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["members_id"] . "'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
-if ($ses_row["type"] == 'Z') {
-	$selectedId = $_POST["selectedId"];
+if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {
+	if (isset($_POST ['selectedId'])) {
+		$selectedId = $_POST ['selectedId'];
+	}
 }
 $query = "SELECT * FROM `Members` WHERE id=$selectedId";
 $result = mysql_query($query);
@@ -46,7 +48,7 @@ $result = mysql_query($query);
 }
 </style>
 </head>
-<body home page page-id-131 page-template-default rf_wrapper>
+<body class="home page page-id-131 page-template-default rf_wrapper">
 	<div id="site-wrapper">
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
@@ -66,7 +68,7 @@ $result = mysql_query($query);
            			</form>
            				<p>
            					<input name="listMembers" onclick="window.location.href='members.php';" value="Lista członków" class="redButton" type="button"/>
-           					<?php  if ($ses_row["type"] == 'Z') {?>
+           					<?php  if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {?>
            						<input name="createMember" onclick="window.location.href='createMember.php';" value="Dodaj członka" class="redButton" type="button"/>
        						<?php }?>
        					</p>
