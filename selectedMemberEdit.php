@@ -127,7 +127,7 @@ if (isset($_POST ['submit_changes'])) {
 		{
 			die('Błąd podczas zapisu danych: ' . mysql_error());
 		}
-		echo "<script type='text/javascript'>alert('Dane zostały zapisane');</script>";
+		echo "<script type='text/javascript'>alert('Dane zostały poprawnie zapisane');</script>";
 		echo "<script>";
 		echo "$( document ).ready(function() {";
 		echo "goBack();";
@@ -242,7 +242,7 @@ if (isset($_POST ['submit_changes'])) {
 			</select>
 		</div>
 		<input type="hidden" id="selectedId" name="selectedId" value="<?php echo $_POST["selectedId"]?>">
-		<br><br><input name="submit_changes" value="Zapisz zmiany" class="red" type="submit"/>
+		<br><input name="submit_changes" value="Zapisz zmiany" class="red" type="submit"/>
 		</form>	
 		<br>
 	</div>

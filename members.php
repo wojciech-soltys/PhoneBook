@@ -58,10 +58,10 @@ $ses_row = mysql_fetch_array($ses_sql);
        					</p>
            			</form>
            			<p>
-           			<?php  if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {?>
+           			<?php  if ($ses_row["type"] == 'Z') {?>
            				<input name="createMember" onclick="window.location.href='createMember.php';" value="Dodaj członka" class="redButton" type="button"/>
        				<?php }?>
-       					<input name="createMember" onclick="window.location.href='selectedMember.php';" value="Twoje dane" class="redButton" type="button"/>
+       					<input name="myData" onclick="window.location.href='selectedMember.php';" value="Moje dane" class="redButton" type="button"/>
        				</p>
 				</div>	
 			</div>
@@ -213,7 +213,7 @@ $ses_row = mysql_fetch_array($ses_sql);
     		<input type="hidden" id="selectedId" name="selectedId" value="0">
 		</form>
 	</div>
-	<?php } else  if ($ses_row["type"] == 'C' || $ses_row["type"] == 'K') {?>
+	<?php } else  if ($ses_row["type"] == 'C' || $ses_row["type"] == 'K' || $ses_row["type"] == 'H') {?>
 		<h3 class="colour blue">Książka telefoniczna</h3>
 		Wpisz imię i nazwisko członka.
 		<form action="members.php" id="member" method="post" enctype="multipart/form-data">
@@ -245,8 +245,11 @@ $ses_row = mysql_fetch_array($ses_sql);
 			if ((strlen($errorFirstName) == 0) && (strlen($errorLastName) == 0) ) {
 				$query = mysql_query("SELECT firstName, lastName, phone from Members WHERE firstName = '$firstName' AND lastName = '$lastName'", $connection);
 				$row = mysql_fetch_array($query);
-				if (strlen($row["firstName"]) > 0 && strlen($row["lastName"]) > 0 && strlen($row["phone"]) > 0)
+				if (strlen($row["firstName"]) > 0 && strlen($row["lastName"]) > 0 && strlen($row["phone"]) > 0) {
 					echo '<h3 class="colour blue">Imię: ' . $row["firstName"] . '&nbsp;&nbsp;&nbsp;&nbsp;Nazwisko: ' . $row["lastName"] . '&nbsp;&nbsp;&nbsp;&nbsp;Numer telefonu: ' . $row["phone"] . '</h3>';
+				} else {
+					echo '<h3 class="colour blue">Nie znaleziono członka ' . $firstName . ' ' . $lastName . '</h3>';
+				}
 			}
 		}
 		?>

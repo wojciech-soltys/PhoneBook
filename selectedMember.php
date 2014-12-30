@@ -20,7 +20,6 @@ if (!mysql_select_db($databaseName, $connection)) {
 	exit (0);
 }
 
-
 $ses_sql = mysql_query("SELECT members_id FROM Members, Login WHERE username='$user_check'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
 $selectedId = $ses_row["members_id"];
@@ -68,7 +67,7 @@ $result = mysql_query($query);
            			</form>
            				<p>
            					<input name="listMembers" onclick="window.location.href='members.php';" value="Lista członków" class="redButton" type="button"/>
-           					<?php  if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {?>
+           					<?php  if ($ses_row["type"] == 'Z') {?>
            						<input name="createMember" onclick="window.location.href='createMember.php';" value="Dodaj członka" class="redButton" type="button"/>
        						<?php }?>
        					</p>
@@ -135,6 +134,9 @@ $result = mysql_query($query);
     		echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"$selectedId\">";
     		echo "<br><input name=\"submit\" value=\"Edytuj dane\" class=\"redButton\" type=\"submit\"/>";
 			echo "</form>";
+		}
+		if (!isset($_POST ['selectedId'])) {
+			echo "<br><input name=\"changePassword\" onclick=\"window.location.href='changePassword.php';\" value=\"Zmień hasło\" class=\"redButton\" type=\"button\"/><br>";
 		}
 		echo "<br>";
 	?>
