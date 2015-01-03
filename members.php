@@ -78,16 +78,19 @@ $ses_row = mysql_fetch_array($ses_sql);
 			date_default_timezone_set('UTC');
 			$year = date("Y");
 			$currentDate = date("Y-m-d");
-			if ($currentDate > $year."-10-01") {
+			if ($currentDate >= $year."-01-01" && $currentDate < $year."-03-01") {
+				$year = $year - 1;
+			}
+			if ($currentDate >= $year."-10-01" ) {
 				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND id IN (
-						SELECT userID
+						SELECT member_id
 						FROM `Payments`
 						WHERE (type = 2 AND paymentDate >= STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d'))
 						OR (type = 3 AND paymentDate >= STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-12-31','%Y-%m-%d'))
 					)";
 			} else {
 				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND id IN (
-						SELECT userID
+						SELECT member_id
 						FROM `Payments`
 						WHERE (type = 1 AND paymentDate >= STR_TO_DATE('" . $year . "-03-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-09-30','%Y-%m-%d'))
 						OR (type = 3 AND paymentDate >= STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-12-31','%Y-%m-%d'))
@@ -100,11 +103,11 @@ $ses_row = mysql_fetch_array($ses_sql);
 			echo "<br><label>Liczba członków posiadających adres w domenie aegee-gliwice.org: </label>" . mysql_result($result, 0);
 			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND declaration = 1";
 			$result = mysql_query($query);
-			echo "<br><label>Liczba członków, którzy wypełnili ankietę: </label>" . mysql_result($result, 0);
+			echo "<br><label>Liczba członków, którzy wypełnili deklarację członkowską: </label>" . mysql_result($result, 0);
 			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND connectedToList = 1";
 			$result = mysql_query($query);
 			echo "<br><label>Liczba członków podłączonych do listy ogólnej AEGEE Gliwice: </label>" . mysql_result($result, 0);
-			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND mentorID = 0";
+			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND mentor_id = 0";
 			$result = mysql_query($query);
 			echo "<br><label>Liczba mentorów: </label>" . mysql_result($result, 0) . "<br>";
 			?>
@@ -141,13 +144,16 @@ $ses_row = mysql_fetch_array($ses_sql);
 				date_default_timezone_set('UTC');
 				$year = date("Y");
 				$currentDate = date("Y-m-d");
+				if ($currentDate >= $year."-01-01" && $currentDate < $year."-03-01") {
+					$year = $year - 1;
+				}
 				if ($currentDate > $year."-10-01") {
-					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.userID AND (
+					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id AND (
 						(Payments.type = 2 AND paymentDate >= STR_TO_DATE('" . $year . "-10-01','%Y-%m-%d') AND paymentDate < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d'))
 						OR (Payments.type = 3 AND paymentDate >= STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-12-31','%Y-%m-%d'))
 					)";
 				} else {
-					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.userID AND (
+					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id AND (
 						(Payments.type = 1 AND paymentDate >= STR_TO_DATE('" . $year . "-03-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-09-30','%Y-%m-%d'))
 						OR (Payments.type = 3 AND paymentDate >= STR_TO_DATE('" . $year . "-01-01','%Y-%m-%d') AND paymentDate <= STR_TO_DATE('" . $year . "-12-31','%Y-%m-%d'))
 					)";
@@ -155,16 +161,16 @@ $ses_row = mysql_fetch_array($ses_sql);
 
 				if (@mysql_num_rows(mysql_query($query_fee))==1 || $row["type"] == 'H') {				
 					if ($row["type"] == 'Z') {
-						echo "<tr bgcolor='#ddefff' onclick='details(".$row["id"].")'>";
+						echo "<tr title='Członek Zarządu' bgcolor='#ddefff' onclick='details(".$row["id"].")'>";
 					}  else if ($row["type"] == 'R') {
-						echo "<tr bgcolor='#ebf5ff' onclick='details(".$row["id"].")'>";
+						echo "<tr title='Członek Komisji Rewizyjnej' bgcolor='#ebf5ff' onclick='details(".$row["id"].")'>";
 					} else if ($row["type"] == 'K') {
-						echo "<tr bgcolor='#f3f9ff' onclick='details(".$row["id"].")'>";
+						echo "<tr title='Koordynator' bgcolor='#f3f9ff' onclick='details(".$row["id"].")'>";
 					} else {
 						echo "<tr onclick='details(".$row["id"].")'>";
 					}
 				} else {
-					echo "<tr bgcolor='#ffbebe' onclick='details(".$row["id"].")'>";
+					echo "<tr title='Brak opłaconej składki!' bgcolor='#ffbebe' onclick='details(".$row["id"].")'>";
 				}
 					
 				echo "<td>" . $index++ . "</td>";
@@ -188,14 +194,14 @@ $ses_row = mysql_fetch_array($ses_sql);
 				} else {
 					echo "<td class='center'><input type='checkbox' name='connectedToList' value='connectedToList' disabled/></td>";
 				}
-				$query = "SELECT firstName, lastName FROM `Members` WHERE id = ".$row["mentorID"];
+				$query = "SELECT firstName, lastName FROM `Members` WHERE id = ".$row["mentor_id"];
 				$mentorResult = mysql_query($query);
 				$mentor = mysql_fetch_array($mentorResult);
-				if ($row["mentorID"] != 0 && $row["mentorID"] != -1) {
+				if ($row["mentor_id"] != 0 && $row["mentor_id"] != -1) {
 					echo "<td>" . $mentor["firstName"] . " " . $mentor["lastName"] . "</td>";
-				} else if ($row["mentorID"] == 0){
+				} else if ($row["mentor_id"] == 0){
 					echo "<td><b>" . $mentor["firstName"] . "</b>" . "</td>";
-				} else if ($row["mentorID"] == -1){
+				} else if ($row["mentor_id"] == -1){
 					echo "<td>" . $mentor["firstName"] . "</td>";
 				}
 				echo "</tr>";

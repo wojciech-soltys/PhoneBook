@@ -119,14 +119,14 @@ $result = mysql_query($query);
 		} else {
 			echo "<label>Podłączenie do listy ogólnej: </label><input type='checkbox' name='connectedToList' value='connectedToList' disabled/><br>";
 		}
-		if ($row["mentorID"] != 0 && $row["mentorID"] != -1) {
-			$query = "SELECT firstName, lastName FROM `Members` WHERE id = ".$row["mentorID"];
+		if ($row["mentor_id"] != 0 && $row["mentor_id"] != -1) {
+			$query = "SELECT firstName, lastName FROM `Members` WHERE id = ".$row["mentor_id"];
 			$mentorResult = mysql_query($query);
 			$mentor = mysql_fetch_array($mentorResult);
 			echo "<label>Mentor: </label>" . $mentor["firstName"] . " " . $mentor["lastName"] . "<br>";
-		} else if ($row["mentorID"] == 0){
+		} else if ($row["mentor_id"] == 0){
 			echo "<label>Mentor: </label>" . "<b>Mentor</b>" . "<br>";
-		} else if ($row["mentorID"] == -1){
+		} else if ($row["mentor_id"] == -1){
 			echo "<label>Mentor: </label>" . "-" . "<br>";
 		}	
 		if ($ses_row["type"] == 'Z') {
@@ -144,7 +144,7 @@ $result = mysql_query($query);
 	<div id="site-container">
 		<h3 class="colour blue">Składki członkowskie</h3>
 		<?php 
-		$query = "SELECT paymentDate, type, amount FROM `Payments` WHERE userID=$selectedId";
+		$query = "SELECT paymentDate, type, amount FROM `Payments` WHERE member_id=$selectedId";
 		$result = mysql_query($query);
 		$rowCount = mysql_num_rows($result);
 		if ($rowCount == 0) {

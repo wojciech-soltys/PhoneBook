@@ -110,9 +110,9 @@ if (isset ( $_POST ['submit'] )) {
 		<input type='checkbox' name='connectedToList' value='connectedToList' />
 		<br>
 		<label>Mentor: </label>
-		<select name='mentorID' id='mentorID'>
+		<select name='mentor_id' id='mentor_id'>
 			<?php 
-				$query = "SELECT id, firstName, lastName FROM `Members` WHERE mentorID IN (0,-1)";
+				$query = "SELECT id, firstName, lastName FROM `Members` WHERE mentor_id IN (0,-1)";
 				$mentorResult = mysql_query($query);
 				while ( $row = mysql_fetch_array($mentorResult) ) {
 					if ($row["id"] == -1) {

@@ -58,7 +58,7 @@ $birthDate = $row["birthDate"];
 $cardNumber = $row["cardNumber"];
 $declaration = $row["declaration"];
 $connectedToList = $row["connectedToList"];
-$mentorID = $row["mentorID"];
+$mentor_id = $row["mentor_id"];
 $type = $row["type"];
 
 if (isset($_POST ['submit_changes'])) {
@@ -108,7 +108,8 @@ if (isset($_POST ['submit_changes'])) {
 		$connectedToList = 0;
 	}
 	
-	$mentorID = $_POST ['mentorID'];
+	$mentor_id = $_POST ['mentor_id'];
+	$type = $_POST ['type'];
 	
 	$errorFirstName = ((empty($firstName)) ? 'Pole imię jest puste. ' : '');
 	$errorFirstName = ((strlen($firstName) > 70) ? 'Zbyt duża liczba znaków w polu imię.' : '');
@@ -121,7 +122,7 @@ if (isset($_POST ['submit_changes'])) {
 	$errorCardNumber = ((preg_match("/^[A-Z0-9]{6}-[A-Z0-9]{6}$/", $cardNumber) == 0) ? 'Niepoprawna wartość w polu numer karty członkowskiej. Wpisz wartość według schematu: xxxxxx-xxxxxx.' : ''); 
 	if ((strlen($errorFirstName) == 0) && (strlen($errorLastName) == 0) && (strlen($errorAccessionDate) == 0) && (strlen($errorPhone) == 0) && (strlen($errorPrivateEmail) == 0) && (strlen($errorBirthDate) == 0) && (strlen($errorCardNumber) == 0)) {
 		$query = "UPDATE `Members` SET firstName = '$firstName', lastName = '$lastName', accessionDate = '$accessionDate', phone = '$phone', privateEmail = '$privateEmail', aegeeEmail = $aegeeEmail," .
-		"birthDate = '$birthDate', cardNumber = '$cardNumber', declaration = $declaration, connectedToList = $connectedToList, mentorID = $mentorID, type = $type  WHERE id=".$_POST["selectedId"];
+		"birthDate = '$birthDate', cardNumber = '$cardNumber', declaration = $declaration, connectedToList = $connectedToList, mentor_id = $mentor_id, type = '$type' WHERE id=".$_POST["selectedId"];
 		$retval = mysql_query($query, $connection);
 		if(! $retval )
 		{
@@ -215,9 +216,9 @@ if (isset($_POST ['submit_changes'])) {
 		</div>
 		<div>
 			<label>Mentor: </label>
-			<select name='mentorID' id='mentorID'>
+			<select name='mentor_id' id='mentor_id'>
 			<?php
-				$query = "SELECT id, firstName, lastName FROM `Members` WHERE mentorID IN (0,-1)";
+				$query = "SELECT id, firstName, lastName FROM `Members` WHERE mentor_id IN (0,-1)";
 				$mentorResult = mysql_query($query);
 				while ( $row = mysql_fetch_array($mentorResult) ) {
 					if ($row["id"] == -1) {
@@ -252,7 +253,7 @@ if (isset($_POST ['submit_changes'])) {
 	</div>
 	<script>
 		$( document ).ready(function() {
-			$('select#mentorID').val('<?php echo $mentorID ?>');
+			$('select#mentor_id').val('<?php echo $mentor_id ?>');
 			$('select#type').val('<?php echo $type ?>');
 		});
 		function goBack() {
