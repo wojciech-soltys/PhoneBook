@@ -8,6 +8,7 @@ include ('login.php'); // Includes Login Script
 <title>AEGEE Gliwice Members Portal</title>
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="custom.css" rel="stylesheet" type="text/css">
+<link rel="Shortcut icon" href="http://aegee-gliwice.org/strona/wp-content/uploads/2013/12/favicon.png" />
 </head>
 <body home page page-id-131 page-template-default rf_wrapper>
 	<div id="site-wrapper">

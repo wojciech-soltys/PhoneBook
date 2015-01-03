@@ -6,6 +6,7 @@ include ('session.php');
 <head>
 <title>Your Home Page</title>
 <link href="style.css" rel="stylesheet" type="text/css">
+<link rel="Shortcut icon" href="http://aegee-gliwice.org/strona/wp-content/uploads/2013/12/favicon.png" />
 </head>
 <body>
 	<div id="profile">

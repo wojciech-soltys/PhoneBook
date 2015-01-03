@@ -33,6 +33,7 @@ $ses_row = mysql_fetch_array($ses_sql);
 <script src="jquery-2.1.3.js"></script>
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="custom.css" rel="stylesheet" type="text/css">
+<link rel="Shortcut icon" href="http://aegee-gliwice.org/strona/wp-content/uploads/2013/12/favicon.png" />
 <style>
 #site-wrapper {
   background: #fff;

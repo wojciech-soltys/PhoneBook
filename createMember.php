@@ -45,6 +45,7 @@ if (isset ( $_POST ['submit'] )) {
 <title>AEGEE Gliwice Members Portal</title>
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="custom.css" rel="stylesheet" type="text/css">
+<link rel="Shortcut icon" href="http://aegee-gliwice.org/strona/wp-content/uploads/2013/12/favicon.png" />
 <style>
 #site-wrapper {
   background: #fff;
