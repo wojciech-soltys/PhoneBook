@@ -16,7 +16,7 @@ if (! isset ( $user_check )) {
 }
 // SQL Query To Fetch Complete Information Of User
 mysql_query("SET NAMES utf8");
-$ses_sql = mysql_query ( "select firstName,lastName from Members,Login where username='$user_check' and members_id = id", $connection );
+$ses_sql = mysql_query ( "select firstName,lastName from Members,Login where username='$user_check' and member_id = id", $connection );
 $row = mysql_fetch_array ( $ses_sql );
 $login_session = $row ['firstName']. " ". $row ['lastName'];
 if ($login_session == " ") {

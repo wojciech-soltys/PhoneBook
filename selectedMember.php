@@ -20,10 +20,10 @@ if (!mysql_select_db($databaseName, $connection)) {
 	exit (0);
 }
 
-$ses_sql = mysql_query("SELECT members_id FROM Members, Login WHERE username='$user_check'", $connection);
+$ses_sql = mysql_query("SELECT member_id FROM Members, Login WHERE username='$user_check'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
-$selectedId = $ses_row["members_id"];
-$ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["members_id"] . "'", $connection);
+$selectedId = $ses_row["member_id"];
+$ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["member_id"] . "'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
 if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {
 	if (isset($_POST ['selectedId'])) {

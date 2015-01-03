@@ -19,9 +19,9 @@ if (!mysql_select_db($databaseName,$connection)) {
 	echo '</script>';
 	exit (0);
 }
-$ses_sql = mysql_query("SELECT members_id FROM Members, Login WHERE username='$user_check'", $connection);
+$ses_sql = mysql_query("SELECT member_id FROM Members, Login WHERE username='$user_check'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
-$ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["members_id"] . "'", $connection);
+$ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["member_id"] . "'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
 
 ?>
