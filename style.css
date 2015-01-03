@@ -983,7 +983,7 @@ img {
 .post-content .button {
   margin: 0 0 22px 0;
 }
-form input[type='text'], form input[type='email'], select {
+form input[type='text'], form input[type='email'], form select {
   outline: 0px;
   color: #888;
 }

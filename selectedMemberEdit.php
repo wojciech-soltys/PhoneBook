@@ -179,10 +179,10 @@ if (isset($_POST ['submit_changes'])) {
 			<label>Nazwisko: </label><input type="text" id="lastName" name="lastName" maxlenght="70" value="<?php echo $lastName ?>"> <label class="invalid"><?php echo $errorLastName; ?></label>
 		</div>
 		<div>
-			<label>Data wstąpienia: </label><input type="text" id="accessionDate" size="7" maxlength="10" name="accessionDate" value="<?php echo $accessionDate ?>"> <label class="invalid"><?php echo $errorAccessionDate; ?></label>
+			<label>Data wstąpienia: </label><input type="text" id="accessionDate" size="10" maxlength="10" name="accessionDate" value="<?php echo $accessionDate ?>"> <label class="invalid"><?php echo $errorAccessionDate; ?></label>
 		</div>
 		<div>
-			<label>Numer telefonu: </label><input type="text" id="phone" size="7" maxlength="9" name="phone" value="<?php echo $phone ?>"> <label class="invalid"><?php echo $errorPhone; ?></label>
+			<label>Numer telefonu: </label><input type="text" id="phone" size="9" minlength="9" maxlength="9" name="phone" value="<?php echo $phone ?>"> <label class="invalid"><?php echo $errorPhone; ?></label>
 		</div>
 		<div>
 			<label>Prywatny adres email: </label><input type="email" id="privateEmail" size="35" name="privateEmail" value="<?php echo $privateEmail ?>"> <label class="invalid"><?php echo $errorPrivateEmail; ?></label>
@@ -195,10 +195,10 @@ if (isset($_POST ['submit_changes'])) {
 			<?php }?>
 		</div>
 		<div>
-			<label>Data urodzenia: </label><input type="text" id="birthDate" size="7" maxlength="10" name="birthDate" value="<?php echo $birthDate ?>"> <label class="invalid"><?php echo $errorBirthDate; ?></label>
+			<label>Data urodzenia: </label><input type="text" id="birthDate" size="10" maxlength="10" name="birthDate" value="<?php echo $birthDate ?>"> <label class="invalid"><?php echo $errorBirthDate; ?></label>
 		</div>
 		<div>
-			<label>Numer karty członkowskiej: </label><input type="text" id="cardNumber" size="11" maxlength="13" name="cardNumber" value="<?php echo $cardNumber ?>"> <label class="invalid"><?php echo $errorCardNumber; ?></label>
+			<label>Numer karty członkowskiej: </label><input type="text" id="cardNumber" size="13" maxlength="13" name="cardNumber" value="<?php echo $cardNumber ?>"> <label class="invalid"><?php echo $errorCardNumber; ?></label>
 		</div>
 		<div>
 			<?php if ($declaration == 1) {?>

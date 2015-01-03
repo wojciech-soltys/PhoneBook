@@ -23,6 +23,9 @@ if (!mysql_select_db($databaseName, $connection)) {
 $ses_sql = mysql_query("SELECT member_id FROM Members, Login WHERE username='$user_check'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
 $selectedId = $ses_row["member_id"];
+if (isset($_POST ['savePayment'])) {
+	$auditCU = $ses_row["member_id"];
+}
 $ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["member_id"] . "'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
 if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {
@@ -30,6 +33,41 @@ if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {
 		$selectedId = $_POST ['selectedId'];
 	}
 }
+
+if (isset($_POST ['savePayment'])) {
+	$paymentDate = '';
+	$paymentType = '';
+	$paymentAmount = '';
+	
+	$paymentDate = $_POST ['paymentDate'];
+	$paymentDate = stripslashes($paymentDate);
+	$paymentDate = mysql_real_escape_string($paymentDate);
+	
+	$paymentType = $_POST ['paymentType'];
+	$paymentType = stripslashes($paymentType);
+	$paymentType = mysql_real_escape_string($paymentType);
+	
+	$paymentAmount = $_POST ['paymentAmount'];
+	$paymentAmount = stripslashes($paymentAmount);
+	$paymentAmount = mysql_real_escape_string($paymentAmount);
+	
+	$errorPaymentDate = ((preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $paymentDate) == 0) ? 'Niepoprawna wartość w polu data płatności. Wpisz wartość według schematu: RRRR-MM-DD.' : '');
+	if ((strlen($errorPaymentDate) == 0)) {
+		$currentDate = date("Y-m-d");
+		$member_id = $_POST ['selectedId'];
+		$query = "INSERT INTO Payments (member_id, amount, date, type, auditCD, auditCU) VALUES ($member_id,'$paymentAmount','$paymentDate','$paymentType','$currentDate',$auditCU)";
+		$retval = mysql_query($query, $connection);
+		if(! $retval )
+		{
+			die('Błąd podczas zapisu danych: ' . mysql_error());
+		}
+		echo "<script type='text/javascript'>alert('Dane zostały poprawnie zapisane');</script>";
+	}
+	else {
+		echo "<script>alert('Zapis danych nie powiódł się')</script>";
+	}
+}
+
 $query = "SELECT * FROM `Members` WHERE id=$selectedId";
 $result = mysql_query($query);
 ?>
@@ -129,7 +167,7 @@ $result = mysql_query($query);
 		} else if ($row["mentor_id"] == -1){
 			echo "<label>Mentor: </label>" . "-" . "<br>";
 		}	
-		if ($ses_row["type"] == 'Z') {
+		if ($ses_row["type"] == 'Z' && isset($_POST ['selectedId'])) {
 			echo "<form id=\"details\" method=\"post\" action=\"selectedMemberEdit.php\">";
     		echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"$selectedId\">";
     		echo "<br><input name=\"submit\" value=\"Edytuj dane\" class=\"redButton\" type=\"submit\"/>";
@@ -144,7 +182,7 @@ $result = mysql_query($query);
 	<div id="site-container">
 		<h3 class="colour blue">Składki członkowskie</h3>
 		<?php 
-		$query = "SELECT paymentDate, type, amount FROM `Payments` WHERE member_id=$selectedId";
+		$query = "SELECT date, type, amount FROM `Payments` WHERE member_id=$selectedId ORDER BY date DESC";
 		$result = mysql_query($query);
 		$rowCount = mysql_num_rows($result);
 		if ($rowCount == 0) {
@@ -152,6 +190,9 @@ $result = mysql_query($query);
 		}
 		else {
 			$index = 1;
+			if (isset($_POST ['addPayment'])){
+				echo "<form id=\"savePayment\" method=\"post\" action=\"selectedMember.php\">";
+			}
 			echo "<table class='hovered'>";
 			echo "<tr>";
 			echo "<th class='center'>Lp.</th>";
@@ -162,7 +203,7 @@ $result = mysql_query($query);
 			while ( $row = mysql_fetch_array($result) ) {
 				echo "<tr>";
 				echo "<td class='center'>" . $index++ . "</td>";
-				echo "<td class='center'>" . $row["paymentDate"] . "</td>";
+				echo "<td class='center'>" . $row["date"] . "</td>";
 				if ($row["type"] == 1) {
 					echo "<td class='center'>Semestr 1</td>";
 				} else if ($row["type"] == 2) {
@@ -170,13 +211,55 @@ $result = mysql_query($query);
 				} else if ($row["type"] == 3) {
 					echo "<td class='center'>Rok</td>";
 				}
-				echo "<td class='center'>" . number_format((float)$row["amount"], 2, ',', '') . "</td>";
+				echo "<td class='center'>" . number_format((float)$row["amount"], 2, ',', '') . " zł</td>";
 				echo "</tr>";
 			}
+			if (isset($_POST ['addPayment'])){
+				echo "<tr>";
+				echo "<td class='center'>" . $index++ . "</td>";
+				$currentDate = date("Y-m-d");
+				echo "<td class='center'><input type=\"text\" id=\"paymentDate\" size=\"10\" maxlength=\"10\" name=\"paymentDate\" value=\"$currentDate\"></td>";
+				echo "<td class='center'>
+						<select name='paymentType' id='paymentType' onchange='changeAmount();'>
+							<option value=\"1\">Semestr 1</option>
+							<option value=\"2\">Semestr 2</option>
+							<option value=\"3\">Rok</option>
+						</select>
+					</td>"; 
+				echo "<td class='center'>
+						<select name='paymentAmount' id='paymentAmount'>
+							<option value=\"20\">20,00 zł</option>
+							<option value=\"40\">40,00 zł</option>
+						</select>
+					</td>";
+				echo "</tr>";
+			?>
+			<script>
+				function changeAmount() {
+					if ($('#paymentType').val() == '1' || $("#paymentType").val() == '2') {
+						$('#paymentAmount').val('20');
+					} else if ($('#paymentType').val() == '3') {
+						$('#paymentAmount').val('40');
+					}
+				}
+			</script>
+			<?php 
+			}
 			echo "</table>";
+			if (isset($_POST ['addPayment'])){
+				echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"$selectedId\">";
+				echo "<br><input name=\"savePayment\" value=\"Zapisz\" class=\"redButton\" type=\"submit\"/>";
+				echo "</form>";
+			}
+		}
+		if (isset($_POST ['selectedId']) && !isset($_POST ['addPayment'])) {
+			echo "<form id=\"addPayment\" method=\"post\" action=\"selectedMember.php\">";
+			echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"$selectedId\">";
+			echo "<br><input name=\"addPayment\" value=\"Dodaj składkę\" class=\"redButton\" type=\"submit\"/>";
+			echo "</form>";
 		}
 		echo "<br>";
-		?>
+	?>
 	</div>
 	</div>
 	<?php 
