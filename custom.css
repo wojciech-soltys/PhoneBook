@@ -275,6 +275,7 @@ font-size:0.8em;
   padding: 5px;
   font-weight:normal;
   font-size:11px;
+  text-decoration: none;
 }
 
 form input[type=submit] {

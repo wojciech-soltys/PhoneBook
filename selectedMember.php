@@ -186,7 +186,7 @@ $result = mysql_query($query);
 		$query = "SELECT date, type, amount FROM `Payments` WHERE member_id=$selectedId ORDER BY date DESC";
 		$result = mysql_query($query);
 		$rowCount = mysql_num_rows($result);
-		if ($rowCount == 0) {
+		if ($rowCount == 0 && (!isset($_POST ['addPayment']))) {
 			echo "Brak płatności";
 		}
 		else {
