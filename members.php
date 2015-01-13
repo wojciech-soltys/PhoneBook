@@ -165,7 +165,7 @@ if ($ses_row["type"] == 'Z') {
 			<?php 
 			$index = 1;
 			$indexFile = 1;
-			$query = "SELECT * FROM `Members` WHERE id > 0";
+			$query = "SELECT * FROM `Members` WHERE id > 0 ORDER BY lastName";
 			$result = mysql_query($query);
 			while ( $row = mysql_fetch_array($result) ) {
 				date_default_timezone_set('UTC');
