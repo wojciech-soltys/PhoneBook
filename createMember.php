@@ -27,11 +27,11 @@ if (isset ( $_POST ['submit'] )) {
 	$accesionDate = $_POST ['accesionDate'];
 	$phoneNumber = $_POST ['phoneNumber'];
 	$email = $_POST ['email'];
-	$aegeeEmail = $_POST['aegeeEmail'];
+	$aegeeEmail = isset($_POST['aegeeEmail']) ? '1' : '0';
 	$birthDay = $_POST ['birthDay'];
 	$cardNumber = $_POST ['cardNumber'];
-	$declaration = $_POST['declaration'];
-	$connectedToList = $_POST['connectedToList'];
+	$declaration = isset($_POST['declaration']) ? '1' : '0';
+	$connectedToList = isset($_POST['connectedToList']) ? '1' : '0';
 	$mentor_id = $_POST['mentor_id'];
 	$memberType = $_POST['memberType'];
 	$login = $_POST['login'];
@@ -70,12 +70,6 @@ if (isset ( $_POST ['submit'] )) {
 		$error = 'Błędna długość adresu e-mail';
 	}
 	
-	if (isset( $aegeeEmail )) {
-		$aegeeEmail = '1';
-	} else {
-		$aegeeEmail ='0';
-	}
-	
 	if (empty ( $birthDay )) {
 		$error = 'Pusta data urodzenia';
 	} else if (strlen( $birthDay ) > 10 ) {
@@ -85,19 +79,7 @@ if (isset ( $_POST ['submit'] )) {
 	if (strlen( $cardNumber ) > 13 ) {
 		$error = 'Błędna długość numeru karty członkowskiej';
 	}
-	
-	if (isset( $declaration )) {
-		$declaration = '1';
-	} else {
-		$declaration ='0';
-	}
-	
-	if (isset( $connectedToList )) {
-		$connectedToList = '1';
-	} else {
-		$connectedToList ='0';
-	}
-	
+		
 	if (empty ( $login )) {
 		$error = 'Pusty login';
 	} else if (strlen( $login ) > 255 ) {
@@ -125,9 +107,13 @@ if (isset ( $_POST ['submit'] )) {
 	if(strlen($error) == 0) {
 		$query = "INSERT INTO Members (firstName, lastName, accessionDate, phone, privateEmail, 
 				aegeeEmail, birthDate, cardNumber, declaration, connectedToList, mentor_id, type) 
-		VALUES(". $firstName.",".$lastName.",".$accesionDate.",".$phoneNumber.",".$email.","
-				.$aegeeEmail.",".$birthDay.",".$cardNumber.",".$declaration.",".$connectedToList.",".$mentor_id.",".$memberType.")";
+		VALUES(". $firstName.",".$lastName.",".$accesionDate.",".$phoneNumber.",".$email.",'"
+				.$aegeeEmail."',".$birthDay.",".$cardNumber.",".$declaration.",".$connectedToList.",".$mentor_id.",".$memberType.")";
+/* 		echo $query; */
 		$result = mysql_query($query);
+/* 		if (!$result) {
+    		die('Invalid query: ' . mysql_error());
+		} */
 		if($result === TRUE) {
 			$userdId = mysql_insert_id();
 			$query = "INSERT INTO Login ( username, password, member_id) VALUES
