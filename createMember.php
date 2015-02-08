@@ -19,110 +19,147 @@ if (!mysql_select_db($databaseName)) {
 	exit (0);
 }
 
-$error = ''; // Variable To Store Error Message
+
 $firstName = '';
+$lastName = '';
+$accessionDate = '';
+$phone = '';
+$privateEmail = '';
+$aegeeEmail = 0;
+$birthDate = '';
+$cardNumber = '';
+$declaration = 0;
+$connectedToList = 0;
+$mentor_id = -1;
+$type = 'C';
+$login = '';
+$password1 = '';
+$password2 = '';
+
+//Variables To Store Error Message
+$error = ''; 
+$errorFirstName = '';
+$errorLastName = '';
+$errorAccessionDate = '';
+$errorPhone = '';
+$errorPrivateEmail = '';
+$errorBirthDate = '';
+$errorCardNumber = '';
+$errorLogin = '';
+$errorPassword1 = '';
+$errorPassword2 = '';
 if (isset ( $_POST ['submit'] )) {
+	
 	$firstName = $_POST ['firstName'];
+	$firstName = stripslashes($firstName);
+	$firstName = mysql_real_escape_string($firstName);
+	
 	$lastName = $_POST ['lastName'];
-	$accesionDate = $_POST ['accesionDate'];
-	$phoneNumber = $_POST ['phoneNumber'];
-	$email = $_POST ['email'];
+	$lastName = stripslashes($lastName);
+	$lastName = mysql_real_escape_string($lastName);
+	
+	$accessionDate = $_POST ['accessionDate'];
+	$accessionDate = stripslashes($accessionDate);
+	$accessionDate = mysql_real_escape_string($accessionDate);
+	
+	$phone = $_POST ['phone'];
+	$phone = stripslashes($phone);
+	$phone = mysql_real_escape_string($phone);
+	
+	$privateEmail = $_POST ['privateEmail'];
+	$privateEmail = stripslashes($privateEmail);
+	$privateEmail = mysql_real_escape_string($privateEmail);
+	
 	$aegeeEmail = isset($_POST['aegeeEmail']) ? '1' : '0';
-	$birthDay = $_POST ['birthDay'];
+	
+	$birthDate = $_POST ['birthDate'];
+	$birthDate = stripslashes($birthDate);
+	$birthDate = mysql_real_escape_string($birthDate);
+	
 	$cardNumber = $_POST ['cardNumber'];
+	$cardNumber = stripslashes($cardNumber);
+	$cardNumber = mysql_real_escape_string($cardNumber);
+	
 	$declaration = isset($_POST['declaration']) ? '1' : '0';
+	
 	$connectedToList = isset($_POST['connectedToList']) ? '1' : '0';
+	
 	$mentor_id = $_POST['mentor_id'];
-	$memberType = $_POST['memberType'];
+	
+	$type = $_POST['type'];
+	
 	$login = $_POST['login'];
-	$password1 = '';
+	$login = stripslashes($login);
+	$login = mysql_real_escape_string($login);
+	
 	$password1 = $_POST['password1'];
+	$password1 = stripslashes($password1);
+	$password1 = mysql_real_escape_string($password1);
+	
 	$password2 = $_POST['password2'];
+	$password2 = stripslashes($password2);
+	$password2 = mysql_real_escape_string($password2);
 	
 	
-	if (empty ( $firstName )) {
-		$error = 'Puste Imię członka';
-	} else if (strlen( $firstName ) > 255 ) {
-		$error = 'Zbyt długie Imię';
-	}
-	
-	if (empty ( $lastName )) {
-		$error = 'Puste Nazwisko członka';
-	} else if (strlen( $firstName ) > 255 ) {
-		$error = 'Zbyt długie Nazwisko';
-	}
-	
-	if (empty ( $accesionDate )) {
-		$error = 'Pusta Data wstąpienia';
-	} else if (strlen( $accesionDate ) != 10 ) {
-		$error = 'Błędna długość Daty wstąpienia';
-	}
-	
-	if (empty ( $phoneNumber )) {
-		$error = 'Pusty numer telefonu';
-	} else if (strlen( $phoneNumber ) != 9 ) {
-		$error = 'Błędna długość numeru telefonu';
-	}
-	
-	if (empty ( $email )) {
-		$error = 'Pusty adres e-mail';
-	} else if (strlen( $email ) > 255 ) {
-		$error = 'Błędna długość adresu e-mail';
-	}
-	
-	if (empty ( $birthDay )) {
-		$error = 'Pusta data urodzenia';
-	} else if (strlen( $birthDay ) > 10 ) {
-		$error = 'Błędna długość daty uroedzenia';
-	}
-	
-	if (strlen( $cardNumber ) > 13 ) {
-		$error = 'Błędna długość numeru karty członkowskiej';
-	}
+	$errorFirstName = ((empty($firstName)) ? 'Pole imię jest puste. ' : '');
+	$errorFirstName = ((strlen($firstName) > 70) ? 'Zbyt duża liczba znaków w polu imię.' : '');
+	$errorLastName = ((empty($lastName)) ? 'Pole nazwisko jest puste. ' : '');
+	$errorLastName = ((strlen($lastName) > 70) ? 'Zbyt duża liczba znaków w polu nazwisko.' : '');
+	$errorAccessionDate = ((preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $accessionDate) == 0) ? 'Niepoprawna wartość w polu data wstąpienia. Wpisz wartość według schematu: RRRR-MM-DD.' : '');
+	$errorPhone = ((preg_match("/^[0-9]{9}$/", $phone) == 0) ? 'Niepoprawny numer telefonu.' : ''); 
+	$errorPrivateEmail = ((!filter_var($privateEmail, FILTER_VALIDATE_EMAIL)) ? 'Niepoprawny adres poczty elektronicznej.' : '');
+	$errorBirthDate = ((preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $birthDate) == 0) ? 'Niepoprawna wartość w polu data urodzenia. Wpisz wartość według schematu: RRRR-MM-DD.' : '');
+	$errorCardNumber = ((preg_match("/^[A-Z0-9]{6}-[A-Z0-9]{6}$/", $cardNumber) == 0) ? 'Niepoprawna wartość w polu numer karty członkowskiej. Wpisz wartość według schematu: xxxxxx-xxxxxx.' : '');
 		
 	if (empty ( $login )) {
-		$error = 'Pusty login';
+		$errorLogin = 'Pusty login';
 	} else if (strlen( $login ) > 255 ) {
-		$error = 'Błędna długość loginu';
+		$errorLogin = 'Za długi login (maksymalnie 255 znaków)';
 	}
 	
 	if (empty ( $password1 )) {
-		$error = 'Puste hasło';
+		$errorPassword1 = 'Puste hasło';
 	} else if (strlen( $password1 ) > 32 ) {
-		$error = 'Błędna długość hasła';
+		$errorPassword1 = 'Za długie hasło (maksymalnie 32 znaki)';
 	}
 	
 	if (empty ( $password2 )) {
-		$error = 'Puste powtórzone hasło';
+		$errorPassword2 = 'Puste powtórzone hasło';
 	} else if (strlen( $password2 ) > 32 ) {
-		$error = 'Błędna długość powtórzonego hasła';
+		$error = 'Za długie powtórzone hasło (maksymalnie 32 znaki)';
 	}
 	
-	if($password1 !== $password2) {
-		$error = 'Wpisane hasła nie są identyczne';
-	} else {
-		$password = hash('sha256', $password1);
+	if((strlen($errorPassword1) == 0) && (strlen($errorPassword2) == 0)) {
+		if($password1 !== $password2) {
+			$errorPassword1 = 'Wpisane hasła nie są identyczne';
+			$errorPassword2 = 'Wpisane hasła nie są identyczne';
+		} else {
+			$password = hash('sha256', $password1);
+		}
 	}
+
 	
-	if(strlen($error) == 0) {
-		$query = "INSERT INTO Members (firstName, lastName, accessionDate, phone, privateEmail, 
+	if ((strlen($errorFirstName) == 0) && (strlen($errorLastName) == 0) && (strlen($errorAccessionDate) == 0) && (strlen($errorPhone) == 0) 
+			&& (strlen($errorPrivateEmail) == 0) && (strlen($errorBirthDate) == 0) && (strlen($errorCardNumber) == 0) &&
+			(strlen($errorLogin) == 0) && (strlen($errorPassword1) == 0) && (strlen($errorPassword2) == 0)) {
+		$query = "INSERT INTO `Members` (firstName, lastName, accessionDate, phone, privateEmail, 
 				aegeeEmail, birthDate, cardNumber, declaration, connectedToList, mentor_id, type) 
-		VALUES(". $firstName.",".$lastName.",".$accesionDate.",".$phoneNumber.",".$email.",'"
-				.$aegeeEmail."',".$birthDay.",".$cardNumber.",".$declaration.",".$connectedToList.",".$mentor_id.",".$memberType.")";
-/* 		echo $query; */
+		VALUES('$firstName','$lastName','$accessionDate','$phone','$privateEmail',
+				$aegeeEmail,'$birthDate','$cardNumber',$declaration,'$connectedToList','$mentor_id','$type')";
 		$result = mysql_query($query);
-/* 		if (!$result) {
-    		die('Invalid query: ' . mysql_error());
-		} */
-		if($result === TRUE) {
+ 		if (!$result) {
+    		die('Błąd podczas zapisu danych ' . mysql_error());
+		} else {
 			$userdId = mysql_insert_id();
-			$query = "INSERT INTO Login ( username, password, member_id) VALUES
-				(".$login.",".$password.",".$userdId.")";
+			$query = "INSERT INTO `Login` ( username, password, member_id) VALUES
+				('$login','$password',$userdId)";
 			$result = mysql_query($query);
-			if($result === TRUE) {
-				$error = "Poprawnie dodano członka";
+			if(!$result) {
+				die('Błąd podczas zapisu danych logowania. Skontaktuj sie z administratorem strony.' . mysql_error());
+			} else {
+				$error = 'Poprawnie dodano członka.';
 			}
-		}		
+		} 
 	}
 }
 ?>
@@ -169,36 +206,65 @@ if (isset ( $_POST ['submit'] )) {
 	<div id="site-container">
 	<form class="" action="createMember.php" method="post" enctype="multipart/form-data">
 		<h3 class="colour blue">Dodaj członka</h3>
+		
 		<label>Imię: </label> 
 		<input id="firstName" name="firstName" placeholder="Imię członka" type="text" autocomplete="on" maxlength="255" value="<?php echo $firstName; ?>"/>
+		<label class="invalid"><?php echo $errorFirstName; ?></label>
 		<br>
+		
 		<label>Nazwisko: </label>
-		<input id="lastName" name="lastName" placeholder="Nazwisko członka" type="text" autocomplete="on" maxlength="255"/>
+		<input id="lastName" name="lastName" placeholder="Nazwisko członka" type="text" autocomplete="on" maxlength="255" value="<?php echo $lastName;?>"/>
+		<label class="invalid"><?php echo $errorLastName; ?></label>
 		<br>
+		
 		<label>Data wstąpienia: </label>
-		<input id="accesionDate" name="accesionDate" placeholder="RRRR-MM-DD" type="text"autocomplete="on" maxlength="10"/>
+		<input id="accessionDate" name="accessionDate" placeholder="RRRR-MM-DD" type="text"autocomplete="on" maxlength="10" value="<?php echo $accessionDate;?>"/>
+		<label class="invalid"><?php echo $errorAccessionDate; ?></label>
 		<br>
+		
 		<label>Numer telefonu: </label>
-		<input id="phoneNumber" name="phoneNumber" placeholder="123456789" type="text" autocomplete="on" maxlength="9" />
+		<input id="phone" name="phone" placeholder="123456789" type="text" autocomplete="on" maxlength="9" value="<?php echo $phone;?>"/>
+		<label class="invalid"><?php echo $errorPhone; ?></label>
 		<br>
+		
 		<label>Prywatny adres email: </label>
-		<input id="email" name="email" placeholder="abc@gmail.com" type="text" autocomplete="on" maxlength="255"/>
+		<input id="privateEmail" name="privateEmail" placeholder="abc@gmail.com" type="text" autocomplete="on" maxlength="255"  value="<?php echo $privateEmail;?>"/>
+		<label class="invalid"><?php echo $errorPrivateEmail; ?></label>
 		<br>
-		<label>Adres w domenie aegee-gliwice.org: 
-		</label><input type='checkbox' name='aegeeEmail'/>
+		<label>Adres w domenie aegee-gliwice.org: </label>
+			<?php if ($aegeeEmail == 1) { ?>
+				<input type='checkbox' name='aegeeEmail' checked/>
+			<?php } else { ?>
+				<input type='checkbox' name='aegeeEmail'/>
+			<?php }?>
 		<br>
+
 		<label>Data urodzenia: </label>
-		<input id="birthDay" name="birthDay" placeholder="RRRR-MM-DD" type="text" autocomplete="on" maxlength="10" />
+		<input id="birthDate" name="birthDate" placeholder="RRRR-MM-DD" type="text" autocomplete="on" maxlength="10" value="<?php echo $birthDate;?>"/>
+		<label class="invalid"><?php echo $errorBirthDate; ?></label>
 		<br>
+		
 		<label>Numer karty członkowskiej: </label>
-		<input id="cardNumber" name="cardNumber" placeholder="123456-123456" type="text" maxlength="13"/>
+		<input id="cardNumber" name="cardNumber" placeholder="123456-123456" type="text" maxlength="13" value="<?php echo $cardNumber;?>"/>
+		<label class="invalid"><?php echo $errorCardNumber; ?></label>
 		<br>
+		
 		<label>Deklaracja: </label>
-		<input type='checkbox' name='declaration'/>
+			<?php if ($declaration == 1) { ?>
+				<input type='checkbox' name='declaration' chcecked/>
+			<?php } else { ?>
+				<input type='checkbox' name='declaration'/>
+			<?php }?>
 		<br>
+		
 		<label>Podłączenie do listy ogólnej: </label>
-		<input type='checkbox' name='connectedToList'/>
+			<?php if ($connectedToList == 1) { ?>
+				<input type='checkbox' name='declaration' chcecked/>
+			<?php } else { ?>
+				<input type='checkbox' name='connectedToList'/>
+			<?php }?>
 		<br>
+		
 		<label>Mentor: </label>
 		<select name='mentor_id' id='mentor_id'>
 			<?php 
@@ -206,34 +272,75 @@ if (isset ( $_POST ['submit'] )) {
 				$mentorResult = mysql_query($query);
 				while ( $row = mysql_fetch_array($mentorResult) ) {
 					if ($row["id"] == -1) {
-						echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+						if($mentor_id == $row["id"]) {
+							echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+						} else {
+							echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+						}	
 					} else if ($row["id"] == 0) {
-						echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+						if($mentor_id == $row["id"]) {
+							echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+						} else {
+							echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+						}
 					} else {
-						echo "<option value=\"". $row["id"]."\">".$row["firstName"]." ".$row["lastName"]."</option>";
+						if($mentor_id == $row["id"]) {
+							echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]." ".$row["lastName"]."</option>";
+						} else {
+							echo "<option value=\"". $row["id"]."\">".$row["firstName"]." ".$row["lastName"]."</option>";
+						}
 					}
 				}
 			?>
 		</select>
 		<br>
+		
 		<label>Typ członka: </label>
-		<select name='memberType' id='memberType'>
-			<option selected value="C">Członek zwyczajny</option>
-			<option value="K">Koordynator</option>
-			<option value="Z">Członek zarządu</option>
-			<option value="R">Komisja rewizyjna</option>
-			<option value="H">Członek honorowy</option>
+		<select name='type' id='type'>
+			<?php if ($type == 'C') { ?>
+				<option selected value="C">Członek zwyczajny</option>
+			<?php } else { ?>
+				<option value="C">Członek zwyczajny</option>
+			<?php }?>
+			<?php if ($type == 'K') { ?>
+				<option selected value="K">Koordynator</option>
+			<?php } else { ?>
+				<option value="K">Koordynator</option>
+			<?php }?>
+			<?php if ($type == 'Z') { ?>
+				<option selected value="Z">Członek zarządu</option>
+			<?php } else { ?>
+				<option value="Z">Członek zarządu</option>
+			<?php }?>
+			<?php if ($type == 'R') { ?>
+				<option selected value="R">Komisja rewizyjna</option>
+			<?php } else { ?>
+				<option value="R">Komisja rewizyjna</option>
+			<?php }?>
+			<?php if ($type == 'H') { ?>
+				<option selected value="H">Członek honorowy</option>
+			<?php } else { ?>
+				<option value="H">Członek honorowy</option>
+			<?php }?>
 		</select>
 		<br>
-		<p><?php echo $error; ?></p>
 		<br>
+		
 		<label>Login:</label>
-		<input id="login" name="login" placeholder="login" type="text" autocomplete="off" maxlength="255"/>
+		<input id="login" name="login" placeholder="login" type="text" autocomplete="off" maxlength="255" value="<?php echo $login;?>"/>
+		<label class="invalid"><?php echo $errorLogin; ?></label>
 		<br>
+		
 		<label>Hasło</label>
-		<input id="password1" name="password1" placeholder="Hasło" type="password" autocomplete="off" minlenght="6" maxlenght="32"/>
-		<input id="password2" name="password2" placeholder="Powtórz hasło" type="password" autocomplete="off" minlenght="6" maxlenght="32"/>
+		<input id="password1" name="password1" placeholder="Hasło" type="password" autocomplete="off" minlenght="6" maxlenght="32" value="<?php echo $password1;?>"/>
+		<label class="invalid"><?php echo $errorPassword1; ?></label>
+		<br>
+		<label>Potwierdź Hasło</label>
+		<input id="password2" name="password2" placeholder="Powtórz hasło" type="password" autocomplete="off" minlenght="6" maxlenght="32" value="<?php echo $password2;?>"/>
+		<label class="invalid"><?php echo $errorPassword2; ?></label>
+		<br>
 		<input name="submit" value="Dodaj członka" class="red" type="submit"/>
+		<p <?php echo $error; ?></p>
 	</form>
 	</div>
 	</div>
