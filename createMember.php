@@ -88,7 +88,7 @@ if (isset ( $_POST ['submit'] )) {
 	
 	$type = $_POST['type'];
 	
-	$login = $_POST['login'];
+	/*$login = $_POST['login'];
 	$login = stripslashes($login);
 	$login = mysql_real_escape_string($login);
 	
@@ -98,20 +98,35 @@ if (isset ( $_POST ['submit'] )) {
 	
 	$password2 = $_POST['password2'];
 	$password2 = stripslashes($password2);
-	$password2 = mysql_real_escape_string($password2);
+	$password2 = mysql_real_escape_string($password2);*/
 	
 	
 	$errorFirstName = ((empty($firstName)) ? 'Pole imię jest puste. ' : '');
 	$errorFirstName = ((strlen($firstName) > 70) ? 'Zbyt duża liczba znaków w polu imię.' : '');
 	$errorLastName = ((empty($lastName)) ? 'Pole nazwisko jest puste. ' : '');
 	$errorLastName = ((strlen($lastName) > 70) ? 'Zbyt duża liczba znaków w polu nazwisko.' : '');
-	$errorAccessionDate = ((preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $accessionDate) == 0) ? 'Niepoprawna wartość w polu data wstąpienia. Wpisz wartość według schematu: RRRR-MM-DD.' : '');
-	$errorPhone = ((preg_match("/^[0-9]{9}$/", $phone) == 0) ? 'Niepoprawny numer telefonu.' : ''); 
+	if (empty($accessionDate)) {
+		$accessionDate = '1900-01-01';
+	} else {
+		$errorAccessionDate = ((preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $accessionDate) == 0) ? 'Niepoprawna wartość w polu data wstąpienia. Wpisz wartość według schematu: RRRR-MM-DD.' : '');
+	}
+	if (empty($phone)) { 
+		$phone = '-';
+	} else {
+		$errorPhone = ((preg_match("/^[0-9]{9}$/", $phone) == 0) ? 'Niepoprawny numer telefonu.' : ''); 
+	}
 	$errorPrivateEmail = ((!filter_var($privateEmail, FILTER_VALIDATE_EMAIL)) ? 'Niepoprawny adres poczty elektronicznej.' : '');
-	$errorBirthDate = ((preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $birthDate) == 0) ? 'Niepoprawna wartość w polu data urodzenia. Wpisz wartość według schematu: RRRR-MM-DD.' : '');
-	$errorCardNumber = ((preg_match("/^[A-Z0-9]{6}-[A-Z0-9]{6}$/", $cardNumber) == 0) ? 'Niepoprawna wartość w polu numer karty członkowskiej. Wpisz wartość według schematu: xxxxxx-xxxxxx.' : '');
-		
-	if (empty ( $login )) {
+	if (empty($birthDate)) {
+		$birthDate = '1900-01-01';
+	} else {
+		$errorBirthDate = ((preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $birthDate) == 0) ? 'Niepoprawna wartość w polu data urodzenia. Wpisz wartość według schematu: RRRR-MM-DD.' : '');
+	}
+	if (empty($cardNumber)) {
+		$cardNumber = '-';
+	} else {
+		$errorCardNumber = ((preg_match("/^[A-Z0-9]{6}-[A-Z0-9]{6}$/", $cardNumber) == 0) ? 'Niepoprawna wartość w polu numer karty członkowskiej. Wpisz wartość według schematu: xxxxxx-xxxxxx.' : '');
+	}	
+	/*if (empty ( $login )) {
 		$errorLogin = 'Pusty login';
 	} else if (strlen( $login ) > 255 ) {
 		$errorLogin = 'Za długi login (maksymalnie 255 znaków)';
@@ -136,7 +151,7 @@ if (isset ( $_POST ['submit'] )) {
 		} else {
 			$password = hash('sha256', $password1);
 		}
-	}
+	}*/
 
 	
 	if ((strlen($errorFirstName) == 0) && (strlen($errorLastName) == 0) && (strlen($errorAccessionDate) == 0) && (strlen($errorPhone) == 0) 
@@ -151,9 +166,9 @@ if (isset ( $_POST ['submit'] )) {
     		die('Błąd podczas zapisu danych ' . mysql_error());
 		} else {
 			$userdId = mysql_insert_id();
-			$query = "INSERT INTO `Login` ( username, password, member_id) VALUES
+			/*$query = "INSERT INTO `Login` ( username, password, member_id) VALUES
 				('$login','$password',$userdId)";
-			$result = mysql_query($query);
+			$result = mysql_query($query);*/
 			if(!$result) {
 				die('Błąd podczas zapisu danych logowania. Skontaktuj sie z administratorem strony.' . mysql_error());
 			} else {
@@ -326,7 +341,7 @@ if (isset ( $_POST ['submit'] )) {
 		<br>
 		<br>
 		
-		<label>Login:</label>
+		<!--  <label>Login:</label>
 		<input id="login" name="login" placeholder="login" type="text" autocomplete="off" maxlength="255" value="<?php echo $login;?>"/>
 		<label class="invalid"><?php echo $errorLogin; ?></label>
 		<br>
@@ -338,7 +353,7 @@ if (isset ( $_POST ['submit'] )) {
 		<label>Potwierdź Hasło</label>
 		<input id="password2" name="password2" placeholder="Powtórz hasło" type="password" autocomplete="off" minlenght="6" maxlenght="32" value="<?php echo $password2;?>"/>
 		<label class="invalid"><?php echo $errorPassword2; ?></label>
-		<br>
+		<br>-->
 		<input name="submit" value="Dodaj członka" class="red" type="submit"/>
 		<p <?php echo $error; ?></p>
 	</form>
