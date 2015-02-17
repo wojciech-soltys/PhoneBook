@@ -165,15 +165,28 @@ if (isset ( $_POST ['submit'] )) {
  		if (!$result) {
     		die('Błąd podczas zapisu danych ' . mysql_error());
 		} else {
-			$userdId = mysql_insert_id();
-			/*$query = "INSERT INTO `Login` ( username, password, member_id) VALUES
+			/*$userdId = mysql_insert_id();
+			$query = "INSERT INTO `Login` ( username, password, member_id) VALUES
 				('$login','$password',$userdId)";
-			$result = mysql_query($query);*/
+			$result = mysql_query($query);
 			if(!$result) {
 				die('Błąd podczas zapisu danych logowania. Skontaktuj sie z administratorem strony.' . mysql_error());
 			} else {
 				$error = 'Poprawnie dodano członka.';
-			}
+			}*/
+			$firstName = '';
+			$lastName = '';
+			$accessionDate = '';
+			$phone = '';
+			$privateEmail = '';
+			$aegeeEmail = 0;
+			$birthDate = '';
+			$cardNumber = '';
+			$declaration = 0;
+			$connectedToList = 0;
+			$mentor_id = -1;
+			$type = 'C';
+			echo "<script type='text/javascript'>alert('Dane nowego czlonka zostaly poprawnie zapisane');</script>";	
 		} 
 	}
 }
