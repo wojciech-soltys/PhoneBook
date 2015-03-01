@@ -37,6 +37,7 @@ if ($ses_row["type"] == 'Z' || $ses_row["type"] == 'R') {
 if (isset($_POST ['savePayment'])) {
 	$paymentDate = '';
 	$paymentType = '';
+	$paymentYear = '';
 	$paymentAmount = '';
 	
 	$paymentDate = $_POST ['paymentDate'];
@@ -47,6 +48,10 @@ if (isset($_POST ['savePayment'])) {
 	$paymentType = stripslashes($paymentType);
 	$paymentType = mysql_real_escape_string($paymentType);
 	
+	$paymentYear = $_POST ['paymentYear'];
+	$paymentYear = stripslashes($paymentYear);
+	$paymentYear = mysql_real_escape_string($paymentYear);
+	
 	$paymentAmount = $_POST ['paymentAmount'];
 	$paymentAmount = stripslashes($paymentAmount);
 	$paymentAmount = mysql_real_escape_string($paymentAmount);
@@ -55,7 +60,7 @@ if (isset($_POST ['savePayment'])) {
 	if ((strlen($errorPaymentDate) == 0)) {
 		$currentDate = date("Y-m-d");
 		$member_id = $_POST ['selectedId'];
-		$query = "INSERT INTO Payments (member_id, amount, date, type, auditCD, auditCU) VALUES ($member_id,'$paymentAmount','$paymentDate','$paymentType','$currentDate',$auditCU)";
+		$query = "INSERT INTO Payments (member_id, amount, date, type, year, auditCD, auditCU) VALUES ($member_id,'$paymentAmount','$paymentDate','$paymentType','$paymentYear','$currentDate',$auditCU)";
 		$retval = mysql_query($query, $connection);
 		if(! $retval )
 		{
@@ -67,7 +72,10 @@ if (isset($_POST ['savePayment'])) {
 		echo "<script>alert('Zapis danych nie powiódł się')</script>";
 	}
 }
-
+if (isset($_POST ['addPayment'])) {
+	date_default_timezone_set('UTC');
+	$year = date("Y");
+}
 $query = "SELECT * FROM `Members` WHERE id=$selectedId";
 $result = mysql_query($query);
 ?>
@@ -183,7 +191,7 @@ $result = mysql_query($query);
 	<div id="site-container">
 		<h3 class="colour blue">Składki członkowskie</h3>
 		<?php 
-		$query = "SELECT date, type, amount FROM `Payments` WHERE member_id=$selectedId ORDER BY date DESC";
+		$query = "SELECT date, type, year, amount FROM `Payments` WHERE member_id=$selectedId ORDER BY date DESC";
 		$result = mysql_query($query);
 		$rowCount = mysql_num_rows($result);
 		if ($rowCount == 0 && (!isset($_POST ['addPayment']))) {
@@ -198,7 +206,8 @@ $result = mysql_query($query);
 			echo "<tr>";
 			echo "<th class='center'>Lp.</th>";
 			echo "<th class='center'>Data płatności</th>";
-			echo "<th class='center'>Rodzaj składki</th>";
+			echo "<th class='center'>Okres składki</th>";
+			echo "<th class='center'>Rok składki</th>";
 			echo "<th class='center'>Kwota</th>";
 			echo "</tr>";
 			while ( $row = mysql_fetch_array($result) ) {
@@ -212,6 +221,7 @@ $result = mysql_query($query);
 				} else if ($row["type"] == 3) {
 					echo "<td class='center'>Rok</td>";
 				}
+				echo "<td class='center'>".$row["year"]."</td>";
 				echo "<td class='center'>" . number_format((float)$row["amount"], 2, ',', '') . " zł</td>";
 				echo "</tr>";
 			}
@@ -227,6 +237,13 @@ $result = mysql_query($query);
 							<option value=\"3\">Rok</option>
 						</select>
 					</td>"; 
+				echo "<td class='center'>
+						<select name='paymentYear' id='paymentYear'>
+							<option value=\"".($year - 1)."\">".($year - 1)."</option>
+							<option selected value=\"".$year."\">".$year."</option>
+							<option value=\"".($year + 1)."\">".($year + 1)."</option>
+						</select>
+					</td>";
 				echo "<td class='center'>
 						<select name='paymentAmount' id='paymentAmount'>
 							<option value=\"20\">20,00 zł</option>
