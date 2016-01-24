@@ -32,6 +32,10 @@ $declaration = 0;
 $connectedToList = 0;
 $mentor_id = -1;
 $type = 'C';
+$prGroup = 0;
+$hrGroup = 0;
+$frGroup = 0;
+$itGroup = 0;
 $login = '';
 $password1 = '';
 $password2 = '';
@@ -51,42 +55,48 @@ $errorPassword2 = '';
 if (isset ( $_POST ['submit'] )) {
 	
 	$firstName = $_POST ['firstName'];
+	$firstName = trim($firstName);
 	$firstName = stripslashes($firstName);
 	$firstName = mysql_real_escape_string($firstName);
 	
 	$lastName = $_POST ['lastName'];
+	$lastName = trim($lastName);
 	$lastName = stripslashes($lastName);
 	$lastName = mysql_real_escape_string($lastName);
 	
 	$accessionDate = $_POST ['accessionDate'];
+	$accessionDate = trim($accessionDate);
 	$accessionDate = stripslashes($accessionDate);
 	$accessionDate = mysql_real_escape_string($accessionDate);
 	
 	$phone = $_POST ['phone'];
+	$phone = trim($phone);
 	$phone = stripslashes($phone);
 	$phone = mysql_real_escape_string($phone);
 	
 	$privateEmail = $_POST ['privateEmail'];
+	$privateEmail = trim($privateEmail);
 	$privateEmail = stripslashes($privateEmail);
 	$privateEmail = mysql_real_escape_string($privateEmail);
 	
 	$aegeeEmail = isset($_POST['aegeeEmail']) ? '1' : '0';
 	
 	$birthDate = $_POST ['birthDate'];
+	$birthDate = trim($birthDate);
 	$birthDate = stripslashes($birthDate);
 	$birthDate = mysql_real_escape_string($birthDate);
 	
 	$cardNumber = $_POST ['cardNumber'];
+	$cardNumber = trim($cardNumber);
 	$cardNumber = stripslashes($cardNumber);
 	$cardNumber = mysql_real_escape_string($cardNumber);
 	
 	$declaration = isset($_POST['declaration']) ? '1' : '0';
-	
 	$connectedToList = isset($_POST['connectedToList']) ? '1' : '0';
 	
 	$mentor_id = $_POST['mentor_id'];
-	
 	$type = $_POST['type'];
+	
 	
 	/*$login = $_POST['login'];
 	$login = stripslashes($login);
@@ -124,7 +134,7 @@ if (isset ( $_POST ['submit'] )) {
 	if (empty($cardNumber)) {
 		$cardNumber = '-';
 	} else {
-		$errorCardNumber = ((preg_match("/^[A-Z0-9]{6}-[A-Z0-9]{6}$/", $cardNumber) == 0) ? 'Niepoprawna wartość w polu numer karty członkowskiej. Wpisz wartość według schematu: xxxxxx-xxxxxx.' : '');
+		$errorCardNumber = ((strlen($cardNumber) < 5) ? 'Niepoprawna wartość w polu numer karty członkowskiej.' : '');
 	}	
 	/*if (empty ( $login )) {
 		$errorLogin = 'Pusty login';
@@ -199,6 +209,8 @@ if (isset ( $_POST ['submit'] )) {
 <title>AEGEE Gliwice Members Portal</title>
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="custom.css" rel="stylesheet" type="text/css">
+<link href="metro-bootstrap.css" rel="stylesheet" type="text/css">
+<link href="metro-bootstrap-responsive.css" rel="stylesheet" type="text/css">
 <link rel="Shortcut icon" href="http://aegee-gliwice.org/strona/wp-content/uploads/2013/12/favicon.png" />
 <style>
 #site-wrapper {
@@ -206,7 +218,7 @@ if (isset ( $_POST ['submit'] )) {
 }
 </style>
 </head>
-<body>
+<body class="metro">
 	<div id="site-wrapper">
 	<div class="wrapper" id="site-header-wrapper">
 		<div id="site-header" class="wrapper-content">
@@ -215,144 +227,209 @@ if (isset ( $_POST ['submit'] )) {
 			</div>
 			<div id="site-header-right">		
 				<div id="intranet_login">
-					<p class="login_title">Portal członków</p>
-					<form class="" action="logout.php" method="post" enctype="multipart/form-data">
-						<p style="display: inline-block;width: 202px;">
-							Zalogowany: <?php echo $login_session; ?>
-						</p>
-            			<p style="display: inline-block;">
-           					<input name="submit" value="Wyloguj" class="redButton" type="submit"/>
-       					</p>
-           			</form>
-           			<p>
-           				<input name="listMembers" onclick="window.location.href='members.php';" value="Lista członków" class="redButton" type="button"/>
-       				</p>
+					<p>
+						Zalogowany: <?php echo $login_session; ?>
+					</p>
 				</div>	
 			</div>
 		</div>
+					<hr>
+	<header class="bg-light">
+	<div class="navigation-bar light">
+		<div class="navigation-bar-content container">
+			<ul class="element-menu">
+				<li>
+					<a href="javascript:window.location.href='members.php';">Lista członków</a>
+				</li>
+				<?php  if ($ses_row["type"] == 'Z') {?>
+				<li class="active">
+					<a href="javascript:window.location.href='createMember.php';">Dodaj członka</a>
+				</li>
+				<?php }?>
+				<li>
+					<a href="javascript:window.location.href='oldMembers.php';">Byli członkowie</a>
+				</li>
+				<li>
+					<a href="javascript:window.location.href='myData.php';">Moje dane</a>
+				</li>
+				<li>
+					<a href="javascript:window.location.href='generateFile.php';">Raport</a>
+				</li>
+				<li>
+					<a id="logout_button" href="#">Wyloguj</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<form id="logout" action="logout.php" method="post" enctype="multipart/form-data">
+	</form>
+	<script>
+	$("#logout_button").click(function() {
+		document.getElementById('logout').submit();
+    });
+	</script>
+</header>
 	</div>
 	<div id="site-container">
 	<form class="" action="createMember.php" method="post" enctype="multipart/form-data">
-		<h3 class="colour blue">Dodaj członka</h3>
-		
-		<label>Imię: </label> 
-		<input id="firstName" name="firstName" placeholder="Imię członka" type="text" autocomplete="on" maxlength="255" value="<?php echo $firstName; ?>"/>
-		<label class="invalid"><?php echo $errorFirstName; ?></label>
-		<br>
-		
-		<label>Nazwisko: </label>
-		<input id="lastName" name="lastName" placeholder="Nazwisko członka" type="text" autocomplete="on" maxlength="255" value="<?php echo $lastName;?>"/>
-		<label class="invalid"><?php echo $errorLastName; ?></label>
-		<br>
-		
-		<label>Data wstąpienia: </label>
-		<input id="accessionDate" name="accessionDate" placeholder="RRRR-MM-DD" type="text"autocomplete="on" maxlength="10" value="<?php echo $accessionDate;?>"/>
-		<label class="invalid"><?php echo $errorAccessionDate; ?></label>
-		<br>
-		
-		<label>Numer telefonu: </label>
-		<input id="phone" name="phone" placeholder="123456789" type="text" autocomplete="on" maxlength="9" value="<?php echo $phone;?>"/>
-		<label class="invalid"><?php echo $errorPhone; ?></label>
-		<br>
-		
-		<label>Prywatny adres email: </label>
-		<input id="privateEmail" name="privateEmail" placeholder="abc@gmail.com" type="text" autocomplete="on" maxlength="255"  value="<?php echo $privateEmail;?>"/>
-		<label class="invalid"><?php echo $errorPrivateEmail; ?></label>
-		<br>
-		<label>Adres w domenie aegee-gliwice.org: </label>
-			<?php if ($aegeeEmail == 1) { ?>
-				<input type='checkbox' name='aegeeEmail' checked/>
-			<?php } else { ?>
-				<input type='checkbox' name='aegeeEmail'/>
-			<?php }?>
-		<br>
-
-		<label>Data urodzenia: </label>
-		<input id="birthDate" name="birthDate" placeholder="RRRR-MM-DD" type="text" autocomplete="on" maxlength="10" value="<?php echo $birthDate;?>"/>
-		<label class="invalid"><?php echo $errorBirthDate; ?></label>
-		<br>
-		
-		<label>Numer karty członkowskiej: </label>
-		<input id="cardNumber" name="cardNumber" placeholder="123456-123456" type="text" maxlength="13" value="<?php echo $cardNumber;?>"/>
-		<label class="invalid"><?php echo $errorCardNumber; ?></label>
-		<br>
-		
-		<label>Deklaracja: </label>
-			<?php if ($declaration == 1) { ?>
-				<input type='checkbox' name='declaration' chcecked/>
-			<?php } else { ?>
-				<input type='checkbox' name='declaration'/>
-			<?php }?>
-		<br>
-		
-		<label>Podłączenie do listy ogólnej: </label>
-			<?php if ($connectedToList == 1) { ?>
-				<input type='checkbox' name='declaration' chcecked/>
-			<?php } else { ?>
-				<input type='checkbox' name='connectedToList'/>
-			<?php }?>
-		<br>
-		
-		<label>Mentor: </label>
-		<select name='mentor_id' id='mentor_id'>
-			<?php 
-				$query = "SELECT id, firstName, lastName FROM `Members` WHERE mentor_id IN (0,-1)";
-				$mentorResult = mysql_query($query);
-				while ( $row = mysql_fetch_array($mentorResult) ) {
-					if ($row["id"] == -1) {
-						if($mentor_id == $row["id"]) {
-							echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+		<h3 class="colour blue">Dodawanie członka</h3>
+		<table class="form">
+			<col width="3%">
+			<col width="35%">
+			<col width="31%">
+			<col width="31%">
+			<tr>
+				<td></td>
+				<td><label>Imię</label></td>
+				<td><input id="firstName" name="firstName" placeholder="Imię członka" type="text" autocomplete="on" maxlength="255" value="<?php echo $firstName; ?>"/></td>
+				<td><label class="invalid"><?php echo $errorFirstName; ?></label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Nazwisko</label></td>
+				<td><input id="lastName" name="lastName" placeholder="Nazwisko członka" type="text" autocomplete="on" maxlength="255" value="<?php echo $lastName;?>"/></td>
+				<td><label class="invalid"><?php echo $errorLastName; ?></label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Data wstąpienia</label></td>
+				<td><input id="accessionDate" name="accessionDate" placeholder="RRRR-MM-DD" type="text"autocomplete="on" maxlength="10" value="<?php echo $accessionDate;?>"/></td>
+				<td><label class="invalid"><?php echo $errorAccessionDate; ?></label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Numer telefonu</label></td>
+				<td><input id="phone" name="phone" placeholder="123456789" type="text" autocomplete="on" maxlength="9" value="<?php echo $phone;?>"/></td>
+				<td><label class="invalid"><?php echo $errorPhone; ?></label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Prywatny adres e-mail</label></td>
+				<td><input id="privateEmail" name="privateEmail" placeholder="abc@gmail.com" type="text" autocomplete="on" maxlength="255"  value="<?php echo $privateEmail;?>"/></td>
+				<td><label class="invalid"><?php echo $errorPrivateEmail; ?></label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Adres w domenie aegee-gliwice.org</label></td>
+				<td>
+					<?php if ($aegeeEmail == 1) { ?>
+						<input type='checkbox' name='aegeeEmail' checked/>
+					<?php } else { ?>
+						<input type='checkbox' name='aegeeEmail'/>
+					<?php }?>
+				</td>	
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Data urodzenia</label></td>
+				<td><input id="birthDate" name="birthDate" placeholder="RRRR-MM-DD" type="text" autocomplete="on" maxlength="10" value="<?php echo $birthDate;?>"/></td>
+				<td><label class="invalid"><?php echo $errorBirthDate; ?></label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Numer karty członkowskiej</label></td>
+				<td><input id="cardNumber" name="cardNumber" type="text" maxlength="13" value="<?php echo $cardNumber;?>"/></td>
+				<td><label class="invalid"><?php echo $errorCardNumber; ?></label></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Deklaracja</label></td>
+				<td>
+				<?php if ($declaration == 1) { ?>
+					<input type='checkbox' name='declaration' checked/>
+				<?php } else { ?>
+					<input type='checkbox' name='declaration'/>
+				<?php }?>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Podłączenie do listy ogólnej</label></td>
+				<td>
+				<?php if ($connectedToList == 1) { ?>
+					<input type='checkbox' name='declaration' checked/>
+				<?php } else { ?>
+					<input type='checkbox' name='connectedToList'/>
+				<?php }?>
+				</td>
+				<td></td>
+			</tr>
+			<tr>	
+				<td></td>
+				<td><label>Mentor</label></td>
+				<td>
+					<select name='mentor_id' id='mentor_id'>
+				<?php 
+					$query = "SELECT id, firstName, lastName FROM `Members` WHERE mentor_id = 0 AND old = '0';";
+					$mentorResult = mysql_query($query);
+					while ( $row = mysql_fetch_array($mentorResult) ) {
+						if ($row["id"] == -1) {
+							if($mentor_id == $row["id"]) {
+								echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+							} else {
+								echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+							}	
+						} else if ($row["id"] == 0) {
+							if($mentor_id == $row["id"]) {
+								echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+							} else {
+								echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
+							}
 						} else {
-							echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
-						}	
-					} else if ($row["id"] == 0) {
-						if($mentor_id == $row["id"]) {
-							echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]."</option>";
-						} else {
-							echo "<option value=\"". $row["id"]."\">".$row["firstName"]."</option>";
-						}
-					} else {
-						if($mentor_id == $row["id"]) {
-							echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]." ".$row["lastName"]."</option>";
-						} else {
-							echo "<option value=\"". $row["id"]."\">".$row["firstName"]." ".$row["lastName"]."</option>";
+							if($mentor_id == $row["id"]) {
+								echo "<option selected value=\"". $row["id"]."\">".$row["firstName"]." ".$row["lastName"]."</option>";
+							} else {
+								echo "<option value=\"". $row["id"]."\">".$row["firstName"]." ".$row["lastName"]."</option>";
+							}
 						}
 					}
-				}
-			?>
-		</select>
-		<br>
+				?>
+					</select>
+				</td>	
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Typ członka</label></td>
+				<td>
+					<select name='type' id='type'>
+					<?php if ($type == 'C') { ?>
+						<option selected value="C">Członek zwyczajny</option>
+					<?php } else { ?>
+						<option value="C">Członek zwyczajny</option>
+					<?php }?>
+					<?php if ($type == 'K') { ?>
+						<option selected value="K">Koordynator</option>
+					<?php } else { ?>
+						<option value="K">Koordynator</option>
+					<?php }?>
+					<?php if ($type == 'Z') { ?>
+						<option selected value="Z">Członek zarządu</option>
+					<?php } else { ?>
+						<option value="Z">Członek zarządu</option>
+					<?php }?>
+					<?php if ($type == 'R') { ?>
+						<option selected value="R">Komisja rewizyjna</option>
+					<?php } else { ?>
+						<option value="R">Komisja rewizyjna</option>
+					<?php }?>
+					<?php if ($type == 'H') { ?>
+						<option selected value="H">Członek honorowy</option>
+					<?php } else { ?>
+						<option value="H">Członek honorowy</option>
+					<?php }?>
+					</select>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="3"></td>
+				<td><input name="submit" value="Dodaj członka" class="blueButton" type="submit"/></td>
+			</tr>
+		</table>
 		
-		<label>Typ członka: </label>
-		<select name='type' id='type'>
-			<?php if ($type == 'C') { ?>
-				<option selected value="C">Członek zwyczajny</option>
-			<?php } else { ?>
-				<option value="C">Członek zwyczajny</option>
-			<?php }?>
-			<?php if ($type == 'K') { ?>
-				<option selected value="K">Koordynator</option>
-			<?php } else { ?>
-				<option value="K">Koordynator</option>
-			<?php }?>
-			<?php if ($type == 'Z') { ?>
-				<option selected value="Z">Członek zarządu</option>
-			<?php } else { ?>
-				<option value="Z">Członek zarządu</option>
-			<?php }?>
-			<?php if ($type == 'R') { ?>
-				<option selected value="R">Komisja rewizyjna</option>
-			<?php } else { ?>
-				<option value="R">Komisja rewizyjna</option>
-			<?php }?>
-			<?php if ($type == 'H') { ?>
-				<option selected value="H">Członek honorowy</option>
-			<?php } else { ?>
-				<option value="H">Członek honorowy</option>
-			<?php }?>
-		</select>
-		<br>
-		<br>
 		
 		<!--  <label>Login:</label>
 		<input id="login" name="login" placeholder="login" type="text" autocomplete="off" maxlength="255" value="<?php echo $login;?>"/>
@@ -367,8 +444,8 @@ if (isset ( $_POST ['submit'] )) {
 		<input id="password2" name="password2" placeholder="Powtórz hasło" type="password" autocomplete="off" minlenght="6" maxlenght="32" value="<?php echo $password2;?>"/>
 		<label class="invalid"><?php echo $errorPassword2; ?></label>
 		<br>-->
-		<input name="submit" value="Dodaj członka" class="red" type="submit"/>
-		<p <?php echo $error; ?></p>
+		<p> <?php echo $error; ?></p>
+		<br>
 	</form>
 	</div>
 	</div>

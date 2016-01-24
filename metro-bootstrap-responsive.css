@@ -1,0 +1,202 @@
+/*
+ * Devices
+ * min 1200
+ * min 1024
+ * max 1024
+ * max 768
+ * max 640
+ * max 480
+ * max 320
+ */
+#responsive-utils .hide-element {
+  display: none !important;
+  visibility: hidden !important;
+}
+#responsive-utils .show-element {
+  display: block !important;
+  visibility: visible !important;
+}
+#responsive-utils .full-size {
+  float: none !important;
+  display: block !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+#responsive-utils .half-size {
+  width: 50% !important;
+}
+#responsive-utils .container-desktop {
+  width: 940px !important;
+}
+#responsive-utils .container-phone {
+  width: 100% !important;
+}
+#responsive-utils .container-phone2 {
+  width: 100% !important;
+}
+#responsive-utils .container-phone3 {
+  width: 100% !important;
+}
+#responsive-utils .container-phone4 {
+  width: 100% !important;
+}
+#responsive-utils .container-tablet {
+  width: 720px !important;
+}
+#responsive-utils .container-large {
+  width: 1140px !important;
+}
+#responsive-utils .container-phone {
+  padding: 0 10px;
+}
+/* Desktop */
+@media screen and (min-width: 500px) {
+  .no-desktop {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+@media screen and (min-width: 501px) and (max-width: 920px){
+  .metro .navigation-bar .element-menu > li > a, .metro .navbar .element-menu > li > a {
+	padding: 15px 6px !important;
+	font-size: 17px !important;
+  }
+  .metro .navigation-bar .navigation-bar-content .element, .metro .navbar .navigation-bar-content .element, .metro .navigation-bar .navbar-content .element, .metro .navbar .navbar-content .element {
+	padding: 15px 6px;
+	font-size: 17px;
+  }
+  .metro .navigation-bar .navigation-bar-content .active, .metro .navbar .navigation-bar-content .active, .metro .navigation-bar .navbar-content .active, .metro .navbar .navbar-content .active {
+	height: 48px;
+  }
+}
+@media screen and (min-width: 501px) and (max-width: 870px){
+  .metro .navigation-bar .element-menu > li > a, .metro .navbar .element-menu > li > a {
+	padding: 15px 5px !important;
+	font-size: 16px !important;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .no-desktop {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  .on-desktop {
+    display: block !important;
+    visibility: visible !important;
+  }
+  .container {
+    width: 960px !important;
+  }
+  #carouselOrgID {
+	float:left; 
+	margin-right:310px; 
+	margin-bottom:0px;
+  }
+  div.rectangle {
+	height: 130px;
+  }
+  h2#coals, h2#joga {
+	padding-top:15px;
+  }
+  .carouselTop  {
+	height:190px !important;
+	width:286px !important;
+  }
+  .backgroundTop {
+	padding:10px !important;
+  }
+  .metro .navigation-bar .element-menu > li > a, .metro .navbar .element-menu > li > a {
+	padding: 15px 10px;
+	font-size: 19px;
+  }
+}
+/* Large desktop */
+@media screen and (min-width: 1200px) {
+  html {
+    font-size: 70%;
+  }
+  .no-large {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  .on-large {
+    display: block !important;
+    visibility: visible !important;
+  }
+  .container {
+    width: 1140px !important;
+  }
+  #carouselOrgID {
+	float:left; 
+	margin-right:310px; 
+	margin-bottom:0px;
+  }
+  .carouselTop  {
+	height:225px !important;
+	width:324px !important;
+  }
+  .backgroundTop {
+	padding:20px !important;
+  }
+  div.rectangle {
+	height: 100px;
+  }
+  h2#coals, h2#joga {
+	padding-top: 0px;
+  }
+  .metro .navigation-bar .element-menu > li > a, .metro .navbar .element-menu > li > a {
+	padding: 15px;
+	font-size: 18px;
+  }
+}
+/* tablet landscape*/
+@media only screen and (max-width: 1024px) {
+  .no-tablet-landscape,
+  .no-tablet {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  .on-tablet {
+    display: block !important;
+    visibility: visible !important;
+  }
+  .container {
+    width: 95%;
+	min-width: 770px;
+  }
+  .metro h1 {
+	letter-spacing: 2px;
+	font-size: 40px;
+	line-height: 50px;
+  }
+  .metro h2 {
+	font-size: 28px;
+	letter-spacing: 2px;
+	line-height: 34px;
+  }
+  #carouselOrgID {
+	float:left; 
+	margin-right:310px; 
+	margin-bottom:0px;
+  }
+  div.rectangle {
+	height: 130px;
+  }
+  h2#coals, h2#joga {
+	padding-top:15px;
+  }
+  .carouselTop  {
+	height:190px !important;
+	width:100% !important;
+  }
+  .backgroundTop {
+	padding:5px !important;
+  }
+  .metro .navigation-bar .element-menu > li > a, .metro .navbar .element-menu > li > a {
+	padding: 15px 8px;
+	font-size: 18px;
+  }
+}

@@ -38,10 +38,12 @@ if (isset ( $_POST ['submit'] )) {
 				exit (0);
 			}
 			// SQL query to fetch information of registerd users and finds user match.
-			$query = mysql_query ( "select * from Login where password='$password' AND username='$username'", $connection);
-			$rows = mysql_num_rows ( $query );
+			$result = mysql_query ( "select id from Members, Login where Members.id = Login.member_id AND password='$password' AND username='$username'", $connection);
+			$rows = mysql_num_rows($result);
+			$row = mysql_fetch_array($result);
 			if ($rows == 1) {
 				$_SESSION ['login_user'] = $username; // Initializing Session
+				$_SESSION ['userID'] = $row["id"];
 				header ( "Location: members.php" ); // Redirecting To Other Page
 			} else {
 				$error = "Username or Password is invalid";

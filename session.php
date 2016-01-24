@@ -7,9 +7,10 @@ $databasePassword = 'aegee_20702';
 $connection = mysql_connect($databaseAddress, $databaseUser, $databasePassword);
 // Selecting Database
 $db = mysql_select_db($databaseName, $connection);
-session_start (); // Starting Session
+session_start(); // Starting Session
                   // Storing Session
 $user_check = $_SESSION ['login_user'];
+$userID = $_SESSION ['userID'];
 if (! isset ( $user_check )) {
 	mysql_close ( $connection ); // Closing Connection
 	header ( 'Location: index.php' ); // Redirecting To Home Page

@@ -7,6 +7,8 @@
 <script src="jquery-2.1.3.js"></script>
 <link href="style.css" rel="stylesheet" type="text/css">
 <link href="custom.css" rel="stylesheet" type="text/css">
+<link href="metro-bootstrap.css" rel="stylesheet" type="text/css">
+<link href="metro-bootstrap-responsive.css" rel="stylesheet" type="text/css">
 <link rel="Shortcut icon" href="http://aegee-gliwice.org/strona/wp-content/uploads/2013/12/favicon.png" />
 <style>
 #site-wrapper {
@@ -14,7 +16,7 @@
 }
 </style>
 </head>
-<body>
+<body class="metro">
 <?php
 include ('session.php');
 
@@ -37,7 +39,7 @@ if (!mysql_select_db($databaseName, $connection)) {
 	exit (0);
 }
 
-$ses_sql = mysql_query("SELECT login_id FROM Members, Login WHERE username='$user_check'", $connection);
+$ses_sql = mysql_query("SELECT login_id, type FROM Members, Login WHERE username='$user_check'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
 $loginId = $ses_row["login_id"];
 
@@ -91,20 +93,48 @@ if (isset($_POST ['submit_changes'])) {
 			</div>
 			<div id="site-header-right">		
 				<div id="intranet_login">
-					<p class="login_title">Portal członków</p>
-					<form class="" action="logout.php" method="post" enctype="multipart/form-data">
-						<p style="display: inline-block;width: 202px;">
+					<p>
 							Zalogowany: <?php echo $login_session; ?>
-						</p>
-            			<p style="display: inline-block;">
-           					<input name="submit" value="Wyloguj" class="redButton" type="submit"/>
-       					</p>
-           			</form>
-           				<p>
-       					</p>
+					</p>
 				</div>	
 			</div>
 		</div>
+						<hr>
+	<header class="bg-light">
+	<div class="navigation-bar light">
+		<div class="navigation-bar-content container">
+			<ul class="element-menu">
+				<li>
+					<a href="javascript:window.location.href='members.php';">Lista członków</a>
+				</li>
+				<?php  if ($ses_row["type"] == 'Z') {?>
+				<li>
+					<a href="javascript:window.location.href='createMember.php';">Dodaj członka</a>
+				</li>
+				<?php }?>
+				<li>
+					<a href="javascript:window.location.href='oldMembers.php';">Byli członkowie</a>
+				</li>
+				<li class="active">
+					<a href="javascript:window.location.href='myData.php';">Moje dane</a>
+				</li>
+				<li>
+					<a href="javascript:window.location.href='generateFile.php';">Raport</a>
+				</li>
+				<li>
+					<a id="logout_button" href="#">Wyloguj</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<form id="logout" action="logout.php" method="post" enctype="multipart/form-data">
+	</form>
+	<script>
+	$("#logout_button").click(function() {
+		document.getElementById('logout').submit();
+    });
+	</script>
+</header>
 	</div>
 	<div id="site-container">
 		<?php 
@@ -112,32 +142,48 @@ if (isset($_POST ['submit_changes'])) {
 		?>
 		<h3 class="colour blue">Zmiana hasła</h3>
 		<form action="changePassword.php" id="member" method="post" enctype="multipart/form-data">
-		<div>
-			<label>Login: </label><?php echo $user_check ?>
-		</div>
-		<div>
-			<label>Poprzednie hasło: </label><input type="password" id="previousPassword" name="previousPassword" maxlenght="32" >
-		</div>
-		<div>
-			<label>Nowe hasło: </label><input type="password" id="newPassword" name="newPassword" minlenght="6" maxlenght="32" >
-		</div>
-		<div>
-			<label>Powtórz nowe hasło: </label><input type="password" id="confirmPassword" name="confirmPassword" minlenght="6" maxlenght="32">
-		</div>
-		<div>
-			<label class="invalid"><?php echo $error; ?></label>
-		</div>
-		<br>
-		<input name="submit_changes" value="Zapisz zmiany" class="red" type="submit"/>
+		<table class="form">
+			<col width="3%">
+			<col width="35%">
+			<col width="31%">
+			<col width="31%">
+			<tr>
+				<td></td>
+				<td><label>Login</label></td>
+				<td><?php echo $user_check ?></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Poprzednie hasło</label></td>
+				<td><input type="password" id="previousPassword" name="previousPassword" maxlenght="32" ></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Nowe hasło</label></td>
+				<td><input type="password" id="newPassword" name="newPassword" minlength="6" maxlenght="32" ></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><label>Powtórz nowe hasło</label></td>
+				<td><input type="password" id="confirmPassword" name="confirmPassword" minlenght="6" maxlenght="32"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan="3"><label class="invalid"><?php echo $error; ?></label></td>
+			</tr>
+			<tr>
+				<td colspan="3"></td>
+				<td><input name="submit_changes" value="Zapisz zmiany" class="red" type="submit"/></td>
+			</tr>
+		</table>
 		</form>	
 		<br>
 	</div>
 	</div>
-	<script>
-		function goBack() {
-			window.location = "selectedMember.php";
-		}
-	</script>
 	<?php 
 	mysql_close($connection);
 	?>

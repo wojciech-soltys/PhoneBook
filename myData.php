@@ -19,81 +19,10 @@ if (!mysql_select_db($databaseName, $connection)) {
 	echo '</script>';
 	exit (0);
 }
-
-$ses_sql = mysql_query("SELECT member_id FROM Members, Login WHERE username='$user_check'", $connection);
-$ses_row = mysql_fetch_array($ses_sql);
-$selectedId = $ses_row["member_id"];
-if (isset($_POST ['savePayment'])) {
-	$auditCU = $ses_row["member_id"];
-}
+$query = "SELECT * FROM `Members` WHERE id = $userID";
+$result = mysql_query($query);
 $ses_sql = mysql_query("SELECT type from Members WHERE id='" . $ses_row["member_id"] . "'", $connection);
 $ses_row = mysql_fetch_array($ses_sql);
-$userType = $ses_row["type"];
-if ($userType == 'Z' || $userType == 'R') {
-	if (isset($_POST ['selectedId'])) {
-		$selectedId = $_POST ['selectedId'];
-	}
-}
-if (isset($_POST ['removeMember'])) {
-	$remId = $_POST ['removeId'];
-	$query = "UPDATE `Members` SET old = 1 WHERE id=" . $remId;
-	$retval = mysql_query($query, $connection);
-	if(!$retval) {
-		die('Błąd podczas zapisu danych: ' . mysql_error());
-	}
-	echo "<script type='text/javascript'>alert('Członek został usunięty');</script>";
-} else if (isset($_POST ['addMember'])) {
-	$addId = $_POST ['addId'];
-	$query = "UPDATE `Members` SET old = 0 WHERE id=" . $addId;
-	$retval = mysql_query($query, $connection);
-	if(!$retval) {
-		die('Błąd podczas zapisu danych: ' . mysql_error());
-	}
-	echo "<script type='text/javascript'>alert('Członek został przywrócony');</script>";
-} else if (isset($_POST ['savePayment'])) {
-	$paymentDate = '';
-	$paymentType = '';
-	$paymentYear = '';
-	$paymentAmount = '';
-	
-	$paymentDate = $_POST ['paymentDate'];
-	$paymentDate = stripslashes($paymentDate);
-	$paymentDate = mysql_real_escape_string($paymentDate);
-	
-	$paymentType = $_POST ['paymentType'];
-	$paymentType = stripslashes($paymentType);
-	$paymentType = mysql_real_escape_string($paymentType);
-	
-	$paymentYear = $_POST ['paymentYear'];
-	$paymentYear = stripslashes($paymentYear);
-	$paymentYear = mysql_real_escape_string($paymentYear);
-	
-	$paymentAmount = $_POST ['paymentAmount'];
-	$paymentAmount = stripslashes($paymentAmount);
-	$paymentAmount = mysql_real_escape_string($paymentAmount);
-	
-	$errorPaymentDate = ((preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $paymentDate) == 0) ? 'Niepoprawna wartość w polu data płatności. Wpisz wartość według schematu: RRRR-MM-DD.' : '');
-	if ((strlen($errorPaymentDate) == 0)) {
-		$currentDate = date("Y-m-d");
-		$member_id = $_POST ['selectedId'];
-		$query = "INSERT INTO Payments (member_id, amount, date, type, year, auditCD, auditCU) VALUES ($member_id,'$paymentAmount','$paymentDate','$paymentType','$paymentYear','$currentDate',$auditCU)";
-		$retval = mysql_query($query, $connection);
-		if(! $retval )
-		{
-			die('Błąd podczas zapisu danych: ' . mysql_error());
-		}
-		echo "<script type='text/javascript'>alert('Dane zostały poprawnie zapisane');</script>";
-	}
-	else {
-		echo "<script>alert('Zapis danych nie powiódł się')</script>";
-	}
-}
-if (isset($_POST ['addPayment'])) {
-	date_default_timezone_set('UTC');
-	$year = date("Y");
-}
-$query = "SELECT * FROM `Members` WHERE id=$selectedId";
-$result = mysql_query($query);
 ?>
 <!DOCTYPE html>
 <html>
@@ -132,7 +61,7 @@ $result = mysql_query($query);
 	<div class="navigation-bar light">
 		<div class="navigation-bar-content container">
 			<ul class="element-menu">
-				<li class="active">
+				<li>
 					<a href="javascript:window.location.href='members.php';">Lista członków</a>
 				</li>
 				<?php  if ($ses_row["type"] == 'Z') {?>
@@ -143,7 +72,7 @@ $result = mysql_query($query);
 				<li>
 					<a href="javascript:window.location.href='oldMembers.php';">Byli członkowie</a>
 				</li>
-				<li>
+				<li class="active">
 					<a href="javascript:window.location.href='myData.php';">Moje dane</a>
 				</li>
 				<li>
@@ -184,7 +113,7 @@ $result = mysql_query($query);
 				$type = 'członek zwyczajny';
 				break;
 		}
-		echo "<h3 class=\"colour blue\">Dane osobowe członka " . $row["firstName"] . " " . $row["lastName"] . " - $type</h3>";
+		echo "<h3 class=\"colour blue\">Moje dane " . $row["firstName"] . " " . $row["lastName"] . " - $type</h3>";
 		echo "<table class=\"form\"><col width=\"3%\"><col width=\"35%\"><col width=\"31%\"><col width=\"31%\"><tr><td></td><td><label>Id</label></td><td>" . $row["id"] . "</td><td></td></tr>";
 		echo "<tr><td></td><td><label>Imię</label></td><td>" . $row["firstName"] . "</td><td></td></tr>";
 		echo "<tr><td></td><td><label>Nazwisko</label></td><td>" . $row["lastName"] . "</td><td></td></tr>";
@@ -226,30 +155,23 @@ $result = mysql_query($query);
 			echo "<label>Mentor</label></td><td>" . "-";
 		}	
 		echo "</td><td></td></tr>";
-		echo "<tr><td colspan=\"2\"></td><td><form id=\"details\" method=\"post\" action=\"selectedMemberEdit.php\">";
-		echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"$selectedId\">";
-		if ($userType == 'Z') {
-			echo "<br><input name=\"submit\" value=\"Edytuj dane\" class=\"blueButton\" type=\"submit\"/>";
+		echo "<tr><td></td><td><label>Członek grup</label></td><td>";
+		if ($row["pr"] == 1) { echo "PR "; }
+		if ($row["hr"] == 1) { echo "HR "; }
+		if ($row["fr"] == 1) { echo "FR "; }
+		if ($row["it"] == 1) { echo "IT "; }
+		if (($row["pr"] == 0) && ($row["hr"] == 0) && ($row["fr"] == 0) && ($row["it"] == 0)) {
+			echo " - ";
 		}
-		echo "</form></td>";
-		if ($userType == 'Z') {
-			if ($row["old"] == 0) {
-				echo "<td><form id=\"details2\" method=\"post\" action=\"selectedMember.php\">";
-				echo "<input type=\"hidden\" id=\"removeId\" name=\"removeId\" value=\"$selectedId\">";
-				echo "<br><input name=\"removeMember\" value=\"Usuń członka\" class=\"blueButton\" type=\"submit\"/></td></tr>";
-			} else if ($row["old"] == 1) {
-				echo "<td><form id=\"details2\" method=\"post\" action=\"selectedMember.php\">";
-				echo "<input type=\"hidden\" id=\"addId\" name=\"addId\" value=\"$selectedId\">";
-				echo "<br><input name=\"addMember\" value=\"Przywróć członka\" class=\"blueButton\" type=\"submit\"/></td></tr>";
-			}
-		}
+		echo "</td><td></td></tr>";
+		echo "<tr><td colspan=\"3\"></td><td><input name=\"changePassword\" onclick=\"window.location.href='changePassword.php';\" value=\"Zmień hasło\" class=\"blueButton\" type=\"button\"/></td></tr>";
 		echo "</table>";
 	?>
 	</div>
 	<div id="site-container">
 		<h3 class="colour blue">Składki członkowskie</h3>
 		<?php 
-		$query = "SELECT date, type, year, amount FROM `Payments` WHERE member_id=$selectedId ORDER BY date DESC";
+		$query = "SELECT date, type, year, amount FROM `Payments` WHERE member_id=$userID ORDER BY date DESC";
 		$result = mysql_query($query);
 		$rowCount = mysql_num_rows($result);
 		if ($rowCount == 0 && (!isset($_POST ['addPayment']))) {
@@ -283,60 +205,8 @@ $result = mysql_query($query);
 				echo "<td class='center'>" . number_format((float)$row["amount"], 2, ',', '') . " zł</td>";
 				echo "</tr>";
 			}
-			if (isset($_POST ['addPayment'])){
-				echo "<tr>";
-				echo "<td class='center'>" . $index++ . "</td>";
-				$currentDate = date("Y-m-d");
-				echo "<td class='center'><input type=\"text\" id=\"paymentDate\" size=\"10\" maxlength=\"10\" name=\"paymentDate\" value=\"$currentDate\"></td>";
-				echo "<td class='center'>
-						<select name='paymentType' id='paymentType' onchange='changeAmount();'>
-							<option value=\"1\">Semestr 1</option>
-							<option value=\"2\">Semestr 2</option>
-							<option value=\"3\">Rok</option>
-						</select>
-					</td>"; 
-				echo "<td class='center'>
-						<select name='paymentYear' id='paymentYear'>
-							<option value=\"".($year - 1)."\">".($year - 1)."</option>
-							<option selected value=\"".$year."\">".$year."</option>
-							<option value=\"".($year + 1)."\">".($year + 1)."</option>
-						</select>
-					</td>";
-				echo "<td class='center'>
-						<select name='paymentAmount' id='paymentAmount'>
-							<option value=\"20\">20,00 zł</option>
-							<option value=\"40\">40,00 zł</option>
-						</select>
-					</td>";
-				echo "</tr>";
-			?>
-			<script>
-				function changeAmount() {
-					if ($('#paymentType').val() == '1' || $("#paymentType").val() == '2') {
-						$('#paymentAmount').val('20');
-					} else if ($('#paymentType').val() == '3') {
-						$('#paymentAmount').val('40');
-					}
-				}
-			</script>
-			<?php 
-			}
 			echo "</table>";
-			if (isset($_POST ['addPayment'])){
-				echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"$selectedId\">";
-				echo "<br><input name=\"savePayment\" value=\"Zapisz\" style=\"margin-left: 70%;\" class=\"blueButton\" type=\"submit\"/>";
-				echo "</form>";
-			}
 		}
-		if (!isset($_POST ['addPayment'])) {
-			if ($userType == 'Z') {
-				echo "<form id=\"addPayment\" method=\"post\" action=\"selectedMember.php\">";
-				echo "<input type=\"hidden\" id=\"selectedId\" name=\"selectedId\" value=\"$selectedId\">";
-				echo "<br><input name=\"addPayment\" value=\"Dodaj składkę\" style=\"margin-left: 70%;\" class=\"blueButton\" type=\"submit\"/>";
-				echo "</form>";
-			}
-		}
-		echo "<br>";
 	?>
 	<br>
 	</div>
