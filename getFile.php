@@ -51,19 +51,9 @@ if (isset ( $_POST ['submit'] )) {
 	$fee = 0;
 	while ( $row = mysql_fetch_array($result) ) {
 		if (isset ($_POST ['oplacona'])) {
-			$year = date("Y");
 			$currentDate = date("Y-m-d");
-			if ($currentDate > $year."-10-01") {
-				$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id AND (
-					(Payments.type = 2 AND (date > STR_TO_DATE('" . ($year) . "-10-01','%Y-%m-%d') AND Payments.date < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d')))
-					OR (Payments.type = 3 AND Payments.year = '".$year."')
-				)";
-			} else {
-				$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id AND (
-					(Payments.type = 1 AND Payments.year = '".$year."')
-					OR (Payments.type = 3 AND Payments.year = '".$year."')
-				)";
-			}
+			$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id 
+					AND expiration_date >= STR_TO_DATE('". ($currentDate) ."' ,'%Y-%m-%d')";
 			$fee = @mysql_num_rows(mysql_query($query_fee));
 		}
 		if (!(isset ($_POST ['oplacona'])) || (isset ($_POST ['oplacona']) && $fee > 0)) {

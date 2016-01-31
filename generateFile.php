@@ -8,14 +8,14 @@ $databasePassword = 'aegee_20702';
 $connection =  mysql_connect($databaseAddress, $databaseUser, $databasePassword);
 if (!$connection) {
 	echo '<script language="javascript">';
-	echo 'alert("Błąd połączenia z baza danych");';
+	echo 'alert("BĹ‚Ä…d poĹ‚Ä…czenia z baza danych");';
 	echo '</script>';
 	exit (0);
 }
 mysql_query("SET NAMES utf8");
 if (!mysql_select_db($databaseName,$connection)) {
 	echo '<script language="javascript">';
-	echo 'alert("Błąd otwarcia bazy danych");';
+	echo 'alert("BĹ‚Ä…d otwarcia bazy danych");';
 	echo '</script>';
 	exit (0);
 }

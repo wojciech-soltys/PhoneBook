@@ -104,30 +104,11 @@ $ses_row = mysql_fetch_array($ses_sql);
 			$result = mysql_query($query);
 			echo "<tr><td></td><td><label>Liczba członków w antenie</label></td><td>" . mysql_result($result, 0) . "</td></tr>";
 			date_default_timezone_set('UTC');
-			$year = date("Y");
 			$currentDate = date("Y-m-d");
-			if ($currentDate >= $year."-10-01") {
-				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND old = '0' AND id IN (
-						SELECT member_id
-						FROM `Payments`
-						WHERE (type = 2 AND (date > STR_TO_DATE('" . ($year) . "-10-01','%Y-%m-%d') AND date < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d')))
-						OR (type = 3 AND year = '".$year."')
-					)";
-			} else if ($currentDate < $year."-03-01") {
-				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND old = '0' AND id IN (
-						SELECT member_id
-						FROM `Payments`
-						WHERE (type = 2 AND (date > STR_TO_DATE('" . ($year-1) . "-10-01','%Y-%m-%d') AND date < STR_TO_DATE('" . ($year) . "-03-01','%Y-%m-%d')))
-						OR (type = 3 AND year = '".$year."')
-					)";
-			} else {
-				$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND old = '0' AND id IN (
-						SELECT member_id
-						FROM `Payments`
-						WHERE (type = 1 AND year = '".$year."')
-						OR (type = 3 AND year = '".$year."')
-					)";
-			}
+			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND old = '0' AND id IN (
+					SELECT member_id
+					FROM `Payments`
+					WHERE expiration_date >= STR_TO_DATE('". ($currentDate) ."' ,'%Y-%m-%d'))";
 			$result = mysql_query($query);
 			echo "<tr><td></td><td><label>Liczba członków z aktualnie opłaconą składką</label></td><td>" . mysql_result($result, 0) . "</td></tr>";
 			$query = "SELECT count(id) FROM `Members` WHERE id > 0 AND old = '0' AND aegeeEmail = 1";
@@ -174,24 +155,9 @@ $ses_row = mysql_fetch_array($ses_sql);
 			$result = mysql_query($query);
 			while ( $row = mysql_fetch_array($result) ) {
 				date_default_timezone_set('UTC');
-				$year = date("Y");
 				$currentDate = date("Y-m-d");
-				if ($currentDate > $year."-10-01") {
-					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id AND (
-						(Payments.type = 2 AND (date > STR_TO_DATE('" . ($year) . "-10-01','%Y-%m-%d') AND Payments.date < STR_TO_DATE('" . ($year+1) . "-03-01','%Y-%m-%d')))
-						OR (Payments.type = 3 AND Payments.year = '".$year."')
-					)";
-				} else if ($currentDate < $year."-03-01") {
-					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id AND (
-						(Payments.type = 2 AND (date > STR_TO_DATE('" . ($year-1) . "-10-01','%Y-%m-%d') AND Payments.date < STR_TO_DATE('" . ($year) . "-03-01','%Y-%m-%d')))
-						OR (Payments.type = 3 AND Payments.year = '".$year."')
-					)";
-				} else {
-					$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id AND (
-						(Payments.type = 1 AND Payments.year = '".$year."')
-						OR (Payments.type = 3 AND Payments.year = '".$year."')
-					)";
-				}
+				$query_fee = "SELECT true FROM `Members`, `Payments` WHERE Members.id = " . $row["id"] . " AND Members.id = Payments.member_id 
+					AND expiration_date >= STR_TO_DATE('". ($currentDate) ."' ,'%Y-%m-%d')";
 				$fee = @mysql_num_rows(mysql_query($query_fee));
 				if ($fee == 1 || $row["type"] == 'H') {				
 					if ($row["type"] == 'Z') {
