@@ -1,6 +1,0 @@
-Lp;Imię;Nazwisko;Data wstąpienia;Numer telefonu;Adres e-mail;Numer karty
-1;Dariusz;Myszor;2007-01-01;506772908;dariusz.myszor@gmail.com;-
------1;2015-10-28;Rok;2016;40.00 zł;
------2;2015-06-09;Rok;2015;40.00 zł;
------3;2014-10-01;Semestr 2;2014;20.00 zł;
------4;2014-02-26;Semestr 1;2014;20.00 zł;
