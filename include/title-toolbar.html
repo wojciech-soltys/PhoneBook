@@ -1,0 +1,21 @@
+<md-toolbar class="main-toolbar" layout="row" layout-align="space-around center" md-scroll-shrink>
+	<md-button class="open-menu" ng-click="toggleLeft()" hide-gt-sm>
+		<md-icon md-font-set="material-icons"> menu </md-icon>
+	</md-button>
+	<div class="md-toolbar-tools">{{title}}</div>
+	<span flex></span>
+	<md-menu-bar>
+		<md-menu>
+			<button class="btn" ng-click="$mdOpenMenu()">{{userInfo}}</button>
+			<md-menu-content>
+				<md-menu-item>
+					<md-button id="edit-profile" ng-href="#/profile">Edycja profilu</md-button>
+				</md-menu-item>
+				<md-menu-item>
+					<md-button id="change-pass" ng-href="#/changePassword">Zmiana hasła</md-button>
+				</md-menu-item>
+			</md-menu-content>
+		</md-menu>
+	</md-menu-bar>
+	<md-button class="btn" id="logoutButton" ng-click="logout()" >Wyloguj</md-button>
+</md-toolbar>

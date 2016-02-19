@@ -1,0 +1,420 @@
+body {
+	color: #444;
+	font: 400 13px/32px "Lato", sans-serif;
+	line-height: 1.4em;
+	min-width: 600px;
+}
+
+body, html {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body, p, div {
+	font-size: 13px;
+}
+
+img {
+	padding: 10px;
+}
+
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar), 
+md-fab-speed-dial.md-fab-bottom-right button,  md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button {
+	background-color: #1468b3!important;
+	color: #fff;
+}
+
+md-input-container input, md-input-container label, md-input-container md-select{
+	font-size: 17px;
+}
+
+md-content md-input-container {
+	width: 400px;
+	padding: 15px 20px;
+}
+
+md-content div.add-img-container button {
+	margin: 0px;
+}
+
+md-content div.add-img-container img.add-img-view {
+	max-width: 88px;
+	max-height: 88px;
+}
+
+md-content md-input-container.img-upload .file-input::-webkit-file-upload-button {
+	visibility: hidden;
+}
+
+md-card md-card img, md-card>:not(md-card-content) img {
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+}
+
+md-content md-input-container.img-upload .file-input::before {
+	content: 'Wybierz plik';
+	display: inline-block;
+	padding: 3px 2px;
+	outline: none;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	cursor: pointer;
+	font-family: "Lato", sans-serif;
+	font-size: 13px;
+	color: rgba(0, 0, 0, 0.870588);
+}
+md-content md-input-container.img-upload .file-input:hover::before {
+	background-color: rgba(158,158,158,0.2);
+}
+
+md-content md-input-container.img-upload .file-input {
+	width: 75%;
+}
+
+md-content md-input-container.img-upload label {
+	margin-bottom: 15px;
+}
+
+.main-menu, .md-sidenav-left {
+	background-color: #1468b3 !important;
+}
+
+.md-sidenav-left md-content {
+	background: transparent;
+}
+
+.md-sidenav-left, .md-sidenav-left.md-locked-open-add-active, .md-sidenav-left.md-locked-open {
+	width: 252px;
+	min-width: 252px;
+	max-width: 252px;
+}
+
+.md-sidenav-right {
+	width: 400px;
+}
+
+.md-sidenav-right md-input-container {
+	width: 330px;
+	padding: 15px 20px;
+}
+
+ul.main-menu .menu-header {
+	height: 150px !important;
+}
+
+ul.main-menu {
+	padding: 0px;
+}
+
+ul.main-menu li {
+	padding: 0;
+	list-style-position: inside;
+}
+
+ul.main-menu li span {
+	padding-left: 15px;
+}
+md-content {
+	padding-left: 0px !important;
+}
+
+.main-menu .md-button {
+	border-radius: 0;
+	color: white;
+	cursor: pointer;
+	display: block;
+	align-items: inherit;
+	line-height: 40px;
+	margin: 0;
+	max-height: 40px;
+	overflow: hidden;
+	padding: 0px 16px;
+	text-align: left;
+	text-decoration: none;
+	white-space: normal;
+	width: 100%;
+}
+
+.main-menu .md-button:hover, md-toolbar.main-toolbar a.btn:hover, 
+md-toolbar.main-toolbar button.btn:hover, md-fab-speed-dial.md-fab-bottom-right button:hover,
+md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button:hover,
+md-menu-bar md-menu.md-open > button {
+	background-color: #267ED5 !important;
+}
+
+.main-menu .menu-toggle-list a.md-button {
+	display: block;
+	padding: 0 16px 0 32px;
+	text-transform: none;
+	text-rendering: optimizeLegibility;
+	font-weight: 500;
+}
+
+.main-menu li.parentActive, .main-menu li.parentActive .menu-toggle-list {
+	background-color: #A6D3FF !important
+}
+
+.main-menu > li {
+	border-bottom: 1px solid #267ED5;
+}
+
+.main-menu .md-button.active {
+	background-color: #177BDE !important;
+}
+
+.main-view .md-toolbar-tools {
+	width: 30%;
+}
+
+md-toolbar.main-toolbar a.btn, md-toolbar.main-toolbar button.btn {
+	min-width: 150px;
+	padding: 0px 8px;
+	margin: 6px 1px;
+	color: rgba(255,255,255,0.89);
+	font-size: 14px;
+	line-height: 36px;
+	text-transform: uppercase;
+}
+
+md-toolbar.main-toolbar button.open-menu {
+	width: 50px;
+	min-width: 20px;
+}
+
+.md-sidenav-left md-toolbar md-input-container {
+	width: 65px;
+	font-size: 14px;
+	margin: 0px 10px;
+} 
+
+.md-sidenav-left md-toolbar md-input-container md-select-value {
+	min-width: 45px;
+	font-size: 14px;
+	color: rgba(255,255,255,0.89);
+} 
+
+.md-sidenav-left md-toolbar md-input-container.md-input-focused md-select-value {
+	color: rgba(255,255,255,0.89) !important;
+} 
+
+.md-sidenav-left md-toolbar div.eventEdition h4 {
+	font-size: 14px;
+	width: 135px;
+	color: rgba(255,255,255,0.89);
+	margin: 10px 0px;
+}
+
+.md-sidenav-left md-toolbar div.eventEdition {
+	display: inline-flex;
+	padding: 5px 16px;
+}
+
+.md-sidenav-left md-toolbar hr {
+	width: 90%;
+	margin: 4px 12px;
+	border-top: 1px solid rgba(255,255,255,0.89);
+}
+
+md-menu-bar {
+	padding: 0px;
+}
+
+div.main-view {
+	padding: 0px;
+}
+
+md-content.main-content {
+	padding: 0px;
+}
+
+md-fab-speed-dial.md-fab-bottom-right {
+	right: 30px;
+	bottom: 30px;
+	position: fixed;
+}
+
+md-fab-speed-dial.md-fab-bottom-center {
+	bottom: 70px;
+	position: fixed;
+}
+
+md-fab-actions button md-icon {
+	color: rgba(0,0,0,0.54) !important;
+}
+
+
+md-card md-card-title md-card-title-text span {
+	font-weight: bold;
+	font-size: 15px;
+}
+
+md-card md-card-title md-card-title-text .md-subhead {
+	color: rgba(0,0,0,0.54);
+}
+
+div.user-profile form md-input-container, 
+div.change-password form md-input-container
+div.settings form md-input-container {
+	margin: 15px 25px;
+}
+
+div.user-profile form, 
+div.change-password form {
+	margin: 50px 25px;
+	max-width: 650px;
+	width: auto;
+}
+
+div.settings form {
+	margin: 10px 15px;
+	width: auto;
+}
+
+div.settings form md-checkbox span {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: .005em;
+}
+
+div.dictionaries-container {
+	margin: 5px 10px;
+	width: auto;
+}
+
+div.dictionaries-container div {
+	padding: 0px 10px;
+}
+
+div.dictionaries-container div md-list .md-subheader .md-subheader-content {
+	font-size: 22px;	
+}
+
+div.dictionaries-container div md-list md-list-item p {
+	font-size: 17px;	
+}
+
+div.dictionaries-container div md-list md-list-item md-input-container {
+	padding: 5px 10px;
+	margin: 5px 0;	
+}
+
+div.dictionaries-container div md-list md-list-item button {
+	font-size: 14px;	
+}
+
+div.dictionaries-container div button {
+	font-size: 15px;	
+}
+
+form div.actions-row {
+	width: 100%;
+}
+
+form h4 {
+	color: rgba(0, 0, 0, 0.258824);
+	font-size: 17px;
+	padding-left: 3px;
+	font-weight: normal;
+}
+
+form h4.filled {
+	color: rgba(0, 0, 0, 0.541176);
+	-webkit-transform: translate3d(0,6px,0) scale(.75);
+	transform: translate3d(0,6px,0) scale(.75);
+	-webkit-transition-duration: 0.25s; 
+	transition-duration: 0.25s;
+	padding-left: 0px;
+}
+
+form md-radio-group, form md-checkbox {
+	margin-left: 20px !important;
+}
+
+form md-datepicker {
+	margin-bottom: 18px;
+}
+
+.right-view form md-input-container {
+	margin-bottom: 14px;
+	margin-top: 14px;
+}
+
+.no-content {
+	text-align: center;
+	font-size: 25px;
+	color: rgba(0, 0, 0, 0.6);
+	margin-top: 8%;
+}
+
+
+md-grid-list.dashboard .gray {
+	background: #E0E0E0;
+}
+
+md-grid-list.dashboard .green {
+	background: #b9f6ca;
+}
+
+md-grid-list.dashboard .yellow {
+	background: #ffff8d;
+}
+
+md-grid-list.dashboard .blue {
+	background: #80d8ff;
+}
+
+md-grid-list.dashboard .purple {
+	background: #b388ff;
+}
+
+md-grid-list.dashboard .red {
+	background: #ff8a80
+}
+
+md-grid-list.dashboard md-grid-tile {
+	transition: all 400ms ease-out 50ms;
+}
+
+md-grid-list.dashboard md-grid-tile md-grid-tile-header h3 {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+md-grid-list.dashboard md-grid-tile md-grid-tile-footer h3 {
+	font-size: 16px;
+}
+
+md-grid-list.dashboard md-grid-tile md-grid-tile-footer {
+	cursor: pointer;
+}
+
+md-grid-list.dashboard md-grid-tile md-grid-tile-footer h3:hover {
+	color: #F5F5F5;
+}
+
+md-grid-list.dashboard {
+	margin: 4px;
+}
+
+md-grid-list.dashboard md-grid-tile h1.md-grid-tile-content {
+	font-size: 170px;
+	color: #fff;
+}
+
+md-grid-list.dashboard md-grid-tile h1.md-grid-tile-content-min {
+	font-size: 100px;
+	color: #fff;
+}
+
+.text-editor-container {
+	width: 100%;
+	padding: 0;
+}
+
+@media (min-width: 960px) {
+	md-menu-content[width="5"] {
+		min-width: 180px;
+	}
+}
