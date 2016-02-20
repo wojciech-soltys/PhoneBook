@@ -1,7 +1,8 @@
 app.controller('membersListCtrl', ['$scope', 'informService', 'membersService', 
 	function ($scope, informService, membersService) {
-	$scope.itemsExists = false;
+	$scope.itemsExists = true;
 	$scope.membersList = null;
+	$scope.query = '';
 
 	var getMembersList = function() {
 		membersService.getMembersList($scope.event_edition)
@@ -20,5 +21,4 @@ app.controller('membersListCtrl', ['$scope', 'informService', 'membersService',
 	};
 
 	getMembersList();
-
 }]);

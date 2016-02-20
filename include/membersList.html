@@ -1,13 +1,14 @@
 <title-toolbar title="Lista członków" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
-<div class="members-list-container" ng-controller="membersListCtrl">
+<div class="members-list-container" ng-controller="membersListCtrl as m">
 
 <div ng-show="itemsExists">
 	<md-card style="margin:0px">
 		<md-input-container style="margin:15px;">
 			<label>Szukaj</label>
-			<input type="text" ng-model="filterName">
+			<input type="text" ng-model="query">
 		</md-input-container>
 	</md-card>
+	<members-table list="membersList" query="query"></members-table>
 </div>
 <div ng-hide="itemExists">
 </div>

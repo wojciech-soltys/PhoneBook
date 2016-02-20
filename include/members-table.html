@@ -1,0 +1,33 @@
+<table class="table table-hover">
+	<thead>
+		<th>#</th>
+		<th>Nazwisko</th>
+		<th>Imię</th>
+		<th>Numer telefonu</th>
+		<th>Adres e-mail</th>
+		<th>Data urodzenia</th>
+		<th>Karta członkowska</th>
+		<th>Deklaracja</th>
+		<th>@aegee-gliwice.org<br />Podłączenie do listy</th>
+	</thead>
+	<tbody>
+		<tr ng-repeat="member in list | filter:query as results">
+			<th>{{$index + 1}}</th>
+			<td>{{member.lastName}}</td>
+			<td>{{member.firstName}}</td>
+			<td><a href="tel:member.phone">{{member.phone}}</a></td>
+			<td>{{member.privateEmail}}</td>
+			<td>{{member.birthDate}}</td>
+			<td>{{member.cardNumber}}</td>
+			<td>
+				<md-checkbox ng-change="" ng-model="member.declaration" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</td>
+			<td>
+				<md-checkbox ng-change="" ng-model="member.aegeeEmail" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</td>
+			<td>
+				<md-checkbox ng-change="" ng-model="member.connectedToList" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</td>
+		</tr>
+	</tbody>
+</table>

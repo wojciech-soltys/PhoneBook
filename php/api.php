@@ -50,7 +50,6 @@ private function checkAndSetNewPath($folders) {
 
 
 function login(){
-
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	@$username = $request->username;
@@ -134,21 +133,20 @@ function getMembersList() {
 		@$edition = $request->edition;
 		$sql = "SELECT id, firstName, lastName, accessionDate, phone, privateEmail, aegeeEmail, birthDate, cardNumber, declaration, connectedToList
 			FROM members 
-			WHERE old = 0 
+			WHERE old = 0 AND id > 0
 			ORDER BY lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {					
-				$toReturn[] = array('id' => $row["id"], 
+				$toReturn[] = array('id' => $row["id"],
+					'lastName' => $row["lastName"],
 					'firstName' => $row["firstName"], 
-					'lastName' => $row["lastName"], 
-					'accessionDate' => $row["accessionDate"], 
 					'phone' => $row["phone"], 
 					'privateEmail' => $row["privateEmail"], 
-					'aegeeEmail' => $row["aegeeEmail"], 
 					'birthDate' => $row["birthDate"], 
 					'cardNumber' => $row["cardNumber"], 
 					'declaration' => $row["declaration"], 
+					'aegeeEmail' => $row["aegeeEmail"], 
 					'connectedToList' => $row["connectedToList"]
 					);
 			}
