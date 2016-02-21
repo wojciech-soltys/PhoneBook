@@ -1,6 +1,6 @@
 body {
 	color: #444;
-	font: 400 13px/32px "Lato", sans-serif;
+	font: 400 13px/32px "Lato", sans-serif !important;
 	line-height: 1.4em;
 	min-width: 600px;
 }
@@ -252,6 +252,25 @@ md-card md-card-title md-card-title-text span {
 
 md-card md-card-title md-card-title-text .md-subhead {
 	color: rgba(0,0,0,0.54);
+}
+
+
+.members-list-container md-checkbox {
+	margin-bottom: 0px;
+}
+
+.members-list-container table {
+	font-size: 14px;
+}
+
+.members-list-container md-card {
+	margin: 0;
+}
+
+.members-list-container md-card md-input-container {
+	margin: 25px 15px 0 15px !important;
+	padding: 5px !important;
+	height: 40px;
 }
 
 div.user-profile form md-input-container, 

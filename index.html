@@ -8,11 +8,13 @@
 	<script src="js/libs/angular-aria.min.js"></script>
 	<script src="js/libs/angular-messages.min.js"></script>
 	<script src="js/libs/angular-material.min.js"></script>
+	<script src="js/libs/ui-bootstrap-tpls.min.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/empty.js"></script>
 	<script src="js/title-toolbar.js"></script>
 	<script src="js/members-table.js"></script>
 	<script src="js/membersList.js"></script>
+	<script src="js/memberDetails.js"></script>
 	<script src="js/services/login-services.js"></script>
 	<script src="js/services/inform-services.js"></script>
 	<script src="js/services/members-services.js"></script>
@@ -33,37 +35,37 @@
 				<md-content layout-padding>
 				<ul class="main-menu">
 					<li>
-						<md-button ng-href="#/membersList" ng-class="{active: isActive('/membersList')}" >
+						<md-button ui-sref="membersList" ng-class="{active: isActive('/membersList')}" >
 							Lista członków
 						</md-button>
 					</li>
 
 					<li>
-						<md-button href="#/oldMembersList" ng-class="{active: isActive('/oldMembersList')}">
+						<md-button ui-sref="oldMembersList" ng-class="{active: isActive('/oldMembersList')}">
 							Lista byłych członków
 						</md-button>
 					</li>
 
 					<li>
-						<md-button href="#/newMember" ng-class="{active: isActive('/newMember')}">
+						<md-button ui-sref="newMember" ng-class="{active: isActive('/newMember')}">
 							Dodaj członka
 						</md-button>
 					</li>
 
 					<li>
-						<md-button href="#/reports" ng-class="{active: isActive('/reports')}">
+						<md-button ui-sref="reports" ng-class="{active: isActive('/reports')}">
 							Raporty
 						</md-button>
 					</li>
 
 					<li>
-						<md-button ng-href="#/statistics" ng-class="{active: isActive('/statistics')}">
+						<md-button ui-sref="statistics" ng-class="{active: isActive('/statistics')}">
 							Statystyki
 						</md-button>
 					</li>
 
 					<li>
-						<md-button href="#/users" ng-class="{active: isActive('/users')}">
+						<md-button uisref="users" ng-class="{active: isActive('/users')}">
 							Użytkownicy
 						</md-button>
 					</li>

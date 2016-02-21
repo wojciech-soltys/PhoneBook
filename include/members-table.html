@@ -8,25 +8,26 @@
 		<th>Data urodzenia</th>
 		<th>Karta członkowska</th>
 		<th>Deklaracja</th>
-		<th>@aegee-gliwice.org<br />Podłączenie do listy</th>
+		<th>@aegee-gliwice.org</th>
+		<th>Podłączenie do listy</th>
 	</thead>
 	<tbody>
-		<tr ng-repeat="member in list | filter:query as results">
+		<tr ng-repeat="member in list | filter:query as results" uib-tooltip="{{member.lastName + ' ' + member.firstName + ' - data ważności składki: ' + member.expirationDate}}" tooltip-placement='top' ng-class="{'danger': checkExpirationDate(member)}" ui-sref="memberDetails({id: member.id})">
 			<th>{{$index + 1}}</th>
 			<td>{{member.lastName}}</td>
 			<td>{{member.firstName}}</td>
-			<td><a href="tel:member.phone">{{member.phone}}</a></td>
-			<td>{{member.privateEmail}}</td>
+			<td><a href="tel:{{member.phone}}">{{member.phone}}</a></td>
+			<td><a href="mailto:{{member.privateEmail}}">{{member.privateEmail}}</a></td>
 			<td>{{member.birthDate}}</td>
 			<td>{{member.cardNumber}}</td>
 			<td>
-				<md-checkbox ng-change="" ng-model="member.declaration" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+				<md-checkbox ng-change="" ng-model="member.declaration" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek podpisał deklarację"></md-checkbox>
 			</td>
 			<td>
-				<md-checkbox ng-change="" ng-model="member.aegeeEmail" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+				<md-checkbox ng-change="" ng-model="member.aegeeEmail" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek ma konto mailowe w domenie aegee"></md-checkbox>
 			</td>
 			<td>
-				<md-checkbox ng-change="" ng-model="member.connectedToList" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+				<md-checkbox ng-change="" ng-model="member.connectedToList" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek jest podłączony do listy mailingowej"></md-checkbox>
 			</td>
 		</tr>
 	</tbody>

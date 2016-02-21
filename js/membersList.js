@@ -5,7 +5,7 @@ app.controller('membersListCtrl', ['$scope', 'informService', 'membersService',
 	$scope.query = '';
 
 	var getMembersList = function() {
-		membersService.getMembersList($scope.event_edition)
+		membersService.getMembersList()
 		.success(function (data) {
 			$scope.membersList = data;
 			if ($scope.membersList.length == 0) {
@@ -19,6 +19,6 @@ app.controller('membersListCtrl', ['$scope', 'informService', 'membersService',
 			$scope.itemsExists = false;
 		});
 	};
-
+	
 	getMembersList();
 }]);

@@ -3,7 +3,7 @@ angular.module('main.membersFactory', [])
 	'use strict';
 	var membersService={};
 
-	membersService.getMembersList = function(username, password) {
+	membersService.getMembersList = function() {
 		return $http({
 			method: 'post',
 			url: 'getMembersList',

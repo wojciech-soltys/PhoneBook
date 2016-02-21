@@ -1,4 +1,4 @@
-var app=angular.module('main', ['ui.router', 'ngMaterial', 'login.loginFactory', 
+var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory', 
 	'main.inform', 'main.membersFactory']);
 
 app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout', 
@@ -115,6 +115,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/membersList',
 		views: {
 			'contentView': { templateUrl: 'include/membersList.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
+	.state('memberDetails', {
+		url: '/memberDetails?id',
+		views: {
+			'contentView': { templateUrl: 'include/memberDetails.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
