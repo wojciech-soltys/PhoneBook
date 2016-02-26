@@ -15,6 +15,7 @@
 	<script src="js/members-table.js"></script>
 	<script src="js/membersList.js"></script>
 	<script src="js/memberDetails.js"></script>
+	<script src="js/memberEdit.js"></script>
 	<script src="js/services/login-services.js"></script>
 	<script src="js/services/inform-services.js"></script>
 	<script src="js/services/members-services.js"></script>
@@ -41,14 +42,14 @@
 					</li>
 
 					<li>
-						<md-button ui-sref="oldMembersList" ng-class="{active: isActive('/oldMembersList')}">
-							Lista byłych członków
+						<md-button ui-sref="memberEdit" ng-class="{active: isActive('/memberEdit')}">
+							Dodaj członka
 						</md-button>
 					</li>
 
 					<li>
-						<md-button ui-sref="newMember" ng-class="{active: isActive('/newMember')}">
-							Dodaj członka
+						<md-button ui-sref="oldMembersList" ng-class="{active: isActive('/oldMembersList')}">
+							Lista byłych członków
 						</md-button>
 					</li>
 

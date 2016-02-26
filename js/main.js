@@ -131,6 +131,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'contentView': { templateUrl: 'include/oldMembersList.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
+	})
+	.state('memberEdit', {
+		url: '/memberEdit?id',
+		views: {
+			'contentView': { templateUrl: 'include/memberEdit.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
 	});
 });
 
