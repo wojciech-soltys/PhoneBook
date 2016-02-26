@@ -1,0 +1,38 @@
+<form name="editMemberForm" layout-wrap flex layout="row" autocomplete="off">
+	<md-input-container flex="100">
+		<label>Imię</label>
+		<input type="text" ng-model="member.firstName" md-maxlength="255" minlenght="3" required />
+	</md-input-container>
+	<md-input-container flex="100">
+		<label>Nazwisko</label>
+		<input type="text" ng-model="member.lastName" md-maxlength="255" minlength="3" required />
+	</md-input-container>
+	<h4 ng-class="{'filled':member.accessionDate != null}">Data wstąpienia</h4>
+	<md-datepicker flex="100" ng-model="member.accessionDate" md-placeholder="Wybierz" md-min-date="minAccessiomDate" md-max-date="maxAccessionDate" required></md-datepicker>
+	<md-input-container flex="100">
+		<label>Numer telefonu</label>
+		<input type="tel" ng-model="member.phone" md-maxlength="9" required />
+	</md-input-container>
+	<md-input-container flex="100">
+		<label>Prywatny adres e-mail</label>
+		<input type="email" ng-model="member.privateEmail" md-maxlength="255" required />
+	</md-input-container>
+	<h4>Adres w domenie aegee-gliwice.org</h4>
+	<md-checkbox flex="100" ng-model="member.aegeeEmail" aria-label="Adres w domenie aegee-gliwice.org" ng-true-value="'1'" ng-false-value="'0'">
+		Tak
+	</md-checkbox> 
+	<h4 ng-class="{'filled':member.birthDate != null}">Data wstąpienia</h4>
+	<md-datepicker flex="100" ng-model="member.birthDate" md-placeholder="Wybierz" md-min-date="minBirthDate" md-max-date="maxBirthDate" required></md-datepicker>
+	<md-input-container flex="100">
+		<label>Numer karty członkowskiej</label>
+		<input type="text" ng-model="member.cardNumber" md-maxlength="13" required>
+	</md-input-container>
+	<h4>Deklaracja</h4>
+	<md-checkbox flex="100" ng-model="member.declaration" aria-label="Deklaracja" ng-true-value="'1'" ng-false-value="'0'">
+		Złożona
+	</md-checkbox> 
+	<h4>Podłączenie do listy ogólnej</h4>
+	<md-checkbox flex="100" ng-model="member.connectedToList" aria-label="Podłączenie do listy ogólnej" ng-true-value="'1'" ng-false-value="'0'">
+		Tak
+	</md-checkbox> 
+</form>
