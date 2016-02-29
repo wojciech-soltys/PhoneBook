@@ -153,12 +153,92 @@ function getMembersList() {
 					'declaration' => $row["declaration"], 
 					'aegeeEmail' => $row["aegeeEmail"], 
 					'connectedToList' => $row["connectedToList"],
-					'expirationDate' => $row["expirationDate"],
+					'expirationDate' => $row["expirationDate"]
 					);
 			}
 			$this->response($this->json($toReturn), 200);
 		} else {
 			$this->response('', 204);
+		}
+	}
+}
+
+function getMentors() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		$toReturn = array();
+		$sql = "SELECT m.id, CONCAT(m.firstName, ' ', m.lastName) AS 'name'
+			FROM members m 
+			WHERE m.old = 0 AND m.mentorId = 0
+			ORDER BY m.lastName ASC";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {					
+				$toReturn[] = array('id' => $row["id"],
+					'name' => $row["name"]
+					);
+			}
+			$this->response($this->json($toReturn), 200);
+		} else {
+			$this->response('', 204);
+		}
+	}
+}
+
+function saveMember() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$firstName = $request->firstName;
+		@$lastName = $request->lastName;
+		$accessionDate = new DateTime(substr($request->accessionDate, 0, 23), new DateTimeZone('Poland'));
+		@$phone = $request->phone;
+		@$privateEmail = $request->privateEmail;
+		@$aegeeEmail = $request->aegeeEmail;
+		if (!isset($aegeeEmail)) {
+			$aegeeEmail = 0;
+		}
+		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
+		@$cardNumber = $request->cardNumber;
+		@$declaration = $request->declaration;
+		if (!isset($declaration)) {
+			$declaration = 0;
+		}
+		@$connectedToList = $request->connectedToList;
+		if (!isset($connectedToList)) {
+			$connectedToList = 0;
+		}
+		@$mentorId = $request->mentorId;
+		@$type = $request->type;
+		if (!isset($type)) {
+			$type = 0;
+		}
+		if($firstName != null && strlen($firstName) < 255 && 
+			$lastName != null && strlen($lastName) < 255 &&
+			$accessionDate != null &&
+			$phone != null &&
+			$privateEmail != null && strlen($privateEmail) < 255 &&
+			$birthDate != null &&
+			$cardNumber != null && strlen($cardNumber) < 20 &&
+			$mentorId != null) {
+			$sql = "INSERT INTO members (firstName, lastName, accessionDate,
+				phone, privateEmail, aegeeEmail, birthDate, cardNumber, 
+				declaration, connectedToList, mentorId, type, old) 
+				VALUES ('$firstName', '$lastName', '"
+					.$accessionDate->format('Y-m-d').
+					"', '$phone', $privateEmail', $aegeeEmail, '"
+					.$birthDate->format('Y-m-d').
+					"', '$cardNumber', $declaration, $connectedToList, 
+					$mentorId, $type, 0)";
+				$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
+			}
+		} else {
+			$this->response($this->json(array('message'=>'Nie wszystkie pola zostały wypełnione')), 400);
 		}
 	}
 }
