@@ -194,6 +194,7 @@ function saveMember() {
 		@$lastName = $request->lastName;
 		$accessionDate = new DateTime(substr($request->accessionDate, 0, 23), new DateTimeZone('Poland'));
 		@$phone = $request->phone;
+		$phoneRegex = "/[0-9]{9}/";
 		@$privateEmail = $request->privateEmail;
 		@$aegeeEmail = $request->aegeeEmail;
 		if (!isset($aegeeEmail)) {
@@ -201,6 +202,7 @@ function saveMember() {
 		}
 		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
 		@$cardNumber = $request->cardNumber;
+		$cardNumberRegex = "/[a-zA-Z0-9]{6}-[a-zA-Z0-9]{6}/";
 		@$declaration = $request->declaration;
 		if (!isset($declaration)) {
 			$declaration = 0;
@@ -217,17 +219,17 @@ function saveMember() {
 		if($firstName != null && strlen($firstName) < 255 && 
 			$lastName != null && strlen($lastName) < 255 &&
 			$accessionDate != null &&
-			$phone != null &&
-			$privateEmail != null && strlen($privateEmail) < 255 &&
+			$phone != null && preg_match($phoneRegex, $phone) &&
+			$privateEmail != null && strlen($privateEmail) < 255 && filter_var($privateEmail, FILTER_VALIDATE_EMAIL) &&
 			$birthDate != null &&
-			$cardNumber != null && strlen($cardNumber) < 20 &&
+			$cardNumber != null && strlen($cardNumber) < 20 && preg_match($cardNumberRegex, $cardNumber) &&
 			$mentorId != null) {
 			$sql = "INSERT INTO members (firstName, lastName, accessionDate,
 				phone, privateEmail, aegeeEmail, birthDate, cardNumber, 
 				declaration, connectedToList, mentorId, type, old) 
 				VALUES ('$firstName', '$lastName', '"
 					.$accessionDate->format('Y-m-d').
-					"', '$phone', $privateEmail', $aegeeEmail, '"
+					"', '$phone', '$privateEmail', $aegeeEmail, '"
 					.$birthDate->format('Y-m-d').
 					"', '$cardNumber', $declaration, $connectedToList, 
 					$mentorId, $type, 0)";

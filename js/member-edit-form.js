@@ -1,7 +1,9 @@
 function memberEditController($scope, informService, membersService) {
 	$scope.member = null;
 	$scope.mentors = null;
-	$scope.email = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
+	var phoneRegex = new RegExp('[0-9]{9}');
+	var privateEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+	var cardNumberRegex = new RegExp('[a-z0-9]{6}-[a-z0-9]{6}', 'i');
 	$scope.types = [
 	{id: 'C', name: 'Członek zwyczajny'},
 	{id: 'Z', name: 'Zarząd'},
@@ -13,6 +15,15 @@ function memberEditController($scope, informService, membersService) {
 		if (form.$invalid) {
 			informService.showAlert('Błąd', 'Wypełnij poprawnie formularz');
 			return false;
+		} else if (!phoneRegex.test($scope.member.phone)){
+			informService.showAlert('Błąd', 'Numer telefonu jest niepoprawny');
+			return false;		
+		} else if (!privateEmailRegex.test($scope.member.privateEmail)){
+			informService.showAlert('Błąd', 'Adres e-mail jest niepoprawny');
+			return false;		
+		}  else if (!cardNumberRegex.test($scope.member.cardNumber)){
+			informService.showAlert('Błąd', 'Numer karty członkowskiej jest niepoprawny');
+			return false;		
 		} else {
 			return true;
 		}
@@ -25,6 +36,8 @@ function memberEditController($scope, informService, membersService) {
 				informService.showSimpleToast('Zapisano nowego członka');
 				$scope.member = null;
 				getMentors();
+				form.$setPristine();
+				form.$setUntouched();
 			})
 			.error(function () {
 				informService.showAlert('Błąd', 'Zapis nie powiódł się.');
