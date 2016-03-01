@@ -19,6 +19,10 @@ img {
 	padding: 10px;
 }
 
+.table {
+	margin-bottom: 5px !important;
+}
+
 md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar), 
 md-fab-speed-dial.md-fab-bottom-right button,  md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button {
 	background-color: #1468b3!important;

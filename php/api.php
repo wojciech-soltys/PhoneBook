@@ -130,15 +130,15 @@ function getMembersList() {
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
 		$toReturn = array();
-		@$edition = $request->edition;
-		$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, (SELECT expirationDate
+		@$old = $request->old;
+		$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.type, (SELECT expirationDate
 								FROM payments p
 								WHERE p.member_id = m.id
 								ORDER BY p.expirationDate DESC
 								LIMIT 1
 								) as 'expirationDate'
 			FROM members m 
-			WHERE m.old = 0 AND m.id > 0
+			WHERE m.old = $old AND m.id > 0
 			ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
@@ -154,6 +154,7 @@ function getMembersList() {
 					'aegeeEmail' => $row["aegeeEmail"], 
 					'connectedToList' => $row["connectedToList"],
 					'expirationDate' => $row["expirationDate"],
+					'type' => $row["type"]
 					);
 			}
 			$this->response($this->json($toReturn), 200);

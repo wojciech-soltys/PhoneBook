@@ -3,13 +3,14 @@ angular.module('main.membersFactory', [])
 	'use strict';
 	var membersService={};
 
-	membersService.getMembersList = function() {
+	membersService.getMembersList = function(old) {
 		return $http({
 			method: 'post',
 			url: 'getMembersList',
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
+				old: old
 			}
 		});
 	};

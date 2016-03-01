@@ -3,11 +3,15 @@ angular.module('main').directive('membersTable', function() {
 		restrict: 'E',
 		scope: {
 			list: '=',
-			query: '='
+			query: '=',
+			old: '='
 		},
 		templateUrl : 'include/members-table.html',
 		controller: function($scope, $element, $location) { 
 			$scope.checkExpirationDate = function(member) {
+				if ($scope.old || member.type === 'H') {
+					return false;
+				}
 				if (member.expirationDate === null || member.expirationDate === '') {
 					member.expirationDate = '';
 					return true;
