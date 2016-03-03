@@ -54,18 +54,18 @@ function login(){
 	$request = json_decode($postdata);
 	@$username = $request->username;
 	@$pass = $request->password;
-	@$passw = md5($pass);		
-	$sql = "SELECT id, username, last_login FROM users WHERE username = '$username' AND password = '$passw'";
+	@$passw = md5($pass);
+	$sql = "SELECT u.id, u.username, u.lastLogin, m.type FROM users u JOIN members m ON u.memberId = m.id WHERE username = '$username' AND u.password = '$passw'";
 	$result = $this->mysqli->query($sql);
 
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_array($result);			
 		$datetime = date('Y-m-d H:i:s');
 		$ses = $row["username"].$datetime;
-		$sql = "UPDATE users SET last_login = '$datetime', session_id='".md5($ses)."' WHERE id = " .$row["id"];			
+		$sql = "UPDATE users SET lastLogin = '$datetime', sessionId='".md5($ses)."' WHERE id = " .$row["id"];			
 		$result = $this->mysqli->query($sql);
 		if ($result) {	
-			$this->response($this->json(array('session' => md5($ses), 'url' => 'index.html')), 200);
+			$this->response($this->json(array('role' => $row['type'], 'session' => md5($ses), 'url' => 'index.html')), 200);
 		} else {
 			$this->response('', 400);
 		}
@@ -79,7 +79,7 @@ function logout(){
 	$request = json_decode($postdata);
 	@$username = $request->username;
 	@$session_id = $request->session_id;
-	$sql = "SELECT id FROM users WHERE username = '$username' AND session_id='$session_id'";
+	$sql = "SELECT id FROM users WHERE username = '$username' AND sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 
 	if (mysqli_num_rows($result) > 0) {
@@ -102,7 +102,7 @@ function isUserLogged() {
 	$request = json_decode($postdata);
 	@$session_id = $request->session_id;
 	@$username = $request->username;
-	$sql = "SELECT u.id, m.firstName as 'firstName', m.lastName as 'lastName' FROM users u JOIN members m ON u.member_id = m.id WHERE u.username = '$username' AND u.session_id='$session_id'";
+	$sql = "SELECT u.id, m.firstName as 'firstName', m.lastName as 'lastName' FROM users u JOIN members m ON u.memberId = m.id WHERE u.username = '$username' AND u.sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
@@ -115,7 +115,7 @@ function isUserLogged() {
 private function isLogged($request) {
 	@$session_id = $request->session_id;
 	@$username = $request->username;
-	$sql = "SELECT id FROM users WHERE username = '$username' AND session_id='$session_id'";
+	$sql = "SELECT id FROM users WHERE username = '$username' AND sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
 		return true;
