@@ -90,9 +90,9 @@ md-content md-input-container.img-upload label {
 }
 
 .md-sidenav-left, .md-sidenav-left.md-locked-open-add-active, .md-sidenav-left.md-locked-open {
-	width: 252px;
-	min-width: 252px;
-	max-width: 252px;
+	width: 250px;
+	min-width: 250px;
+	max-width: 250px;
 }
 
 .md-sidenav-right {
@@ -118,7 +118,7 @@ ul.main-menu li {
 }
 
 ul.main-menu li span {
-	padding-left: 15px;
+	padding-left: 5px;
 }
 md-content {
 	padding-left: 0px !important;
