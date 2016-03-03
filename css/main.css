@@ -61,8 +61,24 @@ md-content md-input-container {
 	padding: 15px 20px;
 }
 
-ul.main-menu .menu-header {
-	height: 150px !important;
+md-sidenav md-toolbar {
+	height: 150px;
+	display: block;
+}
+
+md-toolbar .menu-header {
+	height: 37px;
+	width: auto;
+	font-family: 'Lato';
+}
+
+md-toolbar img {
+	max-width: 240px;
+	max-height: 100px;
+	width: auto;
+	height: auto;
+	padding: 0;
+	margin: 5px 10px 10px;
 }
 
 ul.main-menu {
@@ -77,6 +93,7 @@ ul.main-menu li {
 ul.main-menu li span {
 	padding-left: 5px;
 }
+
 md-content {
 	padding-left: 0px !important;
 }
