@@ -153,8 +153,12 @@ function getMembersList() {
 					'declaration' => $row["declaration"], 
 					'aegeeEmail' => $row["aegeeEmail"], 
 					'connectedToList' => $row["connectedToList"],
+<<<<<<< HEAD
 					'expirationDate' => $row["expirationDate"],
 					'type' => $row["type"]
+=======
+					'expirationDate' => $row["expirationDate"]
+>>>>>>> origin/feature-new_member
 					);
 			}
 			$this->response($this->json($toReturn), 200);

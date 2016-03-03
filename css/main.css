@@ -38,49 +38,6 @@ md-content md-input-container {
 	padding: 15px 20px;
 }
 
-md-content div.add-img-container button {
-	margin: 0px;
-}
-
-md-content div.add-img-container img.add-img-view {
-	max-width: 88px;
-	max-height: 88px;
-}
-
-md-content md-input-container.img-upload .file-input::-webkit-file-upload-button {
-	visibility: hidden;
-}
-
-md-card md-card img, md-card>:not(md-card-content) img {
-	max-width: 100%;
-	max-height: 100%;
-	width: auto;
-}
-
-md-content md-input-container.img-upload .file-input::before {
-	content: 'Wybierz plik';
-	display: inline-block;
-	padding: 3px 2px;
-	outline: none;
-	white-space: nowrap;
-	-webkit-user-select: none;
-	cursor: pointer;
-	font-family: "Lato", sans-serif;
-	font-size: 13px;
-	color: rgba(0, 0, 0, 0.870588);
-}
-md-content md-input-container.img-upload .file-input:hover::before {
-	background-color: rgba(158,158,158,0.2);
-}
-
-md-content md-input-container.img-upload .file-input {
-	width: 75%;
-}
-
-md-content md-input-container.img-upload label {
-	margin-bottom: 15px;
-}
-
 .main-menu, .md-sidenav-left {
 	background-color: #1468b3 !important;
 }
@@ -249,16 +206,6 @@ md-fab-actions button md-icon {
 }
 
 
-md-card md-card-title md-card-title-text span {
-	font-weight: bold;
-	font-size: 15px;
-}
-
-md-card md-card-title md-card-title-text .md-subhead {
-	color: rgba(0,0,0,0.54);
-}
-
-
 .members-list-container md-checkbox {
 	margin-bottom: 0px;
 }
@@ -277,15 +224,34 @@ md-card md-card-title md-card-title-text .md-subhead {
 	height: 40px;
 }
 
-div.user-profile form md-input-container, 
-div.change-password form md-input-container
-div.settings form md-input-container {
-	margin: 15px 25px;
+member-edit-form form md-input-container {
+	padding: 10px 20px !important;
+	margin: 0 25px;
 }
 
-div.user-profile form, 
-div.change-password form {
-	margin: 50px 25px;
+member-edit-form form md-input-container.list {
+	margin: 5px 25px;
+}
+
+member-edit-form form .container {
+	margin: 0 25px 15px;
+}
+
+member-edit-form form md-input-container.md-input-focused label:not(.md-no-float),
+member-edit-form form md-input-container.md-input-has-value label:not(.md-no-float) {
+    -webkit-transform: translate3d(0, 20px, 0) scale(.75);
+    transform: translate3d(0, 20px, 0) scale(.75) !important;
+}
+
+
+member-edit-form form h4 {
+	font-family: Lato;
+	font-weight: bold;
+	margin-left: -16px;
+}
+
+member-edit-form form {
+	margin: 25px;
 	max-width: 650px;
 	width: auto;
 }
@@ -301,36 +267,6 @@ div.settings form md-checkbox span {
     letter-spacing: .005em;
 }
 
-div.dictionaries-container {
-	margin: 5px 10px;
-	width: auto;
-}
-
-div.dictionaries-container div {
-	padding: 0px 10px;
-}
-
-div.dictionaries-container div md-list .md-subheader .md-subheader-content {
-	font-size: 22px;	
-}
-
-div.dictionaries-container div md-list md-list-item p {
-	font-size: 17px;	
-}
-
-div.dictionaries-container div md-list md-list-item md-input-container {
-	padding: 5px 10px;
-	margin: 5px 0;	
-}
-
-div.dictionaries-container div md-list md-list-item button {
-	font-size: 14px;	
-}
-
-div.dictionaries-container div button {
-	font-size: 15px;	
-}
-
 form div.actions-row {
 	width: 100%;
 }
@@ -344,8 +280,8 @@ form h4 {
 
 form h4.filled {
 	color: rgba(0, 0, 0, 0.541176);
-	-webkit-transform: translate3d(0,6px,0) scale(.75);
-	transform: translate3d(0,6px,0) scale(.75);
+	-webkit-transform: translate3d(-70px, 6px, 0) scale(.75);
+	transform: translate3d(-70px, 6px, 0) scale(.75);
 	-webkit-transition-duration: 0.25s; 
 	transition-duration: 0.25s;
 	padding-left: 0px;
