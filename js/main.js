@@ -12,6 +12,7 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			localStorage.removeItem('Username');
 			localStorage.removeItem('TimeStamp');
 			localStorage.removeItem('SessionID');
+			localStorage.removeItem('UserRole');
 			$window.location.href = 'login.html';
 		};
 
