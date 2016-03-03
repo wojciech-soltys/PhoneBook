@@ -1,62 +1,74 @@
-<form name="editMemberForm" layout-wrap flex layout="row" autocomplete="off">
-	<md-input-container flex="100">
-		<label>Imię</label>
-		<input type="text" ng-model="member.firstName" md-maxlength="255" minlenght="3" required />
-	</md-input-container>
-	<md-input-container flex="100">
-		<label>Nazwisko</label>
-		<input type="text" ng-model="member.lastName" md-maxlength="255" minlength="3" required />
-	</md-input-container>
-	<div class="container">
-		<h4 ng-class="{'filled':member.accessionDate != null}">Data wstąpienia</h4>
-		<md-datepicker flex="100" ng-model="member.accessionDate" md-placeholder="Wybierz" md-min-date="minAccessiomDate" md-max-date="maxAccessionDate" required></md-datepicker>
+<form name="editMemberForm" autocomplete="off" class="md-whiteframe-z1">
+	<div layout-gt-sm="row">
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Imię</label>
+			<input type="text" ng-model="member.firstName" md-maxlength="255" minlenght="3" required autocomplete="off" />
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Nazwisko</label>
+			<input type="text" ng-model="member.lastName" md-maxlength="255" minlength="3" required autocomplete="off" />
+		</md-input-container>
 	</div>
-	<md-input-container flex="100">
-		<label>Numer telefonu</label>
-		<input type="tel" ng-model="member.phone" md-maxlength="9" required />
-	</md-input-container>
-	<md-input-container flex="100">
-		<label>Prywatny adres e-mail</label>
-		<input type="email" ng-model="member.privateEmail" md-maxlength="255" required />
-	</md-input-container>
-	<div class="container">
-		<h4>Adres w domenie aegee-gliwice.org</h4>
-		<md-checkbox flex="100" ng-model="member.aegeeEmail" aria-label="Adres w domenie aegee-gliwice.org" ng-true-value="'1'" ng-false-value="'0'">
-			Tak
-		</md-checkbox> 
+	<div layout-gt-sm="row">
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Numer telefonu</label>
+			<input type="tel" ng-model="member.phone" md-maxlength="9" required autocomplete="off" />
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Prywatny adres e-mail</label>
+			<input type="email" ng-model="member.privateEmail" md-maxlength="255" required autocomplete="off" />
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Numer karty członkowskiej</label>
+			<input type="text" ng-model="member.cardNumber" md-maxlength="13" required>
+		</md-input-container>
 	</div>
-	<div class="container">
-		<h4 ng-class="{'filled':member.birthDate != null}">Data wstąpienia</h4>
-		<md-datepicker flex="100" ng-model="member.birthDate" md-placeholder="Wybierz" md-min-date="minBirthDate" md-max-date="maxBirthDate" required></md-datepicker>
+	<div layout-gt-sm="row">
+		<div class="container md-block" flex-gt-sm>
+			<h4 ng-class="{'filled':member.birthDate != null}">Data urodzenia</h4>
+			<md-datepicker flex="100" ng-model="member.birthDate" md-placeholder="Wybierz" md-min-date="minBirthDate" md-max-date="maxBirthDate" required></md-datepicker>
+		</div>
+		<div class="container md-block" flex-gt-sm>
+			<h4 ng-class="{'filled':member.accessionDate != null}">Data wstąpienia</h4>
+			<md-datepicker flex="100" ng-model="member.accessionDate" md-placeholder="Wybierz" md-min-date="minAccessiomDate" md-max-date="maxAccessionDate" required></md-datepicker>
+		</div>
+		<div class="container md-block" flex-gt-sm>
+		</div>
 	</div>
-	<md-input-container flex="100">
-		<label>Numer karty członkowskiej</label>
-		<input type="text" ng-model="member.cardNumber" md-maxlength="13" required>
-	</md-input-container>
-	<div class="container">
-		<h4>Deklaracja</h4>
-		<md-checkbox flex="100" ng-model="member.declaration" aria-label="Deklaracja" ng-true-value="'1'" ng-false-value="'0'">
-			Złożona
-		</md-checkbox> 
+	<div layout-gt-sm="row">
+		<div class="container md-block" flex-gt-sm>
+			<h4>Deklaracja</h4>
+			<md-checkbox flex="100" ng-model="member.declaration" aria-label="Deklaracja" ng-true-value="'1'" ng-false-value="'0'">
+				Złożona
+			</md-checkbox> 
+		</div>
+		<div class="container md-block" flex-gt-sm>
+			<h4>Podłączenie do listy ogólnej</h4>
+			<md-checkbox flex="100" ng-model="member.connectedToList" aria-label="Podłączenie do listy ogólnej" ng-true-value="'1'" ng-false-value="'0'">
+				Tak
+			</md-checkbox>
+		</div>
+		<div class="container md-block" flex-gt-sm>
+			<h4>Adres w domenie aegee-gliwice.org</h4>
+			<md-checkbox flex="100" ng-model="member.aegeeEmail" aria-label="Adres w domenie aegee-gliwice.org" ng-true-value="'1'" ng-false-value="'0'">
+				Tak
+			</md-checkbox> 
+		</div>
 	</div>
-	<div class="container">
-		<h4>Podłączenie do listy ogólnej</h4>
-		<md-checkbox flex="100" ng-model="member.connectedToList" aria-label="Podłączenie do listy ogólnej" ng-true-value="'1'" ng-false-value="'0'">
-			Tak
-		</md-checkbox>
+	<div layout-gt-sm="row">
+		<md-input-container class="list md-block" flex-gt-sm>
+			<label>Mentor</label>
+			<md-select ng-model="member.mentorId">
+				<md-option ng-value="mentor.id" ng-repeat="mentor in mentors">{{mentor.name}}</md-option>
+			</md-select>
+		</md-input-container>
+		<md-input-container class="list md-block" flex-gt-sm>
+			<label>Typ członka</label>
+			<md-select ng-model="member.type" ng-value="null">
+				<md-option ng-value="type.id" ng-repeat="type in types">{{type.name}}</md-option>
+			</md-select>
+		</md-input-container>
 	</div>
-	<md-input-container class="list" flex="100">
-		<label>Mentor</label>
-		<md-select ng-model="member.mentorId">
-			<md-option ng-value="mentor.id" ng-repeat="mentor in mentors">{{mentor.name}}</md-option>
-		</md-select>
-	</md-input-container>
-	<md-input-container class="list" flex="100">
-		<label>Typ członka</label>
-		<md-select ng-model="member.type" ng-value="null">
-			<md-option ng-value="type.id" ng-repeat="type in types">{{type.name}}</md-option>
-		</md-select>
-	</md-input-container>
 	<div class="actions-row" layout="row" layout-align="end center">
 		<md-button id="save" ng-click="saveMember(editMemberForm)">Zapisz</md-button>
 	</div>
