@@ -26,11 +26,11 @@
 	<div layout-gt-sm="row">
 		<div class="container md-block" flex-gt-sm>
 			<h4 ng-class="{'filled':member.birthDate != null}">Data urodzenia</h4>
-			<md-datepicker flex="100" ng-model="member.birthDate" md-placeholder="Wybierz" md-min-date="minBirthDate" md-max-date="maxBirthDate" required></md-datepicker>
+			<md-datepicker ng-model="member.birthDate" md-placeholder="Wybierz" md-min-date="minBirthDate" md-max-date="maxBirthDate" required></md-datepicker>
 		</div>
 		<div class="container md-block" flex-gt-sm>
 			<h4 ng-class="{'filled':member.accessionDate != null}">Data wstąpienia</h4>
-			<md-datepicker flex="100" ng-model="member.accessionDate" md-placeholder="Wybierz" md-min-date="minAccessiomDate" md-max-date="maxAccessionDate" required></md-datepicker>
+			<md-datepicker ng-model="member.accessionDate" md-placeholder="Wybierz" md-min-date="minAccessiomDate" md-max-date="maxAccessionDate" required></md-datepicker>
 		</div>
 		<div class="container md-block" flex-gt-sm>
 		</div>
@@ -38,19 +38,19 @@
 	<div layout-gt-sm="row">
 		<div class="container md-block" flex-gt-sm>
 			<h4>Deklaracja</h4>
-			<md-checkbox flex="100" ng-model="member.declaration" aria-label="Deklaracja" ng-true-value="'1'" ng-false-value="'0'">
+			<md-checkbox ng-model="member.declaration" aria-label="Deklaracja" ng-true-value="'1'" ng-false-value="'0'">
 				Złożona
 			</md-checkbox> 
 		</div>
 		<div class="container md-block" flex-gt-sm>
 			<h4>Podłączenie do listy ogólnej</h4>
-			<md-checkbox flex="100" ng-model="member.connectedToList" aria-label="Podłączenie do listy ogólnej" ng-true-value="'1'" ng-false-value="'0'">
+			<md-checkbox ng-model="member.connectedToList" aria-label="Podłączenie do listy ogólnej" ng-true-value="'1'" ng-false-value="'0'">
 				Tak
 			</md-checkbox>
 		</div>
 		<div class="container md-block" flex-gt-sm>
 			<h4>Adres w domenie aegee-gliwice.org</h4>
-			<md-checkbox flex="100" ng-model="member.aegeeEmail" aria-label="Adres w domenie aegee-gliwice.org" ng-true-value="'1'" ng-false-value="'0'">
+			<md-checkbox ng-model="member.aegeeEmail" aria-label="Adres w domenie aegee-gliwice.org" ng-true-value="'1'" ng-false-value="'0'">
 				Tak
 			</md-checkbox> 
 		</div>

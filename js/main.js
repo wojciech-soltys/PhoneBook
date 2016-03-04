@@ -146,6 +146,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'contentView': { templateUrl: 'include/usersList.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
+	})
+	.state('userProfile', {
+		url: '/userProfile',
+		views: {
+			'contentView': { templateUrl: 'include/userProfile.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
 	});
 });
 

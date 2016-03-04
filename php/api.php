@@ -326,6 +326,57 @@ function getUsersList() {
 	}
 }
 
+function getUserProfile() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$session_id = $request->session_id;
+		@$username = $request->username;
+		$sql = "SELECT u.id, u.username, m.firstName, m.lastName, m.privateEmail 
+				FROM users u JOIN members m ON u.memberId = m.id 
+				WHERE username = '$username' AND sessionId='$session_id'";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$this->response($this->json(array('id' => $row["id"], 'username' => $row["username"], 'firstName' => $row["firstName"], 'lastName' => $row["lastName"], 'privateEmail' => $row["privateEmail"])), 200);
+		} else {
+			$this->response('', 401);
+		}
+	}
+}
+
+function setUserProfile() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$session_id = $request->session_id;
+		@$username = $request->username;
+		$valid = true;
+		@$oldPassword = $request->oldPassword;
+		if (!isset($oldPassword) || strlen($oldPassword) < 5) {
+			$this->response($this->json(array('code' => 'oldPassword')), 306);
+			$valid = false;
+		}
+		@$password = $request->password;
+		if (!isset($password) || strlen($password) < 5) {
+			$this->response($this->json(array('code' => 'password')), 306);
+			$valid = false;
+		}
+		$oldPassword = md5($oldPassword);
+		$password = md5($password);
+
+		if ($valid) {
+			$sql="UPDATE users SET password='$password' WHERE username = '$username' AND session_id='$session_id' AND password='$oldPassword'";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 306);
+			}
+		}
+	}
+}
+
 /*
 * Encode array into JSON
 */

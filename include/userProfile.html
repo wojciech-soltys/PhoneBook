@@ -1,0 +1,49 @@
+<title-toolbar title="Profil użytkownika" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<div class="user-profile-container" ng-controller="userProfileCtrl">
+	<form name="userProfileForm" class="md-whiteframe-z1">
+		<div layout-gt-sm="row">
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Nazwa użytkownika</label>
+				<input ng-model="user.username" md-maxlength="80" disabled autocomplete="off">
+			</md-input-container>
+		</div>
+		<div layout-gt-sm="row">
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Imię</label>
+				<input ng-model="user.firstName" md-maxlength="50" minlength="2" disabled autocomplete="off">
+			</md-input-container>
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Nazwisko</label>
+				<input ng-model="user.lastName" md-maxlength="60" minlength="2" disabled autocomplete="off">
+			</md-input-container>
+		</div>
+		<div layout-gt-sm="row">
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>E-mail</label>
+				<input ng-model="user.privateEmail" type="email" md-maxlength="255" autocomplete="off" required>
+			</md-input-container>
+		</div>
+		<div layout-gt-sm="row">
+			<md-checkbox ng-model="changePassword" aria-label="Zmiana hasła" ng-true-value="1" ng-false-value="0">
+				Zmień hasło
+			</md-checkbox>
+		</div>
+		<div layout-gt-sm="row" ng-show="changePassword">
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Poprzednie hasło</label>
+				<input ng-model="user.oldPassword" type="password" md-maxlength="32" minlength="5" ng-required="changePassword" autocomplete="off" ng-disabled="!changePassword">
+			</md-input-container>
+		   <md-input-container class="md-block" flex-gt-sm>
+				<label>Nowe hasło</label>
+				<input ng-model="user.password" type="password" md-maxlength="32" minlength="5" ng-required="changePassword" autocomplete="off" ng-disabled="!changePassword">
+			</md-input-container>
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>Potwierdź nowe hasło</label>
+				<input ng-model="user.confirmPassword" type="password" md-maxlength="32" minlength="5" ng-required="changePassword" autocomplete="off" ng-disabled="!changePassword">
+			</md-input-container>
+		</div>
+		<div class="actions-row" layout="row" layout-align="end center">
+			<md-button id="save" ng-click="save(userProfileForm)">Zapisz</md-button>
+		</div>
+	</form>
+</div>

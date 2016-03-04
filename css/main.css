@@ -222,7 +222,9 @@ member-edit-form form md-input-container.list {
 }
 
 member-edit-form form md-input-container.md-input-focused label:not(.md-no-float),
-member-edit-form form md-input-container.md-input-has-value label:not(.md-no-float) {
+member-edit-form form md-input-container.md-input-has-value label:not(.md-no-float),
+.user-profile-container form md-input-container.md-input-focused label:not(.md-no-float),
+.user-profile-container form md-input-container.md-input-has-value label:not(.md-no-float) {
 	-webkit-transform: translate3d(0, 20px, 0) scale(.75);
 	transform: translate3d(0, 20px, 0) scale(.75) !important;
 }
@@ -233,12 +235,12 @@ member-edit-form form h4 {
 	margin-left: -16px;
 }
 
-member-edit-form form {
+member-edit-form form, .user-profile-container form{
 	margin: 10px;
 	padding: 10px;
 }
 
-member-edit-form form .layout-gt-sm-row {
+member-edit-form form .layout-gt-sm-row, .user-profile-container form .layout-gt-sm-row {
 	height: 90px;
 	margin-top: 10px;
 	margin-bottom: 15px;
@@ -275,6 +277,10 @@ md-card.search-container md-input-container {
 
 .users-list-container users-card md-card md-card-title-text label span {
 	font-weight: normal;
+}
+
+.user-profile-container form md-checkbox .md-label {
+	padding-top: 20px;
 }
 
 form div.actions-row {
@@ -315,75 +321,4 @@ form md-datepicker {
 	font-size: 25px;
 	color: rgba(0, 0, 0, 0.6);
 	margin-top: 8%;
-}
-
-
-md-grid-list.dashboard .gray {
-	background: #E0E0E0;
-}
-
-md-grid-list.dashboard .green {
-	background: #b9f6ca;
-}
-
-md-grid-list.dashboard .yellow {
-	background: #ffff8d;
-}
-
-md-grid-list.dashboard .blue {
-	background: #80d8ff;
-}
-
-md-grid-list.dashboard .purple {
-	background: #b388ff;
-}
-
-md-grid-list.dashboard .red {
-	background: #ff8a80
-}
-
-md-grid-list.dashboard md-grid-tile {
-	transition: all 400ms ease-out 50ms;
-}
-
-md-grid-list.dashboard md-grid-tile md-grid-tile-header h3 {
-	font-size: 18px;
-	font-weight: bold;
-}
-
-md-grid-list.dashboard md-grid-tile md-grid-tile-footer h3 {
-	font-size: 16px;
-}
-
-md-grid-list.dashboard md-grid-tile md-grid-tile-footer {
-	cursor: pointer;
-}
-
-md-grid-list.dashboard md-grid-tile md-grid-tile-footer h3:hover {
-	color: #F5F5F5;
-}
-
-md-grid-list.dashboard {
-	margin: 4px;
-}
-
-md-grid-list.dashboard md-grid-tile h1.md-grid-tile-content {
-	font-size: 170px;
-	color: #fff;
-}
-
-md-grid-list.dashboard md-grid-tile h1.md-grid-tile-content-min {
-	font-size: 100px;
-	color: #fff;
-}
-
-.text-editor-container {
-	width: 100%;
-	padding: 0;
-}
-
-@media (min-width: 960px) {
-	md-menu-content[width="5"] {
-		min-width: 180px;
-	}
 }
