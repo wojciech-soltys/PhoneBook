@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html ng-app="main">
+<head>
+	<meta charset="UTF-8">
+	<script src="js/libs/angular.min.js"></script>
+	<script src="js/libs/angular-animate.min.js"></script>
+	<script src="js/libs/angular-ui-router.min.js"></script>
+	<script src="js/libs/angular-aria.min.js"></script>
+	<script src="js/libs/angular-messages.min.js"></script>
+	<script src="js/libs/angular-material.min.js"></script>
+	<script src="js/libs/ui-bootstrap-tpls.min.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/empty.js"></script>
+	<script src="js/title-toolbar.js"></script>
+	<script src="js/members-table.js"></script>
+	<script src="js/membersList.js"></script>
+	<script src="js/memberDetails.js"></script>
+	<script src="js/services/login-services.js"></script>
+	<script src="js/services/inform-services.js"></script>
+	<script src="js/services/members-services.js"></script>
+	<title>Strona główna</title>
+	<link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body class="body" ng-controller="navigationCtrl as nav">
+	<div layout="column" style="height:100%;" ng-cloak>
+		<section layout="row" flex>
+			<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+				<md-toolbar class="md-theme-indigo">
+				<h1 class="md-toolbar-tools menu-header">Portal członków Europejskiego Forum Studentów AEGEE-Gliwice</h1>
+				</md-toolbar>
+				<md-content layout-padding>
+				<ul class="main-menu">
+					<li>
+						<md-button ui-sref="membersList" ng-class="{active: isActive('/membersList')}" >
+							Lista członków
+						</md-button>
+					</li>
+
+					<li>
+						<md-button ui-sref="oldMembersList" ng-class="{active: isActive('/oldMembersList')}">
+							Lista byłych członków
+						</md-button>
+					</li>
+
+					<li>
+						<md-button ui-sref="newMember" ng-class="{active: isActive('/newMember')}">
+							Dodaj członka
+						</md-button>
+					</li>
+
+					<li>
+						<md-button ui-sref="reports" ng-class="{active: isActive('/reports')}">
+							Raporty
+						</md-button>
+					</li>
+
+					<li>
+						<md-button ui-sref="statistics" ng-class="{active: isActive('/statistics')}">
+							Statystyki
+						</md-button>
+					</li>
+
+					<li>
+						<md-button uisref="users" ng-class="{active: isActive('/users')}">
+							Użytkownicy
+						</md-button>
+					</li>
+
+					<li hide-gt-sm>
+						<md-button ng-click="closeLeft()" >
+							Zamknij menu
+						</md-button>
+					</li>
+				</ul>
+				</md-content>
+			</md-sidenav>
+			<md-content flex layout-padding class="main-content">
+				<div class="main-view" ui-view="contentView"></div>
+			</md-content>
+			<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+				<div class="right-view" ui-view="rightView"></div>
+			</md-sidenav>
+		</section>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+<title-toolbar title="Lista członków" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<div class="members-list-container" ng-controller="membersListCtrl">
+
+<div ng-show="itemsExists">
+	<md-card>
+		<md-input-container>
+			<label>Szukaj</label>
+			<input type="text" ng-model="query">
+		</md-input-container>
+	</md-card>
+	<members-table list="membersList" query="query"></members-table>
+</div>
+<div ng-hide="itemExists">
+</div>
+
+</div>
