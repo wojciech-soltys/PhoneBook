@@ -16,18 +16,18 @@
 			<th>{{$index + 1}}</th>
 			<td>{{::member.lastName}}</td>
 			<td>{{::member.firstName}}</td>
-			<td><a href="tel:{{member.phone}}">{{::member.phone}}</a></td>
-			<td><a href="mailto:{{member.privateEmail}}">{{::member.privateEmail}}</a></td>
+			<td><a ng-click="$event.stopPropagation()" href="tel:{{::member.phone}}">{{::member.phone}}</a></td>
+			<td><a ng-click="$event.stopPropagation()" href="mailto:{{::member.privateEmail}}">{{::member.privateEmail}}</a></td>
 			<td>{{::member.birthDate}}</td>
 			<td>{{::member.cardNumber}}</td>
 			<td class="col-md-offset-5">
-				<md-checkbox ng-change="" ng-model="::member.declaration" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek podpisał deklarację"></md-checkbox>
+				<md-checkbox ng-click="$event.stopPropagation()" ng-model="::member.declaration" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek podpisał deklarację" ng-change="changeDeclaration(member)"></md-checkbox>
 			</td>
 			<td class="col-md-offset-5">
-				<md-checkbox ng-change="" ng-model="::member.aegeeEmail" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek ma konto mailowe w domenie aegee"></md-checkbox>
+				<md-checkbox ng-click="$event.stopPropagation()" ng-model="::member.aegeeEmail" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek ma konto mailowe w domenie aegee" ng-change="changeAegeeEmail(member)"></md-checkbox>
 			</td>
 			<td class="col-md-offset-5">
-				<md-checkbox ng-change="" ng-model="::member.connectedToList" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek jest podłączony do listy mailingowej"></md-checkbox>
+				<md-checkbox ng-click="$event.stopPropagation()" ng-model="::member.connectedToList" ng-true-value="'1'" ng-false-value="'0'" aria-label="Czy członek jest podłączony do listy mailingowej" ng-change="changeConnectedToList(member)"></md-checkbox>
 			</td>
 		</tr>
 	</tbody>

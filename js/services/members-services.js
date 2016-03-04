@@ -15,6 +15,45 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
+	membersService.setDeclaration = function(member) {
+		return $http({
+			method: 'post',
+			url: 'setDeclaration',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				member_id: member.id,
+				declaration: member.declaration
+			}
+		});
+	};
+
+	membersService.setAegeeEmail = function(member) {
+		return $http({
+			method: 'post',
+			url: 'setAegeeEmail',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				member_id: member.id,
+				aegeeEmail: member.aegeeEmail
+			}
+		});
+	};
+	
+	membersService.setConnectedToList = function(member) {
+		return $http({
+			method: 'post',
+			url: 'setConnectedToList',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				member_id: member.id,
+				connectedToList: member.connectedToList
+			}
+		});
+	};
+
 	membersService.getMentors = function() {
 		return $http({
 			method: 'post',

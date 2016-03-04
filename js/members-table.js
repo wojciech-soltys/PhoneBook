@@ -7,7 +7,7 @@ angular.module('main').directive('membersTable', function() {
 			old: '='
 		},
 		templateUrl : 'include/members-table.html',
-		controller: function($scope, $element, $location) { 
+		controller: function($scope, $element, $location, membersService, informService) { 
 			$scope.checkExpirationDate = function(member) {
 				if ($scope.old || member.type === 'H') {
 					return false;
@@ -21,6 +21,36 @@ angular.module('main').directive('membersTable', function() {
 				if (expDate < now)
 					return true;
 				return false;
+			};
+
+			$scope.changeDeclaration = function(member) {
+				membersService.setDeclaration(member)
+				.success(function () {
+					informService.showSimpleToast('Zmiana została zapisana');
+				})
+				.error(function () {
+					informService.showSimpleToast('Błąd zapisu');
+				});
+			};
+
+			$scope.changeAegeeEmail = function(member) {
+				membersService.setAegeeEmail(member)
+				.success(function () {
+					informService.showSimpleToast('Zmiana została zapisana');
+				})
+				.error(function () {
+					informService.showSimpleToast('Błąd zapisu');
+				});
+			};
+
+			$scope.changeConnectedToList = function(member) {
+				membersService.setConnectedToList(member)
+				.success(function () {
+					informService.showSimpleToast('Zmiana została zapisana');
+				})
+				.error(function () {
+					informService.showSimpleToast('Błąd zapisu');
+				});
 			};
 		}
 	}

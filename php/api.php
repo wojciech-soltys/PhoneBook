@@ -33,22 +33,6 @@ public function processApi(){
 		$this->response('',404); // If the method not exist with in this class "Page not found".
 }
 
-private function checkAndSetNewPath($folders) {
-	if ($folders != null) {
-		$destination = '../';
-		foreach($folders as $x => $folder) {
-	    	$destination .= $folder;
-			if(!is_dir($destination)) {
-				mkdir($destination, 0775);
-			}
-			$destination .= '/';
-		}
-		return true;
-	}
-	return false;
-}
-
-
 function login(){
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
@@ -160,6 +144,75 @@ function getMembersList() {
 			$this->response($this->json($toReturn), 200);
 		} else {
 			$this->response('', 204);
+		}
+	}
+}
+
+function setDeclaration() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$id = $request->member_id;
+		@$declaration = $request->declaration;
+		if (!isset($declaration)) {
+			$declaration = 0;
+		}
+		if($id != null) {
+			$sql = "UPDATE members SET declaration = $declaration WHERE id = $id";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 400);
+			}
+		} else {
+			$this->response('', 400);
+		}
+	}
+}
+
+function setAegeeEmail() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$id = $request->member_id;
+		@$aegeeEmail = $request->aegeeEmail;
+		if (!isset($aegeeEmail)) {
+			$aegeeEmail = 0;
+		}
+		if($id != null) {
+			$sql = "UPDATE members SET aegeeEmail = $aegeeEmail WHERE id = $id";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 400);
+			}
+		} else {
+			$this->response('', 400);
+		}
+	}
+}
+
+function setConnectedToList() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$id = $request->member_id;
+		@$connectedToList = $request->connectedToList;
+		if (!isset($connectedToList)) {
+			$connectedToList = 0;
+		}
+		if($id != null) {
+			$sql = "UPDATE members SET connectedToList = $connectedToList WHERE id = $id";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 400);
+			}
+		} else {
+			$this->response('', 400);
 		}
 	}
 }
