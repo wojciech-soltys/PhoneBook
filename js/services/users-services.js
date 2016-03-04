@@ -33,8 +33,7 @@ angular.module('main.usersFactory', [])
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
 				password: user.password,
-				privateEmail: user.privateEmail,
-				oldPassword: user.oldPassword
+				currentPassword: user.currentPassword
 			}
 		});
 	};

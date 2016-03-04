@@ -20,7 +20,7 @@
 		<div layout-gt-sm="row">
 			<md-input-container class="md-block" flex-gt-sm>
 				<label>E-mail</label>
-				<input ng-model="user.privateEmail" type="email" md-maxlength="255" autocomplete="off" required>
+				<input ng-model="user.privateEmail" type="email" md-maxlength="255" disabled autocomplete="off" required>
 			</md-input-container>
 		</div>
 		<div layout-gt-sm="row">
@@ -30,8 +30,8 @@
 		</div>
 		<div layout-gt-sm="row" ng-show="changePassword">
 			<md-input-container class="md-block" flex-gt-sm>
-				<label>Poprzednie hasło</label>
-				<input ng-model="user.oldPassword" type="password" md-maxlength="32" minlength="5" ng-required="changePassword" autocomplete="off" ng-disabled="!changePassword">
+				<label>Aktualne hasło</label>
+				<input ng-model="user.currentPassword" type="password" md-maxlength="32" minlength="5" ng-required="changePassword" autocomplete="off" ng-disabled="!changePassword">
 			</md-input-container>
 		   <md-input-container class="md-block" flex-gt-sm>
 				<label>Nowe hasło</label>
@@ -42,7 +42,7 @@
 				<input ng-model="user.confirmPassword" type="password" md-maxlength="32" minlength="5" ng-required="changePassword" autocomplete="off" ng-disabled="!changePassword">
 			</md-input-container>
 		</div>
-		<div class="actions-row" layout="row" layout-align="end center">
+		<div ng-show="changePassword" class="actions-row" layout="row" layout-align="end center">
 			<md-button id="save" ng-click="save(userProfileForm)">Zapisz</md-button>
 		</div>
 	</form>

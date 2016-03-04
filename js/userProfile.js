@@ -3,7 +3,6 @@ app.controller('userProfileCtrl',['$scope', '$rootScope', 'usersService', 'infor
 		'use strict';
 		$scope.user = null;
 		$scope.changePassword = 0;
-		var privateEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 		var getUserProfile = function() {
 			usersService.getUserProfile()
@@ -21,9 +20,6 @@ app.controller('userProfileCtrl',['$scope', '$rootScope', 'usersService', 'infor
 			if (form.$invalid) {
 				informService.showAlert('Błąd', 'Wypełnij poprawnie formularz');
 				return false;
-			} else if(!privateEmailRegex.test($scope.user.privateEmail)) {
-				informService.showAlert('Błąd', 'Wypełnij poprawnie pole e-mail');
-				return false;
 			} else if ($scope.changePassword && $scope.user.password !== $scope.user.confirmPassword) {
 				informService.showAlert('Błąd', 'Nowe hasło i potwierdzone hasło nie są identyczne');
 				return false;
@@ -37,17 +33,19 @@ app.controller('userProfileCtrl',['$scope', '$rootScope', 'usersService', 'infor
 				usersService.setUserProfile($scope.user)
 				.success(function (data) {
 					$scope.user = data;
-					var msg = data.firstName + ' ' + data.lastName;
-					$rootScope.$emit('edit.profile', msg);
-					informService.showSimpleToast('Dane o użytkowniku zostały zaktualizowane');
+					informService.showSimpleToast('Profil użytkownika został zaktualizowany');
+					form.$setPristine();
+					form.$setUntouched();
+					$scope.changePassword = 0;
+					getUserProfile();
 				})
 				.error(function (data) {
 					switch (data.code) {
-						case 'privateEmail':
-							informService.showAlert('Błąd', 'Wypełnij poprawnie pole e-mail');
+						case 'currentPassword':
+							informService.showAlert('Błąd', 'Podano błędne aktualne hasło');
 							break;
 						case 'password':
-							informService.showAlert('Błąd', 'Wypełnij poprawnie pole hasło');
+							informService.showAlert('Błąd', 'POdano błędne nowe hasło');
 							break;
 						default:
 							informService.showAlert('Błąd', 'Dane nie zostały zaktualizowane');

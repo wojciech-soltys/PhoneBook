@@ -352,21 +352,33 @@ function setUserProfile() {
 		@$session_id = $request->session_id;
 		@$username = $request->username;
 		$valid = true;
-		@$oldPassword = $request->oldPassword;
-		if (!isset($oldPassword) || strlen($oldPassword) < 5) {
-			$this->response($this->json(array('code' => 'oldPassword')), 306);
+		@$currentPassword = $request->currentPassword;
+		if (!isset($currentPassword) || strlen($currentPassword) < 5) {
+			$this->response($this->json(array('code' => 'currentPassword')), 306);
 			$valid = false;
+		} else {
+			$sql = "SELECT password FROM users WHERE username = '$username'";
+			$result = $this->mysqli->query($sql);
+			if (mysqli_num_rows($result) > 0) {
+				$currentPassword = md5($currentPassword);
+				$row = mysqli_fetch_assoc($result);
+				if ($row['password'] != $currentPassword) {
+					$this->response($this->json(array('code' => 'currentPassword')), 306);
+					$valid = false;
+				}
+			}
 		}
+		
 		@$password = $request->password;
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
 			$valid = false;
+		} else {
+			$password = md5($password);
 		}
-		$oldPassword = md5($oldPassword);
-		$password = md5($password);
 
 		if ($valid) {
-			$sql="UPDATE users SET password='$password' WHERE username = '$username' AND session_id='$session_id' AND password='$oldPassword'";
+			$sql = "UPDATE users SET password='$password' WHERE username = '$username' AND sessionId='$session_id' AND password='$currentPassword'";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
