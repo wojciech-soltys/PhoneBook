@@ -144,7 +144,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/usersList',
 		views: {
 			'contentView': { templateUrl: 'include/usersList.html' },
-			'rightView': { templateUrl: 'include/empty.html' }
+			'rightView': { templateUrl: 'include/userEdit.html' }
 		}
 	})
 	.state('userProfile', {

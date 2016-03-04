@@ -1,0 +1,26 @@
+<md-toolbar class="md-theme-light">
+	<h1 class="md-toolbar-tools">Użytkownik</h1>
+</md-toolbar>
+
+<md-content layout-padding class="user-edit-container" ng-controller="userEditCtrl">
+	<form name="userEditForm" layout-wrap flex layout="row">
+		<md-input-container class="list" flex="100">
+			<label>Konto dla członka</label>
+			<md-select ng-model="user.memberId">
+				<md-option ng-value="member.id" ng-click="setUsername(member)" ng-repeat="member in membersList">{{member.firstName + ' ' + member.lastName}}</md-option>
+			</md-select>
+		</md-input-container>
+
+		<md-input-container flex="100">
+			<label>Nazwa użytkownika</label>
+			<input ng-model="user.username" md-maxlength="50" minlength="2" disabled autocomplete="off">
+		</md-input-container>
+
+
+		<div class="actions-row" layout="row" layout-align="end center">
+			<md-button id="cancel" ng-click="close(newAgendaElem)">Anuluj</md-button>
+			<md-button id="save" ng-hide="isEdit" ng-click="save(newAgendaElem)">Dodaj</md-button>
+			<md-button id="save" ng-show="isEdit" ng-click="saveChanges(newAgendaElem)">Zapisz zmiany</md-button>
+		</div>	
+	</form>
+</md-content>

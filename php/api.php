@@ -148,6 +148,31 @@ function getMembersList() {
 	}
 }
 
+function getMembersShortList() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		$toReturn = array();
+		@$old = $request->old;
+		$sql = "SELECT m.id, m.firstName, m.lastName
+			FROM members m 
+			WHERE m.old = 0 AND m.id > 0
+			ORDER BY m.lastName ASC";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {					
+				$toReturn[] = array('id' => $row["id"],
+					'lastName' => $row["lastName"],
+					'firstName' => $row["firstName"]
+					);
+			}
+			$this->response($this->json($toReturn), 200);
+		} else {
+			$this->response('', 204);
+		}
+	}
+}
+
 function setDeclaration() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);

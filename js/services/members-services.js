@@ -15,6 +15,17 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
+	membersService.getMembersShortList = function() {
+		return $http({
+			method: 'post',
+			url: 'getMembersShortList',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+			}
+		});
+	};
+
 	membersService.setDeclaration = function(member) {
 		return $http({
 			method: 'post',

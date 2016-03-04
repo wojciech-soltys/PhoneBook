@@ -59,7 +59,6 @@ md-input-container input, md-input-container label, md-input-container md-select
 }
 
 md-sidenav md-toolbar {
-	height: 150px;
 	display: block;
 }
 
