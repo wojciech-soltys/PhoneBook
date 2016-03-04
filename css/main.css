@@ -217,24 +217,14 @@ md-fab-actions button md-icon {
 	font-size: 14px;
 }
 
-.members-list-container md-card {
-	margin: 0;
-}
-
-.members-list-container md-card md-input-container {
-	margin: 25px 15px 0 15px !important;
-	padding: 5px !important;
-	height: 40px;
-}
-
 member-edit-form form md-input-container.list {
 	margin: 5px 25px;
 }
 
 member-edit-form form md-input-container.md-input-focused label:not(.md-no-float),
 member-edit-form form md-input-container.md-input-has-value label:not(.md-no-float) {
-    -webkit-transform: translate3d(0, 20px, 0) scale(.75);
-    transform: translate3d(0, 20px, 0) scale(.75) !important;
+	-webkit-transform: translate3d(0, 20px, 0) scale(.75);
+	transform: translate3d(0, 20px, 0) scale(.75) !important;
 }
 
 member-edit-form form h4 {
@@ -254,15 +244,37 @@ member-edit-form form .layout-gt-sm-row {
 	margin-bottom: 15px;
 }
 
-div.settings form {
-	margin: 10px 15px;
-	width: auto;
+md-card.search-container  {
+	margin: 0;
 }
 
-div.settings form md-checkbox span {
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: .005em;
+md-card.search-container md-input-container.md-input-focused label:not(.md-no-float),
+md-card.search-container md-input-container.md-input-has-value label:not(.md-no-float) {
+	-webkit-transform: translate3d(0, 15px, 0) scale(.75);
+	transform: translate3d(0, 15px, 0) scale(.75) !important;
+}
+
+md-card.search-container md-input-container {
+	width: 60%;
+}
+
+md-card.search-container md-input-container {
+	margin: 25px 15px 0 15px !important;
+	padding: 5px !important;
+	height: 40px;
+}
+
+.users-list-container users-card md-card {
+	margin: 10px 5px;
+
+}
+
+.users-list-container users-card md-card md-card-title {
+	padding: 15px 16px 0;
+}
+
+.users-list-container users-card md-card md-card-title-text label span {
+	font-weight: normal;
 }
 
 form div.actions-row {

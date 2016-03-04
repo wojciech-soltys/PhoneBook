@@ -299,6 +299,33 @@ function saveMember() {
 	}
 }
 
+function getUsersList() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		$toReturn = array();
+		@$old = $request->old;
+		$sql = "SELECT u.id, m.firstName, m.lastName, m.privateEmail, u.username, u.lastLogin
+			FROM members m JOIN users u ON m.id = u.memberId
+			ORDER BY m.lastName ASC";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {					
+				$toReturn[] = array('id' => $row["id"],
+					'lastName' => $row["lastName"],
+					'firstName' => $row["firstName"], 
+					'privateEmail' => $row["privateEmail"],
+					'username' => $row["username"],
+					'lastLogin' => $row["lastLogin"]
+					);
+			}
+			$this->response($this->json($toReturn), 200);
+		} else {
+			$this->response('', 204);
+		}
+	}
+}
+
 /*
 * Encode array into JSON
 */
