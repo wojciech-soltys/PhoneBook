@@ -86,11 +86,15 @@ function isUserLogged() {
 	$request = json_decode($postdata);
 	@$session_id = $request->session_id;
 	@$username = $request->username;
-	$sql = "SELECT u.id, m.firstName as 'firstName', m.lastName as 'lastName' FROM users u JOIN members m ON u.memberId = m.id WHERE u.username = '$username' AND u.sessionId='$session_id'";
+	$sql = "SELECT u.id, m.firstName, m.lastName, u.lastLogin FROM users u JOIN members m ON u.memberId = m.id WHERE u.username = '$username' AND u.sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
+		if (time() - strtotime($row['lastLogin']) < 1200) {
 		$this->response($this->json(array('firstName' => $row['firstName'], 'lastName' => $row['lastName'], 'url' => 'index.html', 'isLoggedIn' => true)), 200);
+		} else {
+			$this->response('', 401);
+		}
 	} else {
 		$this->response('', 401);
 	}
@@ -99,12 +103,18 @@ function isUserLogged() {
 private function isLoggedAsAdmin($request) {
 	@$session_id = $request->session_id;
 	@$username = $request->username;
-	$sql = "SELECT u.id 
+	$sql = "SELECT u.id, u.lastLogin
 		FROM users u JOIN members m ON u.memberId = m.id 
 		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='H'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
-		return true;
+		$row = mysqli_fetch_assoc($result);
+		if (time() - strtotime($row['lastLogin']) < 1200) {
+			return true;
+		} else {
+			$this->response('', 401);
+			return false;
+		}
 	} else {
 		$this->response('', 401);
 		return false;
@@ -114,10 +124,16 @@ private function isLoggedAsAdmin($request) {
 private function isLogged($request) {
 	@$session_id = $request->session_id;
 	@$username = $request->username;
-	$sql = "SELECT id FROM users WHERE username = '$username' AND sessionId='$session_id'";
+	$sql = "SELECT id, lastLogin FROM users WHERE username = '$username' AND sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
-		return true;
+		$row = mysqli_fetch_assoc($result);
+		if (time() - strtotime($row['lastLogin']) < 1200) {
+			return true;
+		} else {
+			$this->response('', 401);
+			return false;
+		}
 	} else {
 		$this->response('', 401);
 		return false;
