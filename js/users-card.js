@@ -41,6 +41,9 @@ angular.module('main').directive('usersCard', function() {
 								} else {
 									informService.showAlert('Błąd', 'Usunięcie użytkownika nie powiodło się');
 								}
+								if (status === 401) {
+									$rootScope.$emit('session.timeout', '');
+								}
 							});
 					});
 				}

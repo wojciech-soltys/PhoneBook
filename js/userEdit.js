@@ -72,7 +72,7 @@ app.controller('userEditCtrl',['$scope', '$rootScope', 'usersService', 'membersS
 					$rootScope.$emit('refresh.users.list', '');
 					$scope.close(form);
 				})
-				.error(function (data) {
+				.error(function (data, status) {
 					switch (data.code) {
 						case 'memberId':
 							informService.showAlert('Błąd', 'Nie przypisano konta do członka');
@@ -85,6 +85,9 @@ app.controller('userEditCtrl',['$scope', '$rootScope', 'usersService', 'membersS
 							break;
 						default:
 							informService.showAlert('Błąd', 'Dane nie zostały zapisane');
+					}
+					if (status === 401) {
+						$rootScope.$emit('session.timeout', '');
 					}
 				});
 			}
@@ -99,13 +102,16 @@ app.controller('userEditCtrl',['$scope', '$rootScope', 'usersService', 'membersS
 					form.$setUntouched();
 					$scope.close(form);
 				})
-				.error(function (data) {
+				.error(function (data, status) {
 					switch (data.code) {
 						case 'password':
 							informService.showAlert('Błąd', 'Podano błędne nowe hasło');
 							break;
 						default:
 							informService.showAlert('Błąd', 'Dane nie zostały zapisane');
+					}
+					if (status === 401) {
+						$rootScope.$emit('session.timeout', '');
 					}
 				});
 			}

@@ -14,9 +14,12 @@ app.controller('usersListCtrl', ['$scope', '$rootScope', 'informService', 'users
 					$scope.itemsExists= true;
 				}
 			})
-			.error(function () {
+			.error(function (data, status) {
 				informService.showSimpleToast('Błąd pobrania listy użytkowników');
 				$scope.itemsExists = false;
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
 			});
 		};
 
