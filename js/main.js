@@ -127,7 +127,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/memberDetails?id',
 		views: {
 			'contentView': { templateUrl: 'include/memberDetails.html' },
-			'rightView': { templateUrl: 'include/empty.html' }
+			'rightView': { templateUrl: 'include/paymentNew.html' }
 		}
 	})
 	.state('oldMembersList', {

@@ -3,7 +3,6 @@ app.controller('userEditCtrl',['$scope', '$rootScope', 'usersService', 'membersS
 		'use strict';
 		$scope.membersList = null;
 		$scope.isEdit = false;
-		$scope.changePassword = 0;
 		$scope.title = 'Nowy użytkownik';
 		$scope.user = {};
 

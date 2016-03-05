@@ -98,5 +98,21 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
+	membersService.setNewPayment = function(payment) {
+		return $http({
+			method: 'post',
+			url: 'setNewPayment',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: payment.memberId,
+				paymentDate: payment.paymentDate,
+				type: payment.type,
+				expirationDate: payment.expirationDate,
+				amount: payment.amount
+			}
+		});
+	};
+
 	return membersService;
 }]);
