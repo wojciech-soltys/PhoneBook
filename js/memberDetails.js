@@ -1,7 +1,8 @@
-app.controller('memberDetailsCtrl', ['$scope', 'informService', 'membersService', 
-	function ($scope, informService, membersService) {
+app.controller('memberDetailsCtrl', ['$scope', '$stateParams', 'informService', 'membersService', 
+	function ($scope, $stateParams, informService, membersService) {
 
 		$scope.memberDetails = null;
+		$scope.memberId = $stateParams.id;
 
 		var getMembersDetails = function() {
 			membersService.getMembersDetails($scope.memberId)
@@ -9,10 +10,9 @@ app.controller('memberDetailsCtrl', ['$scope', 'informService', 'membersService'
 				$scope.membersDetails = data;
 			})
 			.error(function () {
-				informService.showSimpleToast('Błąd pobrania listy członków');
-				$scope.itemsExists = false;
+				informService.showSimpleToast('Błąd pobrania szczegółów członka');
 			});
 		};
 
-		//getMembersDetails();
+		getMembersDetails();
 	}]);

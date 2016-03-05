@@ -389,6 +389,28 @@ function setUserProfile() {
 	}
 }
 
+function getMembersDetails() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$session_id = $request->session_id;
+		@$username = $request->username;
+		@$member_id = $request->member_id;
+		$sql = "SELECT m.accessionDate, m.aegeeEmail, m.birthDate, m.cardNumber, m.connectedToList, m.declaration, m.firstName, m.id, m.lastName,
+		 			   m.mentorId, m.old, m.phone, m.privateEmail, m.type, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
+				FROM members m LEFT JOIN members m2
+				ON m.mentorId = m2.id
+				WHERE m.id = '$member_id'";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$this->response($this->json(array('accessionDate' => $row["accessionDate"], 'aegeeEmail' => $row["aegeeEmail"], 'birthDate' => $row["birthDate"], 'cardNumber' => $row["cardNumber"], 'connectedToList' => $row["connectedToList"], 'declaration' => $row["declaration"], 'firstName' => $row["firstName"], 'id' => $row["id"], 'lastName' => $row["lastName"], 'mentorId' => $row["mentorId"], 'old' => $row["old"], 'phone' => $row["phone"], 'privateEmail' => $row["privateEmail"], 'type' => $row["type"], 'mentorFirstName' => $row["mentorFirstName"], 'mentorLastName' => $row["mentorLastName"])), 200);
+		} else {
+			$this->response('', 401);
+		}
+	}
+}
+
 /*
 * Encode array into JSON
 */

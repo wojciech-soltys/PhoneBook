@@ -87,5 +87,18 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
+
+	membersService.getMembersDetails = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'getMembersDetails',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				member_id: memberId
+			}
+		});
+	};
+
 	return membersService;
 }]);
