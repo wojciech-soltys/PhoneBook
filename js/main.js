@@ -1,5 +1,5 @@
 var app=angular.module('main', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory', 
-	'main.inform', 'main.membersFactory']);
+	'main.inform', 'main.membersFactory', 'main.usersFactory']);
 
 app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout', 
 	'$location', '$mdSidenav', '$window', 'loginService', 'informService', 
@@ -12,6 +12,7 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			localStorage.removeItem('Username');
 			localStorage.removeItem('TimeStamp');
 			localStorage.removeItem('SessionID');
+			localStorage.removeItem('UserRole');
 			$window.location.href = 'login.html';
 		};
 
@@ -129,6 +130,27 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/oldMembersList',
 		views: {
 			'contentView': { templateUrl: 'include/oldMembersList.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
+	.state('memberEdit', {
+		url: '/memberEdit?id',
+		views: {
+			'contentView': { templateUrl: 'include/memberEdit.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
+	.state('usersList', {
+		url: '/usersList',
+		views: {
+			'contentView': { templateUrl: 'include/usersList.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
+	.state('userProfile', {
+		url: '/userProfile',
+		views: {
+			'contentView': { templateUrl: 'include/userProfile.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	});

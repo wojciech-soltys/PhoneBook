@@ -5,7 +5,7 @@ app.controller('membersListCtrl', ['$scope', 'informService', 'membersService',
 	$scope.query = '';
 
 	var getMembersList = function() {
-		membersService.getMembersList()
+		membersService.getMembersList(0)
 		.success(function (data) {
 			$scope.membersList = data;
 			if ($scope.membersList.length == 0) {

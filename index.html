@@ -14,23 +14,31 @@
 	<script src="js/title-toolbar.js"></script>
 	<script src="js/members-table.js"></script>
 	<script src="js/membersList.js"></script>
+	<script src="js/oldMembersList.js"></script>
 	<script src="js/memberDetails.js"></script>
+	<script src="js/memberEdit.js"></script>
+	<script src="js/member-edit-form.js"></script>
+	<script src="js/usersList.js"></script>
+	<script src="js/userProfile.js"></script>
+	<script src="js/users-card.js"></script>
 	<script src="js/services/login-services.js"></script>
 	<script src="js/services/inform-services.js"></script>
 	<script src="js/services/members-services.js"></script>
+	<script src="js/services/users-services.js"></script>
 	<title>Strona główna</title>
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body class="body" ng-controller="navigationCtrl as nav">
 	<div layout="column" style="height:100%;" ng-cloak>
 		<section layout="row" flex>
 			<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
-				<md-toolbar class="md-theme-indigo">
-				<h1 class="md-toolbar-tools menu-header">Portal członków Europejskiego Forum Studentów AEGEE-Gliwice</h1>
+				<md-toolbar class="md-theme-indigo text-center">
+					<h1 class="md-toolbar-tools menu-header col-md-offset-2">Portal członków</h1>
+					<img src="img/logo.png" />
 				</md-toolbar>
 				<md-content layout-padding>
 				<ul class="main-menu">
@@ -41,14 +49,14 @@
 					</li>
 
 					<li>
-						<md-button ui-sref="oldMembersList" ng-class="{active: isActive('/oldMembersList')}">
-							Lista byłych członków
+						<md-button ui-sref="memberEdit" ng-class="{active: isActive('/memberEdit')}">
+							Dodaj członka
 						</md-button>
 					</li>
 
 					<li>
-						<md-button ui-sref="newMember" ng-class="{active: isActive('/newMember')}">
-							Dodaj członka
+						<md-button ui-sref="oldMembersList" ng-class="{active: isActive('/oldMembersList')}">
+							Lista byłych członków
 						</md-button>
 					</li>
 
@@ -65,7 +73,7 @@
 					</li>
 
 					<li>
-						<md-button uisref="users" ng-class="{active: isActive('/users')}">
+						<md-button ui-sref="usersList" ng-class="{active: isActive('/usersList')}">
 							Użytkownicy
 						</md-button>
 					</li>

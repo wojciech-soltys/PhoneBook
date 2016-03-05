@@ -25,6 +25,7 @@ var myApp=angular.module('login', ['login.loginFactory'])
 			localStorage.setItem('TimeStamp', new Date().getTime());
 			localStorage.setItem('SessionID', data.session);
 			localStorage.setItem('Username', $scope.user.username );
+			localStorage.setItem('UserRole', data.role);
 			$window.location.href = data.url;
 			$scope.errorMessage = '';
 		})

@@ -19,6 +19,10 @@ img {
 	padding: 10px;
 }
 
+.table {
+	margin-bottom: 5px !important;
+}
+
 md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar), 
 md-fab-speed-dial.md-fab-bottom-right button,  md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button {
 	background-color: #1468b3!important;
@@ -29,53 +33,7 @@ md-input-container input, md-input-container label, md-input-container md-select
 	font-size: 17px;
 }
 
-md-content md-input-container {
-	width: 400px;
-	padding: 15px 20px;
-}
 
-md-content div.add-img-container button {
-	margin: 0px;
-}
-
-md-content div.add-img-container img.add-img-view {
-	max-width: 88px;
-	max-height: 88px;
-}
-
-md-content md-input-container.img-upload .file-input::-webkit-file-upload-button {
-	visibility: hidden;
-}
-
-md-card md-card img, md-card>:not(md-card-content) img {
-	max-width: 100%;
-	max-height: 100%;
-	width: auto;
-}
-
-md-content md-input-container.img-upload .file-input::before {
-	content: 'Wybierz plik';
-	display: inline-block;
-	padding: 3px 2px;
-	outline: none;
-	white-space: nowrap;
-	-webkit-user-select: none;
-	cursor: pointer;
-	font-family: "Lato", sans-serif;
-	font-size: 13px;
-	color: rgba(0, 0, 0, 0.870588);
-}
-md-content md-input-container.img-upload .file-input:hover::before {
-	background-color: rgba(158,158,158,0.2);
-}
-
-md-content md-input-container.img-upload .file-input {
-	width: 75%;
-}
-
-md-content md-input-container.img-upload label {
-	margin-bottom: 15px;
-}
 
 .main-menu, .md-sidenav-left {
 	background-color: #1468b3 !important;
@@ -86,9 +44,9 @@ md-content md-input-container.img-upload label {
 }
 
 .md-sidenav-left, .md-sidenav-left.md-locked-open-add-active, .md-sidenav-left.md-locked-open {
-	width: 252px;
-	min-width: 252px;
-	max-width: 252px;
+	width: 250px;
+	min-width: 250px;
+	max-width: 250px;
 }
 
 .md-sidenav-right {
@@ -100,8 +58,24 @@ md-content md-input-container.img-upload label {
 	padding: 15px 20px;
 }
 
-ul.main-menu .menu-header {
-	height: 150px !important;
+md-sidenav md-toolbar {
+	height: 150px;
+	display: block;
+}
+
+md-toolbar .menu-header {
+	height: 37px;
+	width: auto;
+	font-family: 'Lato';
+}
+
+md-toolbar img {
+	max-width: 240px;
+	max-height: 100px;
+	width: auto;
+	height: auto;
+	padding: 0;
+	margin: 5px 10px 10px;
 }
 
 ul.main-menu {
@@ -114,8 +88,9 @@ ul.main-menu li {
 }
 
 ul.main-menu li span {
-	padding-left: 15px;
+	padding-left: 5px;
 }
+
 md-content {
 	padding-left: 0px !important;
 }
@@ -199,17 +174,6 @@ md-toolbar.main-toolbar button.open-menu {
 	color: rgba(255,255,255,0.89) !important;
 } 
 
-.md-sidenav-left md-toolbar div.eventEdition h4 {
-	font-size: 14px;
-	width: 135px;
-	color: rgba(255,255,255,0.89);
-	margin: 10px 0px;
-}
-
-.md-sidenav-left md-toolbar div.eventEdition {
-	display: inline-flex;
-	padding: 5px 16px;
-}
 
 .md-sidenav-left md-toolbar hr {
 	width: 90%;
@@ -245,16 +209,6 @@ md-fab-actions button md-icon {
 }
 
 
-md-card md-card-title md-card-title-text span {
-	font-weight: bold;
-	font-size: 15px;
-}
-
-md-card md-card-title md-card-title-text .md-subhead {
-	color: rgba(0,0,0,0.54);
-}
-
-
 .members-list-container md-checkbox {
 	margin-bottom: 0px;
 }
@@ -263,68 +217,70 @@ md-card md-card-title md-card-title-text .md-subhead {
 	font-size: 14px;
 }
 
-.members-list-container md-card {
+member-edit-form form md-input-container.list {
+	margin: 5px 25px;
+}
+
+member-edit-form form md-input-container.md-input-focused label:not(.md-no-float),
+member-edit-form form md-input-container.md-input-has-value label:not(.md-no-float),
+.user-profile-container form md-input-container.md-input-focused label:not(.md-no-float),
+.user-profile-container form md-input-container.md-input-has-value label:not(.md-no-float) {
+	-webkit-transform: translate3d(0, 20px, 0) scale(.75);
+	transform: translate3d(0, 20px, 0) scale(.75) !important;
+}
+
+member-edit-form form h4 {
+	font-family: Lato;
+	font-weight: bold;
+	margin-left: -16px;
+}
+
+member-edit-form form, .user-profile-container form{
+	margin: 10px;
+	padding: 10px;
+}
+
+member-edit-form form .layout-gt-sm-row, .user-profile-container form .layout-gt-sm-row {
+	height: 90px;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+
+md-card.search-container  {
 	margin: 0;
 }
 
-.members-list-container md-card md-input-container {
+md-card.search-container md-input-container.md-input-focused label:not(.md-no-float),
+md-card.search-container md-input-container.md-input-has-value label:not(.md-no-float) {
+	-webkit-transform: translate3d(0, 15px, 0) scale(.75);
+	transform: translate3d(0, 15px, 0) scale(.75) !important;
+}
+
+md-card.search-container md-input-container {
+	width: 60%;
+}
+
+md-card.search-container md-input-container {
 	margin: 25px 15px 0 15px !important;
 	padding: 5px !important;
 	height: 40px;
 }
 
-div.user-profile form md-input-container, 
-div.change-password form md-input-container
-div.settings form md-input-container {
-	margin: 15px 25px;
+.users-list-container users-card md-card {
+	margin: 10px 5px;
+
 }
 
-div.user-profile form, 
-div.change-password form {
-	margin: 50px 25px;
-	max-width: 650px;
-	width: auto;
+.users-list-container users-card md-card md-card-title {
+	padding: 15px 16px 0;
 }
 
-div.settings form {
-	margin: 10px 15px;
-	width: auto;
+.users-list-container users-card md-card md-card-title-text label span {
+	font-weight: normal;
 }
 
-div.settings form md-checkbox span {
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: .005em;
-}
-
-div.dictionaries-container {
-	margin: 5px 10px;
-	width: auto;
-}
-
-div.dictionaries-container div {
-	padding: 0px 10px;
-}
-
-div.dictionaries-container div md-list .md-subheader .md-subheader-content {
-	font-size: 22px;	
-}
-
-div.dictionaries-container div md-list md-list-item p {
-	font-size: 17px;	
-}
-
-div.dictionaries-container div md-list md-list-item md-input-container {
-	padding: 5px 10px;
-	margin: 5px 0;	
-}
-
-div.dictionaries-container div md-list md-list-item button {
-	font-size: 14px;	
-}
-
-div.dictionaries-container div button {
-	font-size: 15px;	
+.user-profile-container form md-checkbox .md-label {
+	padding-top: 20px;
 }
 
 form div.actions-row {
@@ -340,8 +296,8 @@ form h4 {
 
 form h4.filled {
 	color: rgba(0, 0, 0, 0.541176);
-	-webkit-transform: translate3d(0,6px,0) scale(.75);
-	transform: translate3d(0,6px,0) scale(.75);
+	-webkit-transform: translate3d(-10px, -5px, 0) scale(.75);
+	transform: translate3d(-10px, -5px, 0) scale(.75);
 	-webkit-transition-duration: 0.25s; 
 	transition-duration: 0.25s;
 	padding-left: 0px;
@@ -365,75 +321,4 @@ form md-datepicker {
 	font-size: 25px;
 	color: rgba(0, 0, 0, 0.6);
 	margin-top: 8%;
-}
-
-
-md-grid-list.dashboard .gray {
-	background: #E0E0E0;
-}
-
-md-grid-list.dashboard .green {
-	background: #b9f6ca;
-}
-
-md-grid-list.dashboard .yellow {
-	background: #ffff8d;
-}
-
-md-grid-list.dashboard .blue {
-	background: #80d8ff;
-}
-
-md-grid-list.dashboard .purple {
-	background: #b388ff;
-}
-
-md-grid-list.dashboard .red {
-	background: #ff8a80
-}
-
-md-grid-list.dashboard md-grid-tile {
-	transition: all 400ms ease-out 50ms;
-}
-
-md-grid-list.dashboard md-grid-tile md-grid-tile-header h3 {
-	font-size: 18px;
-	font-weight: bold;
-}
-
-md-grid-list.dashboard md-grid-tile md-grid-tile-footer h3 {
-	font-size: 16px;
-}
-
-md-grid-list.dashboard md-grid-tile md-grid-tile-footer {
-	cursor: pointer;
-}
-
-md-grid-list.dashboard md-grid-tile md-grid-tile-footer h3:hover {
-	color: #F5F5F5;
-}
-
-md-grid-list.dashboard {
-	margin: 4px;
-}
-
-md-grid-list.dashboard md-grid-tile h1.md-grid-tile-content {
-	font-size: 170px;
-	color: #fff;
-}
-
-md-grid-list.dashboard md-grid-tile h1.md-grid-tile-content-min {
-	font-size: 100px;
-	color: #fff;
-}
-
-.text-editor-container {
-	width: 100%;
-	padding: 0;
-}
-
-@media (min-width: 960px) {
-	md-menu-content[width="5"] {
-		min-width: 180px;
-	}
 }

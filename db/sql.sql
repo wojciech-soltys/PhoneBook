@@ -9,3 +9,7 @@ ALTER TABLE `members` DROP `fr`;
 ALTER TABLE `members` DROP `it`;
 RENAME TABLE  `db9_aegee_pl`.`Payments` TO  `db9_aegee_pl`.`payments` ;
 ALTER TABLE `payments` CHANGE `expiration_date` `expirationDate` DATE NOT NULL COMMENT 'Data wygaśnięcia składki';
+ALTER TABLE `members` CHANGE `mentor_id` `mentorId` INT(10) NOT NULL DEFAULT '0' COMMENT 'ID mentora. ID = 0 oznacza, że członek jest mentorem.';
+ALTER TABLE `users` CHANGE `member_id` `memberId` INT(10) NOT NULL COMMENT 'id użytkownika';
+ALTER TABLE `users` CHANGE `last_login` `lastLogin` DATE NULL DEFAULT NULL;
+ALTER TABLE `users` CHANGE `session_id` `sessionId` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_polish_ci NULL DEFAULT NULL;
