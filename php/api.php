@@ -155,8 +155,8 @@ function getMembersShortList() {
 		$toReturn = array();
 		@$old = $request->old;
 		$sql = "SELECT m.id, m.firstName, m.lastName
-			FROM members m 
-			WHERE m.old = 0 AND m.id > 0
+			FROM members m LEFT JOIN users u ON m.id = u.memberId
+			WHERE m.old = 0 AND m.id > 0 and u.memberID IS NULL
 			ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
@@ -404,6 +404,46 @@ function setUserProfile() {
 
 		if ($valid) {
 			$sql = "UPDATE users SET password='$password' WHERE username = '$username' AND sessionId='$session_id' AND password='$currentPassword'";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 306);
+			}
+		}
+	}
+}
+
+function setNewUser() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$session_id = $request->session_id;
+		$valid = true;	
+
+		@$username = $request->_username;
+		if (!isset($username) || strlen($username) < 5) {
+			$this->response($this->json(array('code' => 'username')), 306);
+			$valid = false;
+		}
+		
+		@$password = $request->password;
+		if (!isset($password) || strlen($password) < 5) {
+			$this->response($this->json(array('code' => 'password')), 306);
+			$valid = false;
+		} else {
+			$password = md5($password);
+		}
+
+		@$memberId = $request->memberId;
+		if (!isset($memberId)) {
+			$this->response($this->json(array('code' => 'memberId')), 306);
+			$valid = false;
+		}
+
+		if ($valid) {
+			$sql = "INSERT INTO users (username, password, memberId) 
+				VALUES ('$username', '$password', $memberId)";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);

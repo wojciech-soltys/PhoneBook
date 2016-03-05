@@ -38,5 +38,19 @@ angular.module('main.usersFactory', [])
 		});
 	};
 
+	usersService.setNewUser = function(user) {
+		return $http({
+			method: 'post',
+			url: 'setNewUser',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				password: user.password,
+				_username: user.username,
+				memberId: user.memberId
+			}
+		});
+	};
+
 	return usersService;
 }]);
