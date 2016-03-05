@@ -96,6 +96,21 @@ function isUserLogged() {
 	}
 }
 
+private function isLoggedAsAdmin($request) {
+	@$session_id = $request->session_id;
+	@$username = $request->username;
+	$sql = "SELECT u.id 
+		FROM users u JOIN members m ON u.memberId = m.id 
+		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='H'";
+	$result = $this->mysqli->query($sql);
+	if (mysqli_num_rows($result) > 0) {
+		return true;
+	} else {
+		$this->response('', 401);
+		return false;
+	}
+}
+
 private function isLogged($request) {
 	@$session_id = $request->session_id;
 	@$username = $request->username;
@@ -330,7 +345,7 @@ function getUsersList() {
 	if ($this->isLogged($request)) {
 		$toReturn = array();
 		@$old = $request->old;
-		$sql = "SELECT u.id, m.firstName, m.lastName, m.privateEmail, u.username, u.lastLogin
+		$sql = "SELECT u.id, m.firstName, m.lastName, m.privateEmail, u.username, u.memberId, u.lastLogin
 			FROM members m JOIN users u ON m.id = u.memberId
 			ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
@@ -341,7 +356,8 @@ function getUsersList() {
 					'firstName' => $row["firstName"], 
 					'privateEmail' => $row["privateEmail"],
 					'username' => $row["username"],
-					'lastLogin' => $row["lastLogin"]
+					'lastLogin' => $row["lastLogin"],
+					'memberId' => $row["memberId"]
 					);
 			}
 			$this->response($this->json($toReturn), 200);
@@ -359,7 +375,7 @@ function getUserProfile() {
 		@$username = $request->username;
 		$sql = "SELECT u.id, u.username, m.firstName, m.lastName, m.privateEmail 
 				FROM users u JOIN members m ON u.memberId = m.id 
-				WHERE username = '$username' AND sessionId='$session_id'";
+				WHERE username = '$username' AND sessionId = '$session_id'";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);
@@ -403,7 +419,7 @@ function setUserProfile() {
 		}
 
 		if ($valid) {
-			$sql = "UPDATE users SET password='$password' WHERE username = '$username' AND sessionId='$session_id' AND password='$currentPassword'";
+			$sql = "UPDATE users SET password='$password' WHERE username = '$username' AND sessionId = '$session_id' AND password = '$currentPassword'";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -417,8 +433,7 @@ function setUserProfile() {
 function setNewUser() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	if ($this->isLogged($request)) {
-		@$session_id = $request->session_id;
+	if ($this->isLoggedAsAdmin($request)) {
 		$valid = true;	
 
 		@$username = $request->_username;
@@ -449,6 +464,60 @@ function setNewUser() {
 				$this->response('', 200);
 			} else {
 				$this->response('', 306);
+			}
+		}
+	}
+}
+
+function setNewPassword() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		$valid = true;	
+
+		@$memberId = $request->memberId;
+		if (!isset($memberId)) {
+			$this->response($this->json(array('code' => 'memberId')), 306);
+			$valid = false;
+		}
+		
+		@$password = $request->password;
+		if (!isset($password) || strlen($password) < 5) {
+			$this->response($this->json(array('code' => 'password')), 306);
+			$valid = false;
+		} else {
+			$password = md5($password);
+		}
+
+		if ($valid) {
+			$sql = "UPDATE users SET password = '$password' WHERE memberId = $memberId";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 306);
+			}
+		}
+	}
+}
+
+function removeUser(){
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		@$id = $request->id;
+		@$username = $request->_username;
+		$sql = "SELECT * FROM users WHERE username = '$username' AND id = '$id'";
+		$result=$this->mysqli->query($sql);
+		if(mysqli_num_rows($result) == 0) {
+			$this->response('', 404);
+		} else {
+			$sql = "DELETE FROM users WHERE username = '$username' AND id = '$id'";
+			$result=$this->mysqli->query($sql);
+			if($result) {
+				$this->response('',200);
+			} else {
+				$this->response('', 400);
 			}
 		}
 	}

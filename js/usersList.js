@@ -22,15 +22,11 @@ app.controller('usersListCtrl', ['$scope', '$rootScope', 'informService', 'users
 
 		getUsersList();
 		
-		$scope.$on('new.user', function() {
-			getUsersList();
-		});
-
-		$rootScope.$on('edit.user', function () {
+		$rootScope.$on('refresh.users.list', function () {
 			getUsersList();	
 		});
 
 		$scope.clearForm = function() {
-			$rootScope.$emit('clear.new.user', '');
+			$rootScope.$emit('clear.edit.user', '');
 		};
 	}]);

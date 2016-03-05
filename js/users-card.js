@@ -33,6 +33,7 @@ angular.module('main').directive('usersCard', function() {
 							usersService.removeUser(user)
 							.success(function () {
 								informService.showSimpleToast('Użykownik o nazwie ' + user.username + ' został usunięty');
+								$rootScope.$emit('refresh.users.list', '');
 							})
 							.error(function (data, status) {
 								if (status === 404) {

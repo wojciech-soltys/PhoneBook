@@ -52,5 +52,31 @@ angular.module('main.usersFactory', [])
 		});
 	};
 
+	usersService.removeUser = function(user) {
+		return $http({
+			method: 'post',
+			url: 'removeUser',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				id: user.id,
+				_username: user.username
+			}
+		});
+	};
+
+	usersService.setNewPassword = function(user) {
+		return $http({
+			method: 'post',
+			url: 'setNewPassword',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: user.memberId,
+				password: user.password,
+			}
+		});
+	};
+
 	return usersService;
 }]);

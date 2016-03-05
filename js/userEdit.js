@@ -4,6 +4,7 @@ app.controller('userEditCtrl',['$scope', '$rootScope', 'usersService', 'membersS
 		$scope.membersList = null;
 		$scope.isEdit = false;
 		$scope.changePassword = 0;
+		$scope.title = 'Nowy użytkownik';
 		$scope.user = {};
 
 		var getMembersShortList = function() {
@@ -16,6 +17,23 @@ app.controller('userEditCtrl',['$scope', '$rootScope', 'usersService', 'membersS
 			});
 		};
 
+		$rootScope.$on('refresh.users.list', function () {
+			getMembersShortList();
+		});
+
+		$rootScope.$on('user.to.edit', function (event, value) {
+			$scope.reset($scope.userEditForm);
+			$scope.isEdit = true;
+			$scope.title = 'Zmiana hasła';
+			$scope.user = value;
+			$scope.toggleRight();
+		});
+
+		$rootScope.$on('clear.edit.user', function (event, value) {
+			$scope.reset($scope.userEditForm);
+		});
+
+		$scope.closeRight();
 		getMembersShortList();
 
 		$scope.setUsername = function(member) {
@@ -44,14 +62,15 @@ app.controller('userEditCtrl',['$scope', '$rootScope', 'usersService', 'membersS
 			}
 		};
 
-		$scope.save= function(form) {
+		$scope.save = function(form) {
 			if (validation(form)) {
 				usersService.setNewUser($scope.user)
 				.success(function (data) {
-					$scope.user = data;
 					informService.showSimpleToast('Użytkownik został utworzony');
 					form.$setPristine();
 					form.$setUntouched();
+					$rootScope.$emit('refresh.users.list', '');
+					$scope.close(form);
 				})
 				.error(function (data) {
 					switch (data.code) {
@@ -69,6 +88,42 @@ app.controller('userEditCtrl',['$scope', '$rootScope', 'usersService', 'membersS
 					}
 				});
 			}
+		};
+
+		$scope.saveChanges = function(form) {
+			if (validation(form)) {
+				usersService.setNewPassword($scope.user)
+				.success(function (data) {
+					informService.showSimpleToast('Hasło zostało zmienione');
+					form.$setPristine();
+					form.$setUntouched();
+					$scope.close(form);
+				})
+				.error(function (data) {
+					switch (data.code) {
+						case 'password':
+							informService.showAlert('Błąd', 'Podano błędne nowe hasło');
+							break;
+						default:
+							informService.showAlert('Błąd', 'Dane nie zostały zapisane');
+					}
+				});
+			}
+		};
+
+		$scope.reset = function(form) {
+			if (form) {
+				$scope.isEdit = false;
+				$scope.title = 'Nowy użytkownik';
+				$scope.user = {};
+				form.$setPristine();
+				form.$setUntouched();
+			}
+		};
+
+		$scope.close = function(form) {
+			$scope.reset(form);
+			$scope.closeRight();
 		};
 
 
