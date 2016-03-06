@@ -1,7 +1,7 @@
 app.controller('memberDetailsCtrl', ['$scope', '$stateParams', 'informService', 'membersService', 
 	function ($scope, $stateParams, informService, membersService) {
 
-		$scope.memberDetails = null;
+		$scope.member = null;
 		$scope.memberId = $stateParams.id;
 
 		$scope.types = [
@@ -14,31 +14,13 @@ app.controller('memberDetailsCtrl', ['$scope', '$stateParams', 'informService', 
 		var getMembersDetails = function() {
 			membersService.getMemberDetails($scope.memberId)
 			.success(function (data) {
-				$scope.memberDetails = data;
+				$scope.member = data;
 			})
 			.error(function () {
 				informService.showSimpleToast('Błąd pobrania szczegółów członka');
 			});
 		};
-
-		var getMentors = function() {
-			membersService.getMentors()
-			.success(function (data) {
-				$scope.mentors = data;
-			})
-			.error(function (data, status) {
-				informService.showSimpleToast('Błąd pobrania listy mentorów');
-				if (status === 401) {
-					$rootScope.$emit('session.timeout', '');
-				}
-			});
-		};
-
-		var init = function() {
-			getMembersDetails();
-			getMentors();
-		};
-
-		init();
+		getMembersDetails();
+		
 
 	}]);

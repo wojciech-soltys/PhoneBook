@@ -2,74 +2,71 @@
 <div class="member-details-container" ng-controller="memberDetailsCtrl">
 	<form name="memberDetailsForm" autocomplete="off" class="md-whiteframe-z1">
 	<div layout-gt-sm="row">
-		<md-input-container class="md-block" flex-gt-sm>
+		<div class="md-block" flex-gt-sm>
 			<label>Imię</label>
-			<input type="text" ng-model="memberDetails.firstName" md-maxlength="255" minlenght="3" required autocomplete="off" readonly />
-		</md-input-container>
-		<md-input-container class="md-block" flex-gt-sm>
+			<label>{{member.firstName}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
 			<label>Nazwisko</label>
-			<input type="text" ng-model="memberDetails.lastName" md-maxlength="255" minlength="3" required autocomplete="off" readonly />
-		</md-input-container>
+			<label>{{member.lastName}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+		</div>
 	</div>
 	<div layout-gt-sm="row">
-		<md-input-container class="md-block" flex-gt-sm>
+		<div class="md-block" flex-gt-sm>
 			<label>Numer telefonu</label>
-			<input type="tel" ng-model="memberDetails.phone" md-maxlength="9" required autocomplete="off" readonly />
-		</md-input-container>
-		<md-input-container class="md-block" flex-gt-sm>
+			<label>{{member.phone}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
 			<label>Prywatny adres e-mail</label>
-			<input type="email" ng-model="memberDetails.privateEmail" md-maxlength="255" required autocomplete="off" readonly />
-		</md-input-container>
-		<md-input-container class="md-block" flex-gt-sm>
+			<label>{{member.privateEmail}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
 			<label>Numer karty członkowskiej</label>
-			<input type="text" ng-model="memberDetails.cardNumber" md-maxlength="13" required readonly>
-		</md-input-container>
-	</div>
-	<div layout-gt-sm="row">
-		<md-input-container class="md-block" flex-gt-sm>
-			<h4 ng-class="{'filled':member.birthDate != null}">Data urodzenia</h4>
-			<input type="text" ng-model="memberDetails.birthDate" md-maxlength="13" required readonly>
-		</md-input-container>
-		<md-input-container class="md-block" flex-gt-sm>
-			<h4 ng-class="{'filled':member.accessionDate != null}">Data urodzenia</h4>
-			<input type="text" ng-model="memberDetails.accessionDate" md-maxlength="13" required readonly>
-		</md-input-container>
-		<div class="container md-block" flex-gt-sm>
+			<label>{{member.cardNumber}}</label>
 		</div>
 	</div>
 	<div layout-gt-sm="row">
-		<div class="container md-block" flex-gt-sm>
-			<h4>Deklaracja</h4>
-			<md-checkbox ng-model="memberDetails.declaration" aria-label="Deklaracja" ng-true-value="'1'" ng-false-value="'0'" readonly>
-				Złożona
-			</md-checkbox> 
+		<div class="md-block" flex-gt-sm>
+			<label>Data urodzenia</label>
+			<label>{{member.birthDate}}</label>
 		</div>
-		<div class="container md-block" flex-gt-sm>
-			<h4>Podłączenie do listy ogólnej</h4>
-			<md-checkbox ng-model="memberDetails.connectedToList" aria-label="Podłączenie do listy ogólnej" ng-true-value="'1'" ng-false-value="'0'" readonly>
-				Tak
-			</md-checkbox>
+		<div class="md-block" flex-gt-sm>
+			<label>Data wstąpienia</label>
+			<label>{{member.accessionDate}}</label>
 		</div>
-		<div class="container md-block" flex-gt-sm>
-			<h4>Adres w domenie aegee-gliwice.org</h4>
-			<md-checkbox ng-model="memberDetails.aegeeEmail" aria-label="Adres w domenie aegee-gliwice.org" ng-true-value="'1'" ng-false-value="'0'" readonly>
-				Tak
-			</md-checkbox> 
+		<div class="md-block" flex-gt-sm>
 		</div>
 	</div>
 	<div layout-gt-sm="row">
-		<md-input-container class="list md-block" flex-gt-sm>
+		<div class="md-block" flex-gt-sm>
+			<label>Deklaracja</label>
+			<label>{{member.declaration}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Podłączenie do listy ogólnej</label>
+			<label>{{member.connectedToList}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Adres w domenie aegee-gliwice.org</label>
+			<label>{{member.aegeeEmail}}</label>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
 			<label>Mentor</label>
-			 <input type="text" ng-repeat="mentor in mentors" ng-show="mentor.id==memberDetails.mentorId" readonly>
-     			{{mentor.name}}
-     		 </input>
-		</md-input-container>
-		<md-input-container class="list md-block" flex-gt-sm>
+			<label>{{member.mentorFirstName + ' ' + member.mentorLastName}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
 			<label>Typ członka</label>
-			<input type="text" ng-repeat="type in types" ng-show="type.id==memberDetails.type" readonly>
-     			{{type.name}}
-     		</input>
-		</md-input-container>
+			<label>{{member.type}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+		</div>
+	</div>
+	<div class="actions-row" layout="row" layout-align="end center">
+		<md-button id="save" ui-sref="memberEdit({id: member.id})">Edytuj</md-button>
 	</div>
 </form>
 </div>
