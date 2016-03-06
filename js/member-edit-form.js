@@ -1,9 +1,12 @@
-function memberEditController($scope, $rootScope, informService, membersService) {
-	$scope.member = null;
+function memberEditController($scope, $rootScope, $stateParams, informService, membersService) {
+	$scope.member = {};
+	$scope.member.id = $stateParams.id;
 	$scope.mentors = null;
+	
 	var phoneRegex = new RegExp('[0-9]{9}');
 	var privateEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	var cardNumberRegex = new RegExp('[a-z0-9]{6}-[a-z0-9]{6}', 'i');
+	
 	$scope.types = [
 	{id: 'C', name: 'Członek zwyczajny'},
 	{id: 'Z', name: 'Zarząd'},
@@ -31,20 +34,37 @@ function memberEditController($scope, $rootScope, informService, membersService)
 
 	$scope.saveMember = function(form) {
 		if (validate(form)) {
-			membersService.saveMember($scope.member)
-			.success(function () {
-				informService.showSimpleToast('Zapisano nowego członka');
-				$scope.member = null;
-				getMentors();
-				form.$setPristine();
-				form.$setUntouched();
-			})
-			.error(function (data, status) {
-				informService.showAlert('Błąd', 'Zapis nie powiódł się.');
-				if (status === 401) {
-					$rootScope.$emit('session.timeout', '');
-				}
-			});
+			if (angular.isUndefined($scope.member.id)) {
+				membersService.saveMember($scope.member)
+				.success(function () {
+					informService.showSimpleToast('Zapisano nowego członka');
+					$scope.member = null;
+					getMentors();
+					form.$setPristine();
+					form.$setUntouched();
+				})
+				.error(function (data, status) {
+					informService.showAlert('Błąd', 'Zapis nie powiódł się.');
+					if (status === 401) {
+						$rootScope.$emit('session.timeout', '');
+					}
+				});
+			} else {
+				membersService.changeMember($scope.member)
+				.success(function () {
+					informService.showSimpleToast('Zapisano zmiany w danych członka');
+					$scope.member = null;
+					getMentors();
+					form.$setPristine();
+					form.$setUntouched();
+				})
+				.error(function (data, status) {
+					informService.showAlert('Błąd', 'Zapis nie powiódł się.');
+					if (status === 401) {
+						$rootScope.$emit('session.timeout', '');
+					}
+				});
+			}
 		}
 	};
 
