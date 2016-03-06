@@ -1,0 +1,365 @@
+body {
+	color: #444;
+	font: 400 13px/32px "Lato", sans-serif !important;
+	line-height: 1.4em;
+	min-width: 600px;
+}
+
+body, html {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body, p, div {
+	font-size: 13px;
+}
+
+img {
+	padding: 10px;
+}
+
+form h4.filled {
+	color: rgba(0, 0, 0, 0.541176);
+	-webkit-transform: translate3d(-10px, -5px, 0) scale(.75);
+	transform: translate3d(-10px, -5px, 0) scale(.75);
+	-webkit-transition-duration: 0.25s; 
+	transition-duration: 0.25s;
+	padding-left: 0px;
+}
+
+.table {
+	margin-bottom: 5px !important;
+}
+
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar), 
+md-fab-speed-dial.md-fab-bottom-right button,  md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button {
+	background-color: #1468b3!important;
+	color: #fff;
+}
+
+md-input-container input, md-input-container label, md-input-container md-select{
+	font-size: 17px;
+}
+
+
+
+.main-menu, .md-sidenav-left {
+	background-color: #1468b3 !important;
+}
+
+.md-sidenav-left md-content {
+	background: transparent;
+}
+
+.md-sidenav-left, .md-sidenav-left.md-locked-open-add-active, .md-sidenav-left.md-locked-open {
+	width: 250px;
+	min-width: 250px;
+	max-width: 250px;
+}
+
+.md-sidenav-right {
+	width: 400px;
+}
+
+.md-sidenav-right md-input-container {
+	width: 330px;
+	padding: 15px 20px;
+}
+
+md-sidenav md-toolbar {
+	display: block;
+}
+
+md-toolbar .menu-header {
+	height: 37px;
+	width: auto;
+	font-family: 'Lato';
+}
+
+md-toolbar img {
+	max-width: 240px;
+	max-height: 100px;
+	width: auto;
+	height: auto;
+	padding: 0;
+	margin: 5px 10px 10px;
+}
+
+ul.main-menu {
+	padding: 0px;
+}
+
+ul.main-menu li {
+	padding: 0;
+	list-style-position: inside;
+}
+
+ul.main-menu li span {
+	padding-left: 5px;
+}
+
+md-content {
+	padding-left: 0px !important;
+}
+
+.main-menu .md-button {
+	border-radius: 0;
+	color: white;
+	cursor: pointer;
+	display: block;
+	align-items: inherit;
+	line-height: 40px;
+	margin: 0;
+	max-height: 40px;
+	overflow: hidden;
+	padding: 0px 16px;
+	text-align: left;
+	text-decoration: none;
+	white-space: normal;
+	width: 100%;
+}
+
+.main-menu .md-button:hover, md-toolbar.main-toolbar a.btn:hover, 
+md-toolbar.main-toolbar button.btn:hover, md-fab-speed-dial.md-fab-bottom-right button:hover,
+md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button:hover,
+md-menu-bar md-menu.md-open > button {
+	background-color: #267ED5 !important;
+}
+
+.main-menu .menu-toggle-list a.md-button {
+	display: block;
+	padding: 0 16px 0 32px;
+	text-transform: none;
+	text-rendering: optimizeLegibility;
+	font-weight: 500;
+}
+
+.main-menu li.parentActive, .main-menu li.parentActive .menu-toggle-list {
+	background-color: #A6D3FF !important
+}
+
+.main-menu > li {
+	border-bottom: 1px solid #267ED5;
+}
+
+.main-menu .md-button.active {
+	background-color: #177BDE !important;
+}
+
+.main-view .md-toolbar-tools {
+	width: 30%;
+}
+
+.right-view md-toolbar h1.md-toolbar-tools {
+	font-family: Lato;
+}
+
+md-toolbar.main-toolbar a.btn, md-toolbar.main-toolbar button.btn {
+	min-width: 150px;
+	padding: 0px 8px;
+	margin: 6px 1px;
+	color: rgba(255,255,255,0.89);
+	font-size: 14px;
+	line-height: 36px;
+	text-transform: uppercase;
+}
+
+md-toolbar.main-toolbar button.open-menu {
+	width: 50px;
+	min-width: 20px;
+}
+
+.md-sidenav-left md-toolbar md-input-container {
+	width: 65px;
+	font-size: 14px;
+	margin: 0px 10px;
+} 
+
+.md-sidenav-left md-toolbar md-input-container md-select-value {
+	min-width: 45px;
+	font-size: 14px;
+	color: rgba(255,255,255,0.89);
+} 
+
+.md-sidenav-left md-toolbar md-input-container.md-input-focused md-select-value {
+	color: rgba(255,255,255,0.89) !important;
+} 
+
+
+.md-sidenav-left md-toolbar hr {
+	width: 90%;
+	margin: 4px 12px;
+	border-top: 1px solid rgba(255,255,255,0.89);
+}
+
+md-menu-bar {
+	padding: 0px;
+}
+
+div.main-view {
+	padding: 0px;
+}
+
+md-content.main-content {
+	padding: 0px;
+}
+
+md-fab-speed-dial.md-fab-bottom-right {
+	right: 30px;
+	bottom: 30px;
+	position: fixed;
+}
+
+md-fab-speed-dial.md-fab-bottom-center {
+	bottom: 70px;
+	position: fixed;
+}
+
+md-fab-actions button md-icon {
+	color: rgba(0,0,0,0.54) !important;
+}
+
+
+.members-list-container md-checkbox {
+	margin-bottom: 0px;
+}
+
+.members-list-container table {
+	font-size: 14px;
+}
+
+member-edit-form form md-input-container.list {
+	margin: 5px 25px;
+}
+
+member-edit-form form md-input-container.md-input-focused label:not(.md-no-float),
+member-edit-form form md-input-container.md-input-has-value label:not(.md-no-float),
+.user-profile-container form md-input-container.md-input-focused label:not(.md-no-float),
+.user-profile-container form md-input-container.md-input-has-value label:not(.md-no-float) {
+	-webkit-transform: translate3d(0, 15px, 0) scale(.75);
+	transform: translate3d(0, 15px, 0) scale(.75) !important;
+}
+
+member-edit-form form h4 {
+	font-family: Lato;
+	font-weight: bold;
+	margin-left: -16px;
+}
+
+member-edit-form form h4.filled {
+	-webkit-transform: translate3d(-35px, 5px, 0) scale(.75);
+	transform: translate3d(-35px, 5px, 0) scale(.75);
+}
+
+member-edit-form form, 
+.user-profile-container form, 
+.member-details-container form,  
+.member-details-container payments-table div {
+	margin: 10px;
+	padding: 10px;
+}
+
+member-edit-form form .layout-gt-sm-row, .user-profile-container form .layout-gt-sm-row {
+	height: 90px;
+	margin-top: 10px;
+	margin-bottom: 15px;
+}
+
+md-card.search-container  {
+	margin: 0;
+}
+
+md-card.search-container md-input-container.md-input-focused label:not(.md-no-float),
+md-card.search-container md-input-container.md-input-has-value label:not(.md-no-float) {
+	-webkit-transform: translate3d(0, 15px, 0) scale(.75);
+	transform: translate3d(0, 15px, 0) scale(.75) !important;
+}
+
+md-card.search-container md-input-container {
+	width: 60%;
+}
+
+md-card.search-container md-input-container {
+	margin: 25px 15px 0 15px !important;
+	padding: 5px !important;
+	height: 40px;
+}
+
+.users-list-container users-card md-card {
+	margin: 10px 5px;
+
+}
+
+.users-list-container users-card md-card md-card-title {
+	padding: 15px 16px 0;
+}
+
+.users-list-container users-card md-card md-card-title-text label span {
+	font-weight: normal;
+}
+
+.user-profile-container form md-checkbox .md-label {
+	padding-top: 20px;
+}
+
+.payment-new-container form h4 {
+	-webkit-transform: translate3d(-35px, 10px, 0) scale(.75);
+	transform: translate3d(-35px, 10px, 0) scale(.75);
+}
+
+
+.payment-new-container form {
+	padding-top: 0 !important;
+}
+
+.payment-new-container form md-input-container.md-input-focused label:not(.md-no-float), 
+.payment-new-container form md-input-container.md-input-has-placeholder label:not(.md-no-float), 
+.payment-new-container form md-input-container.md-input-has-value label:not(.md-no-float) {
+	-webkit-transform: translate3d(20px, 30px, 0) scale(.75);
+    transform: translate3d(20px, 30px, 0) scale(.75);
+}
+
+.member-details-container form div.title {
+	font-weight: normal;
+	font-size: 14px;
+}
+
+.member-details-container form div.content {
+	font-weight: normal;
+	font-size: 20px;
+	line-height: 10px;
+	margin-bottom: 20px;
+}
+
+form div.actions-row {
+	width: 100%;
+}
+
+form h4 {
+	color: rgba(0, 0, 0, 0.45);
+	font-size: 17px;
+	padding-left: 3px;
+	font-family: Lato;
+	font-weight: bold;
+}
+
+form md-radio-group, form md-checkbox {
+	margin-left: 20px !important;
+}
+
+form md-datepicker {
+	margin-bottom: 18px;
+}
+
+.right-view form md-input-container, .right-view form .container {
+	margin-bottom: 14px;
+	margin-top: 14px;
+}
+
+.no-content {
+	text-align: center;
+	font-size: 25px;
+	color: rgba(0, 0, 0, 0.6);
+	margin-top: 8%;
+}

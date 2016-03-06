@@ -1,0 +1,23 @@
+<md-card class="user" ng-repeat="user in list  | filter:query as results">
+	<md-card-title>
+		<md-card-title-text>
+			<span class="md-headline">{{user.username}}</span>
+			<span layout-wrap wrap layout="row" class="md-subhead">
+				<label flex="30"><span>Imię i nazwisko</span>
+					<div>{{user.firstName}} {{user.lastName}}</div>
+				</label> 
+				<label flex="30"><span>E-mail</span>
+					<br />
+					<div>{{user.privateEmail}}</div>
+				</label> 
+				<label flex="30"><span>Ostatnie logowanie</span>
+					<div>{{user.lastLogin}}</div>
+				</label> 
+			</span>
+		</md-card-title-text>
+	</md-card-title>
+	<md-card-actions layout="row" layout-align="end center">
+		<md-button ng-show="isAdmin" ng-disabled="(user.username === userLogged)" ng-click="editUser(user)">Edytuj</md-button>
+		<md-button ng-show="isAdmin" ng-disabled="(user.username === userLogged)" ng-click="removeUser(user)">Usuń</md-button>
+	</md-card-actions>
+</md-card>

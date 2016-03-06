@@ -1,0 +1,89 @@
+<title-toolbar title="Szczegóły członka" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<div class="member-details-container" ng-controller="memberDetailsCtrl">
+	<form name="memberDetailsForm" autocomplete="off" class="md-whiteframe-z1">
+		<div layout-gt-sm="row">
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Imię</div>
+				<div class="content">{{::member.firstName}}</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Nazwisko</div>
+				<div class="content">{{::member.lastName}}</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+			</div>
+		</div>
+		<div layout-gt-sm="row">
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Numer telefonu</div>
+				<div class="content">{{::member.phone}}</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Prywatny adres e-mail</div>
+				<div class="content">{{::member.privateEmail}}</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Numer karty członkowskiej</div>
+				<div class="content">{{::member.cardNumber}}</div>
+			</div>
+		</div>
+		<div layout-gt-sm="row">
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Data urodzenia</div>
+				<div class="content">{{::member.birthDate}}</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Data wstąpienia</div>
+				<div class="content">{{::member.accessionDate}}</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+			</div>
+		</div>
+		<div layout-gt-sm="row">
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Deklaracja</div>
+				<div class="content" ng-if="member.declaration === '1'">Tak</div>
+				<div class="content" ng-if="member.declaration === '0'">Nie</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Podłączenie do listy ogólnej</div>
+				<div class="content" ng-if="member.connectedToList === '1'">Tak</div>
+				<div class="content" ng-if="member.connectedToList === '0'">Nie</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Adres w domenie aegee-gliwice.org</div>
+				<div class="content" ng-if="member.aegeeEmail === '1'">Tak</div>
+				<div class="content" ng-if="member.aegeeEmail === '0'">Nie</div>
+			</div>
+		</div>
+		<div layout-gt-sm="row">
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Mentor</div>
+				<div class="content">{{member.mentorFirstName + ' ' + member.mentorLastName}}</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+				<div class="title">Typ członka</div>
+				<div class="content" ng-if="member.type === 'C'">Członek zwyczajny</div>
+				<div class="content" ng-if="member.type === 'Z'">Zarząd</div>
+				<div class="content" ng-if="member.type === 'R'">Komisja Rewizyjna</div>
+				<div class="content" ng-if="member.type === 'K'">Koordynator grupy roboczej</div>
+				<div class="content" ng-if="member.type === 'H'">Członek honorowy</div>
+			</div>
+			<div class="md-block" flex-gt-sm>
+			</div>
+		</div>
+		<div class="actions-row" layout="row" layout-align="end center">
+			<md-button id="save" ui-sref="memberEdit({id: member.id})">Edytuj</md-button>
+		</div>
+	</form>
+	<payments-table></payments-table>
+	<div class="lock-size" layout="row" layout-align="center center">
+		<md-fab-speed-dial ng-click="clearForm(); toggleRight()" ng-hide="isOpenRight()" class="md-fab-bottom-right">
+			<md-fab-trigger>
+				<md-button aria-label="menu" class="md-fab">
+					<md-icon md-font-set="material-icons">add</md-icon>
+				</md-button>
+			</md-fab-trigger>
+		</md-fab-speed-dial>
+	</div>
+</div>

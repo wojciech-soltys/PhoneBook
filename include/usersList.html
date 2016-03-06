@@ -1,0 +1,24 @@
+<title-toolbar title="Lista użytkowników" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<div class="users-list-container" ng-controller="usersListCtrl">
+	<div ng-show="itemsExists">
+		<md-card class="search-container">
+			<md-input-container>
+				<label>Szukaj</label>
+				<input type="text" ng-model="query">
+			</md-input-container>
+		</md-card>
+		<users-card list="usersList" query="query"></users-card>
+	</div>
+	<div ng-hide="itemExists">
+	</div>
+
+	<div class="lock-size" layout="row" layout-align="center center">
+		<md-fab-speed-dial ng-click="clearForm(); toggleRight()" ng-hide="isOpenRight()" class="md-fab-bottom-right">
+			<md-fab-trigger>
+				<md-button aria-label="menu" class="md-fab">
+					<md-icon md-font-set="material-icons">add</md-icon>
+				</md-button>
+			</md-fab-trigger>
+		</md-fab-speed-dial>
+	</div>
+</div>
