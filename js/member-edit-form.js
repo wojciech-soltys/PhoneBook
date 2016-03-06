@@ -1,6 +1,6 @@
-function memberEditController($scope, $rootScope, $stateParams, informService, membersService) {
+function memberEditController($scope, $rootScope, $stateParams, $state, informService, membersService) {
 	$scope.member = {};
-	$scope.member.id = $stateParams.id;
+	$scope.memberId = $stateParams.id;
 	$scope.mentors = null;
 	
 	var phoneRegex = new RegExp('[0-9]{9}');
@@ -32,6 +32,23 @@ function memberEditController($scope, $rootScope, $stateParams, informService, m
 		}
 	};
 
+	var getMembersDetails = function() {
+		membersService.getMemberDetails($scope.memberId)
+		.success(function (data) {
+			$scope.member = data;
+			$scope.member.birthDate = new Date(data.birthDate);
+			$scope.member.accessionDate = new Date(data.accessionDate);
+		})
+		.error(function () {
+			informService.showSimpleToast('Błąd pobrania szczegółów członka');
+		});
+	};
+
+	if (angular.isDefined($scope.memberId)) {
+		getMembersDetails();
+	}
+
+
 	$scope.saveMember = function(form) {
 		if (validate(form)) {
 			if (angular.isUndefined($scope.member.id)) {
@@ -53,10 +70,7 @@ function memberEditController($scope, $rootScope, $stateParams, informService, m
 				membersService.changeMember($scope.member)
 				.success(function () {
 					informService.showSimpleToast('Zapisano zmiany w danych członka');
-					$scope.member = null;
-					getMentors();
-					form.$setPristine();
-					form.$setUntouched();
+					$state.go('membersList');
 				})
 				.error(function (data, status) {
 					informService.showAlert('Błąd', 'Zapis nie powiódł się.');

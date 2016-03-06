@@ -342,7 +342,73 @@ function saveMember() {
 					"', '$phone', '$privateEmail', $aegeeEmail, '"
 					.$birthDate->format('Y-m-d').
 					"', '$cardNumber', $declaration, $connectedToList, 
-					$mentorId, $type, 0)";
+					$mentorId, '$type', 0)";
+				$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
+			}
+		} else {
+			$this->response($this->json(array('message'=>'Nie wszystkie pola zostały wypełnione')), 400);
+		}
+	}
+}
+
+function changeMember() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$id = $request->id;
+		@$firstName = $request->firstName;
+		@$lastName = $request->lastName;
+		$accessionDate = new DateTime(substr($request->accessionDate, 0, 23), new DateTimeZone('Poland'));
+		@$phone = $request->phone;
+		$phoneRegex = "/[0-9]{9}/";
+		@$privateEmail = $request->privateEmail;
+		@$aegeeEmail = $request->aegeeEmail;
+		if (!isset($aegeeEmail)) {
+			$aegeeEmail = 0;
+		}
+		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
+		@$cardNumber = $request->cardNumber;
+		$cardNumberRegex = "/[a-zA-Z0-9]{6}-[a-zA-Z0-9]{6}/";
+		@$declaration = $request->declaration;
+		if (!isset($declaration)) {
+			$declaration = 0;
+		}
+		@$connectedToList = $request->connectedToList;
+		if (!isset($connectedToList)) {
+			$connectedToList = 0;
+		}
+		@$mentorId = $request->mentorId;
+		@$type = $request->type;
+		if (!isset($type)) {
+			$type = 0;
+		}
+		if($id != null && 
+			$firstName != null && strlen($firstName) < 255 && 
+			$lastName != null && strlen($lastName) < 255 &&
+			$accessionDate != null &&
+			$phone != null && preg_match($phoneRegex, $phone) &&
+			$privateEmail != null && strlen($privateEmail) < 255 && filter_var($privateEmail, FILTER_VALIDATE_EMAIL) &&
+			$birthDate != null &&
+			$cardNumber != null && strlen($cardNumber) < 20 && preg_match($cardNumberRegex, $cardNumber) &&
+			$mentorId != null) {
+			$sql = "UPDATE members SET 
+						firstName = '$firstName',
+						lastName = '$lastName',
+						accessionDate = '".$accessionDate->format('Y-m-d')."',
+						phone = '$phone',
+						privateEmail = '$privateEmail',
+						aegeeEmail = $aegeeEmail,
+						birthDate = '".$birthDate->format('Y-m-d')."',
+						cardNumber = '$cardNumber',
+						declaration = $declaration,
+						connectedToList = $connectedToList,
+						mentorId = $mentorId,
+						type = '$type'
+					WHERE id = $id";
 				$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);

@@ -93,11 +93,35 @@ angular.module('main.membersFactory', [])
 				cardNumber: member.cardNumber,
 				declaration: member.declaration,
 				connectedToList: member.connectedToList,
-				mentorId: member.mentorId
+				mentorId: member.mentorId,
+				type: member.type
 			}
 		});
 	};
 
+	membersService.changeMember = function(member) {
+		return $http({
+			method: 'post',
+			url: 'changeMember',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				id: member.id,
+				firstName: member.firstName,
+				lastName: member.lastName,
+				accessionDate: member.accessionDate,
+				phone: member.phone,
+				privateEmail: member.privateEmail,
+				aegeeEmail: member.aegeeEmail,
+				birthDate: member.birthDate,
+				cardNumber: member.cardNumber,
+				declaration: member.declaration,
+				connectedToList: member.connectedToList,
+				mentorId: member.mentorId,
+				type: member.type
+			}
+		});
+	};
 
 	membersService.getMemberDetails = function(memberId) {
 		return $http({

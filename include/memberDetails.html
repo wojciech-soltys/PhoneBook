@@ -3,64 +3,71 @@
 	<form name="memberDetailsForm" autocomplete="off" class="md-whiteframe-z1">
 	<div layout-gt-sm="row">
 		<div class="md-block" flex-gt-sm>
-			<label>Imię</label>
-			<label>{{member.firstName}}</label>
+			<div class="title">Imię</div>
+			<div class="content">{{::member.firstName}}</div>
 		</div>
 		<div class="md-block" flex-gt-sm>
-			<label>Nazwisko</label>
-			<label>{{member.lastName}}</label>
-		</div>
-		<div class="md-block" flex-gt-sm>
-		</div>
-	</div>
-	<div layout-gt-sm="row">
-		<div class="md-block" flex-gt-sm>
-			<label>Numer telefonu</label>
-			<label>{{member.phone}}</label>
-		</div>
-		<div class="md-block" flex-gt-sm>
-			<label>Prywatny adres e-mail</label>
-			<label>{{member.privateEmail}}</label>
-		</div>
-		<div class="md-block" flex-gt-sm>
-			<label>Numer karty członkowskiej</label>
-			<label>{{member.cardNumber}}</label>
-		</div>
-	</div>
-	<div layout-gt-sm="row">
-		<div class="md-block" flex-gt-sm>
-			<label>Data urodzenia</label>
-			<label>{{member.birthDate}}</label>
-		</div>
-		<div class="md-block" flex-gt-sm>
-			<label>Data wstąpienia</label>
-			<label>{{member.accessionDate}}</label>
+			<div class="title">Nazwisko</div>
+			<div class="content">{{::member.lastName}}</div>
 		</div>
 		<div class="md-block" flex-gt-sm>
 		</div>
 	</div>
 	<div layout-gt-sm="row">
 		<div class="md-block" flex-gt-sm>
-			<label>Deklaracja</label>
-			<label>{{member.declaration}}</label>
+			<div class="title">Numer telefonu</div>
+			<div class="content">{{::member.phone}}</div>
 		</div>
 		<div class="md-block" flex-gt-sm>
-			<label>Podłączenie do listy ogólnej</label>
-			<label>{{member.connectedToList}}</label>
+			<div class="title">Prywatny adres e-mail</div>
+			<div class="content">{{::member.privateEmail}}</div>
 		</div>
 		<div class="md-block" flex-gt-sm>
-			<label>Adres w domenie aegee-gliwice.org</label>
-			<label>{{member.aegeeEmail}}</label>
+			<div class="title">Numer karty członkowskiej</div>
+			<div class="content">{{::member.cardNumber}}</div>
 		</div>
 	</div>
 	<div layout-gt-sm="row">
 		<div class="md-block" flex-gt-sm>
-			<label>Mentor</label>
-			<label>{{member.mentorFirstName + ' ' + member.mentorLastName}}</label>
+			<div class="title">Data urodzenia</div>
+			<div class="content">{{::member.birthDate}}</div>
 		</div>
 		<div class="md-block" flex-gt-sm>
-			<label>Typ członka</label>
-			<label>{{member.type}}</label>
+			<div class="title">Data wstąpienia</div>
+			<div class="content">{{::member.accessionDate}}</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Deklaracja</div>
+			<div class="content" ng-if="member.declaration === '1'">Tak</div>
+			<div class="content" ng-if="member.declaration === '0'">Nie</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Podłączenie do listy ogólnej</div>
+			<div class="content" ng-if="member.connectedToList === '1'">Tak</div>
+			<div class="content" ng-if="member.connectedToList === '0'">Nie</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Adres w domenie aegee-gliwice.org</div>
+			<div class="content" ng-if="member.aegeeEmail === '1'">Tak</div>
+			<div class="content" ng-if="member.aegeeEmail === '0'">Nie</div>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Mentor</div>
+			<div class="content">{{member.mentorFirstName + ' ' + member.mentorLastName}}</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Typ członka</div>
+			<div class="content" ng-if="member.type === 'C'">Członek zwyczajny</div>
+			<div class="content" ng-if="member.type === 'Z'">Zarząd</div>
+			<div class="content" ng-if="member.type === 'R'">Komisja Rewizyjna</div>
+			<div class="content" ng-if="member.type === 'K'">Koordynator grupy roboczej</div>
+			<div class="content" ng-if="member.type === 'H'">Członek honorowy</div>
 		</div>
 		<div class="md-block" flex-gt-sm>
 		</div>
