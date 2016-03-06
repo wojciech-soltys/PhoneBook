@@ -39,7 +39,7 @@ app.controller('userProfileCtrl',['$scope', '$rootScope', 'usersService', 'infor
 					$scope.changePassword = 0;
 					getUserProfile();
 				})
-				.error(function (data) {
+				.error(function (data, status) {
 					switch (data.code) {
 						case 'currentPassword':
 							informService.showAlert('Błąd', 'Podano błędne aktualne hasło');
@@ -49,6 +49,9 @@ app.controller('userProfileCtrl',['$scope', '$rootScope', 'usersService', 'infor
 							break;
 						default:
 							informService.showAlert('Błąd', 'Dane nie zostały zaktualizowane');
+					}
+					if (status === 401) {
+						$rootScope.$emit('session.timeout', '');
 					}
 				});
 			}

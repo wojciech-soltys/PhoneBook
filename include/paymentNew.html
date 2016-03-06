@@ -1,0 +1,40 @@
+<div ng-controller="paymentNewCtrl">
+	<md-toolbar class="md-theme-light">
+		<h1 class="md-toolbar-tools">Dodaj składkę</h1>
+	</md-toolbar>
+
+	<md-content layout-padding class="payment-new-container">
+		<form name="paymentNewForm" layout-wrap flex layout="row">
+			<div class="container" flex="100">
+				<h4 ng-class="{'filled':payment.paymentDate != null}">Data płatności</h4>
+				<md-datepicker ng-model="payment.paymentDate" md-placeholder="Wybierz" md-min-date="minDate" md-max-date="maxDate" required></md-datepicker>
+			</div>
+
+			<md-input-container class="list" flex="100">
+				<label>Typ składki</label>
+				<md-select ng-model="payment.type" ng-value="null">
+					<md-option ng-value="type.id" ng-repeat="type in paymentTypes">{{type.name}}</md-option>
+				</md-select>
+			</md-input-container>
+
+
+			<div class="container" flex="100">
+				<h4 ng-class="{'filled':payment.expirationDate != null}">Data ważności</h4>
+				<md-datepicker ng-model="payment.expirationDate" md-placeholder="Wybierz" required disabled></md-datepicker>
+			</div>
+
+			<md-input-container class="list" flex="100">
+				<label>Kwota składki</label>
+				<md-select ng-model="payment.amount" ng-value="null">
+					<md-option ng-value="amount.id" ng-repeat="amount in paymentAmounts">{{amount.name}}</md-option>
+				</md-select>
+			</md-input-container>
+
+
+			<div class="actions-row" layout="row" layout-align="end center">
+				<md-button id="cancel" ng-click="close(paymentNewForm)">Anuluj</md-button>
+				<md-button id="save" ng-hide="isEdit" ng-click="save(paymentNewForm)">Dodaj</md-button>
+			</div>	
+		</form>
+	</md-content>
+</div>

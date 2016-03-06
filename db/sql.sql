@@ -13,3 +13,8 @@ ALTER TABLE `members` CHANGE `mentor_id` `mentorId` INT(10) NOT NULL DEFAULT '0'
 ALTER TABLE `users` CHANGE `member_id` `memberId` INT(10) NOT NULL COMMENT 'id użytkownika';
 ALTER TABLE `users` CHANGE `last_login` `lastLogin` DATE NULL DEFAULT NULL;
 ALTER TABLE `users` CHANGE `session_id` `sessionId` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_polish_ci NULL DEFAULT NULL;
+ALTER TABLE `users` CHANGE `lastLogin` `lastLogin` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `payments` CHANGE `member_id` `memberId` INT(10) NOT NULL COMMENT 'Użytkownik, który opłacił składkę';
+ALTER TABLE `payments` CHANGE `date` `paymentDate` DATE NOT NULL COMMENT 'Data płatności składki';
+ALTER TABLE `payments` CHANGE `year` `year` YEAR(4) NULL;
+ALTER TABLE `payments` CHANGE `auditCD` `auditCD` DATETIME NOT NULL COMMENT 'Data wpisu do bazy';

@@ -1,4 +1,75 @@
-<title-toolbar title="Imię nazwisko" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<title-toolbar title="Szczegóły członka" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
 <div class="member-details-container" ng-controller="memberDetailsCtrl">
-
+	<form name="memberDetailsForm" autocomplete="off" class="md-whiteframe-z1">
+	<div layout-gt-sm="row">
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Imię</label>
+			<input type="text" ng-model="memberDetails.firstName" md-maxlength="255" minlenght="3" required autocomplete="off" readonly />
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Nazwisko</label>
+			<input type="text" ng-model="memberDetails.lastName" md-maxlength="255" minlength="3" required autocomplete="off" readonly />
+		</md-input-container>
+	</div>
+	<div layout-gt-sm="row">
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Numer telefonu</label>
+			<input type="tel" ng-model="memberDetails.phone" md-maxlength="9" required autocomplete="off" readonly />
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Prywatny adres e-mail</label>
+			<input type="email" ng-model="memberDetails.privateEmail" md-maxlength="255" required autocomplete="off" readonly />
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-sm>
+			<label>Numer karty członkowskiej</label>
+			<input type="text" ng-model="memberDetails.cardNumber" md-maxlength="13" required readonly>
+		</md-input-container>
+	</div>
+	<div layout-gt-sm="row">
+		<md-input-container class="md-block" flex-gt-sm>
+			<h4 ng-class="{'filled':member.birthDate != null}">Data urodzenia</h4>
+			<input type="text" ng-model="memberDetails.birthDate" md-maxlength="13" required readonly>
+		</md-input-container>
+		<md-input-container class="md-block" flex-gt-sm>
+			<h4 ng-class="{'filled':member.accessionDate != null}">Data urodzenia</h4>
+			<input type="text" ng-model="memberDetails.accessionDate" md-maxlength="13" required readonly>
+		</md-input-container>
+		<div class="container md-block" flex-gt-sm>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="container md-block" flex-gt-sm>
+			<h4>Deklaracja</h4>
+			<md-checkbox ng-model="memberDetails.declaration" aria-label="Deklaracja" ng-true-value="'1'" ng-false-value="'0'" readonly>
+				Złożona
+			</md-checkbox> 
+		</div>
+		<div class="container md-block" flex-gt-sm>
+			<h4>Podłączenie do listy ogólnej</h4>
+			<md-checkbox ng-model="memberDetails.connectedToList" aria-label="Podłączenie do listy ogólnej" ng-true-value="'1'" ng-false-value="'0'" readonly>
+				Tak
+			</md-checkbox>
+		</div>
+		<div class="container md-block" flex-gt-sm>
+			<h4>Adres w domenie aegee-gliwice.org</h4>
+			<md-checkbox ng-model="memberDetails.aegeeEmail" aria-label="Adres w domenie aegee-gliwice.org" ng-true-value="'1'" ng-false-value="'0'" readonly>
+				Tak
+			</md-checkbox> 
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<md-input-container class="list md-block" flex-gt-sm>
+			<label>Mentor</label>
+			 <input type="text" ng-repeat="mentor in mentors" ng-show="mentor.id==memberDetails.mentorId" readonly>
+     			{{mentor.name}}
+     		 </input>
+		</md-input-container>
+		<md-input-container class="list md-block" flex-gt-sm>
+			<label>Typ członka</label>
+			<input type="text" ng-repeat="type in types" ng-show="type.id==memberDetails.type" readonly>
+     			{{type.name}}
+     		</input>
+		</md-input-container>
+	</div>
+</form>
 </div>

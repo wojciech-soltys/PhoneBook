@@ -86,23 +86,54 @@ function isUserLogged() {
 	$request = json_decode($postdata);
 	@$session_id = $request->session_id;
 	@$username = $request->username;
-	$sql = "SELECT u.id, m.firstName as 'firstName', m.lastName as 'lastName' FROM users u JOIN members m ON u.memberId = m.id WHERE u.username = '$username' AND u.sessionId='$session_id'";
+	$sql = "SELECT u.id, m.firstName, m.lastName, u.lastLogin FROM users u JOIN members m ON u.memberId = m.id WHERE u.username = '$username' AND u.sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
+		if (time() - strtotime($row['lastLogin']) < 1800) {
 		$this->response($this->json(array('firstName' => $row['firstName'], 'lastName' => $row['lastName'], 'url' => 'index.html', 'isLoggedIn' => true)), 200);
+		} else {
+			$this->response('', 401);
+		}
 	} else {
 		$this->response('', 401);
+	}
+}
+
+private function isLoggedAsAdmin($request) {
+	@$session_id = $request->session_id;
+	@$username = $request->username;
+	$sql = "SELECT u.id, u.lastLogin
+		FROM users u JOIN members m ON u.memberId = m.id 
+		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='H'";
+	$result = $this->mysqli->query($sql);
+	if (mysqli_num_rows($result) > 0) {
+		$row = mysqli_fetch_assoc($result);
+		if (time() - strtotime($row['lastLogin']) < 1800) {
+			return true;
+		} else {
+			$this->response('', 401);
+			return false;
+		}
+	} else {
+		$this->response('', 401);
+		return false;
 	}
 }
 
 private function isLogged($request) {
 	@$session_id = $request->session_id;
 	@$username = $request->username;
-	$sql = "SELECT id FROM users WHERE username = '$username' AND sessionId='$session_id'";
+	$sql = "SELECT id, lastLogin FROM users WHERE username = '$username' AND sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
-		return true;
+		$row = mysqli_fetch_assoc($result);
+		if (time() - strtotime($row['lastLogin']) < 1800) {
+			return true;
+		} else {
+			$this->response('', 401);
+			return false;
+		}
 	} else {
 		$this->response('', 401);
 		return false;
@@ -117,7 +148,7 @@ function getMembersList() {
 		@$old = $request->old;
 		$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.type, (SELECT expirationDate
 								FROM payments p
-								WHERE p.member_id = m.id
+								WHERE p.memberId = m.id
 								ORDER BY p.expirationDate DESC
 								LIMIT 1
 								) as 'expirationDate'
@@ -139,6 +170,31 @@ function getMembersList() {
 					'connectedToList' => $row["connectedToList"],
 					'expirationDate' => $row["expirationDate"],
 					'type' => $row["type"]
+					);
+			}
+			$this->response($this->json($toReturn), 200);
+		} else {
+			$this->response('', 204);
+		}
+	}
+}
+
+function getMembersShortList() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		$toReturn = array();
+		@$old = $request->old;
+		$sql = "SELECT m.id, m.firstName, m.lastName
+			FROM members m LEFT JOIN users u ON m.id = u.memberId
+			WHERE m.old = 0 AND m.id > 0 and u.memberID IS NULL
+			ORDER BY m.lastName ASC";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {					
+				$toReturn[] = array('id' => $row["id"],
+					'lastName' => $row["lastName"],
+					'firstName' => $row["firstName"]
 					);
 			}
 			$this->response($this->json($toReturn), 200);
@@ -305,7 +361,7 @@ function getUsersList() {
 	if ($this->isLogged($request)) {
 		$toReturn = array();
 		@$old = $request->old;
-		$sql = "SELECT u.id, m.firstName, m.lastName, m.privateEmail, u.username, u.lastLogin
+		$sql = "SELECT u.id, m.firstName, m.lastName, m.privateEmail, u.username, u.memberId, u.lastLogin
 			FROM members m JOIN users u ON m.id = u.memberId
 			ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
@@ -316,7 +372,8 @@ function getUsersList() {
 					'firstName' => $row["firstName"], 
 					'privateEmail' => $row["privateEmail"],
 					'username' => $row["username"],
-					'lastLogin' => $row["lastLogin"]
+					'lastLogin' => $row["lastLogin"],
+					'memberId' => $row["memberId"]
 					);
 			}
 			$this->response($this->json($toReturn), 200);
@@ -334,7 +391,7 @@ function getUserProfile() {
 		@$username = $request->username;
 		$sql = "SELECT u.id, u.username, m.firstName, m.lastName, m.privateEmail 
 				FROM users u JOIN members m ON u.memberId = m.id 
-				WHERE username = '$username' AND sessionId='$session_id'";
+				WHERE username = '$username' AND sessionId = '$session_id'";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);
@@ -378,7 +435,7 @@ function setUserProfile() {
 		}
 
 		if ($valid) {
-			$sql = "UPDATE users SET password='$password' WHERE username = '$username' AND sessionId='$session_id' AND password='$currentPassword'";
+			$sql = "UPDATE users SET password='$password' WHERE username = '$username' AND sessionId = '$session_id' AND password = '$currentPassword'";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -389,7 +446,79 @@ function setUserProfile() {
 	}
 }
 
-function getMembersDetails() {
+function setNewUser() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		$valid = true;	
+
+		@$username = $request->_username;
+		if (!isset($username) || strlen($username) < 5) {
+			$this->response($this->json(array('code' => 'username')), 306);
+			$valid = false;
+		}
+		
+		@$password = $request->password;
+		if (!isset($password) || strlen($password) < 5) {
+			$this->response($this->json(array('code' => 'password')), 306);
+			$valid = false;
+		} else {
+			$password = md5($password);
+		}
+
+		@$memberId = $request->memberId;
+		if (!isset($memberId)) {
+			$this->response($this->json(array('code' => 'memberId')), 306);
+			$valid = false;
+		}
+
+		if ($valid) {
+			$sql = "INSERT INTO users (username, password, memberId) 
+				VALUES ('$username', '$password', $memberId)";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 306);
+			}
+		}
+	}
+}
+
+function setNewPassword() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		$valid = true;	
+
+		@$memberId = $request->memberId;
+		if (!isset($memberId)) {
+			$this->response($this->json(array('code' => 'memberId')), 306);
+			$valid = false;
+		}
+		
+		@$password = $request->password;
+		if (!isset($password) || strlen($password) < 5) {
+			$this->response($this->json(array('code' => 'password')), 306);
+			$valid = false;
+		} else {
+			$password = md5($password);
+		}
+
+		if ($valid) {
+			$sql = "UPDATE users SET password = '$password' WHERE memberId = $memberId";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 306);
+			}
+		}
+	}
+}
+
+
+function getMemberDetails() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
@@ -407,6 +536,95 @@ function getMembersDetails() {
 			$this->response($this->json(array('accessionDate' => $row["accessionDate"], 'aegeeEmail' => $row["aegeeEmail"], 'birthDate' => $row["birthDate"], 'cardNumber' => $row["cardNumber"], 'connectedToList' => $row["connectedToList"], 'declaration' => $row["declaration"], 'firstName' => $row["firstName"], 'id' => $row["id"], 'lastName' => $row["lastName"], 'mentorId' => $row["mentorId"], 'old' => $row["old"], 'phone' => $row["phone"], 'privateEmail' => $row["privateEmail"], 'type' => $row["type"], 'mentorFirstName' => $row["mentorFirstName"], 'mentorLastName' => $row["mentorLastName"])), 200);
 		} else {
 			$this->response('', 401);
+		}
+	}
+}
+
+function removeUser(){
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		@$id = $request->id;
+		@$username = $request->_username;
+		$sql = "SELECT * FROM users WHERE username = '$username' AND id = '$id'";
+		$result=$this->mysqli->query($sql);
+		if(mysqli_num_rows($result) == 0) {
+			$this->response('', 404);
+		} else {
+			$sql = "DELETE FROM users WHERE username = '$username' AND id = '$id'";
+			$result=$this->mysqli->query($sql);
+			if($result) {
+				$this->response('',200);
+			} else {
+				$this->response('', 400);
+			}
+		}
+	}
+}
+
+function setNewPayment() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		$valid = true;	
+
+		@$memberId = $request->memberId;
+		if (!isset($memberId)) {
+			$this->response($this->json(array('code' => 'memberId')), 306);
+			$valid = false;
+		}
+		
+		@$paymentDate = $request->paymentDate;
+		if (!isset($paymentDate)) {
+			$this->response($this->json(array('code' => 'paymentDate')), 306);
+			$valid = false;
+		} else {
+			$paymentDate = new DateTime(substr($request->paymentDate, 0, 23), new DateTimeZone('Poland'));
+		}
+
+		@$type = $request->type;
+		if (!isset($type)) {
+			$this->response($this->json(array('code' => 'type')), 306);
+			$valid = false;
+		}
+
+		@$expirationDate = $request->expirationDate;
+		if (!isset($expirationDate)) {
+			$this->response($this->json(array('code' => 'expirationDate')), 306);
+			$valid = false;
+		} else {
+			$expirationDate = new DateTime(substr($request->expirationDate, 0, 23), new DateTimeZone('Poland'));
+		}
+
+		@$amount = $request->amount;
+		if (!isset($amount)) {
+			$this->response($this->json(array('code' => 'amount')), 306);
+			$valid = false;
+		} else {
+			$amount = number_format($amount, 2);
+		}
+
+		@$session_id = $request->session_id;
+		@$username = $request->username;
+		$sql = "SELECT m.id FROM users u JOIN members m ON u.memberId = m.id 
+			WHERE u.username = '$username' AND u.sessionId='$session_id'";
+		$result = $this->mysqli->query($sql);
+		if(mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			if ($valid) {
+				$auditCD = date('Y-m-d H:i:s');
+				$auditCU = $row['id'];
+				$sql = "INSERT INTO payments (memberId, amount, paymentDate, expirationDate, type, auditCD, auditCU) 
+				VALUES ($memberId, $amount, '" . $paymentDate->format('Y-m-d') . "', '" . $expirationDate->format('Y-m-d') . "', $type, '$auditCD', $auditCU)";
+				$result = $this->mysqli->query($sql);
+				if ($result) {
+					$this->response('', 200);
+				} else {
+					$this->response($this->json(array('code' => $sql)), 306);
+				}
+			}
+		} else {
+			$this->response($this->json(array('code' => 'username')), 306);
 		}
 	}
 }
