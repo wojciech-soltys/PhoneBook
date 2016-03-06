@@ -1,8 +1,7 @@
-app.controller('paymentNewCtrl',['$scope', '$rootScope', '$stateParams', 'membersService', 'informService',
-	function ($scope, $rootScope, $stateParams, membersService,  informService) {
+app.controller('paymentNewCtrl',['$scope', '$rootScope', 'membersService', 'informService',
+	function ($scope, $rootScope, membersService,  informService) {
 		'use strict';
 		$scope.payment = {};
-		$scope.payment.memberId = $stateParams.id;
 
 		$scope.paymentTypes = [
 			{'id': 1, 'name': 'Semestr 1'},
@@ -16,8 +15,9 @@ app.controller('paymentNewCtrl',['$scope', '$rootScope', '$stateParams', 'member
 		];
 
 
-		$rootScope.$on('clear.edit.user', function (event, value) {
-			$scope.reset($scope.userEditForm);
+		$rootScope.$on('clear.new.payments', function (event, value) {
+			$scope.reset($scope.paymentNewForm);
+			$scope.payment.memberId = value;
 		});
 
 		var setExpirationDate = function() {
@@ -70,7 +70,7 @@ app.controller('paymentNewCtrl',['$scope', '$rootScope', '$stateParams', 'member
 					informService.showSimpleToast('Składka członkowska została zapisana');
 					form.$setPristine();
 					form.$setUntouched();
-					$rootScope.$emit('refresh.user.payments', '');
+					$rootScope.$emit('refresh.payments.table', '');
 					$scope.close(form);
 				})
 				.error(function (data, status) {
@@ -87,7 +87,7 @@ app.controller('paymentNewCtrl',['$scope', '$rootScope', '$stateParams', 'member
 			if (form) {
 				$scope.isEdit = false;
 				$scope.title = 'Nowy użytkownik';
-				$scope.user = {};
+				$scope.payment = {};
 				form.$setPristine();
 				form.$setUntouched();
 			}

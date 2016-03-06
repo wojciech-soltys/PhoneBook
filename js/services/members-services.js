@@ -135,6 +135,18 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
+	membersService.getPaymentsForMember = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'getPaymentsForMember',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId
+			}
+		});
+	};
+
 	membersService.setNewPayment = function(payment) {
 		return $http({
 			method: 'post',

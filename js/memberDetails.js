@@ -1,5 +1,5 @@
-app.controller('memberDetailsCtrl', ['$scope', '$stateParams', 'informService', 'membersService', 
-	function ($scope, $stateParams, informService, membersService) {
+app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'informService', 'membersService', 
+	function ($scope, $rootScope, $stateParams, informService, membersService) {
 
 		$scope.member = null;
 		$scope.memberId = $stateParams.id;
@@ -21,6 +21,10 @@ app.controller('memberDetailsCtrl', ['$scope', '$stateParams', 'informService', 
 			});
 		};
 		getMembersDetails();
+
+		$scope.clearForm = function() {
+			$rootScope.$emit('clear.new.payments', $scope.memberId);
+		}
 		
 
 	}]);

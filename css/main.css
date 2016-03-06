@@ -252,7 +252,10 @@ member-edit-form form h4.filled {
 	transform: translate3d(-35px, 5px, 0) scale(.75);
 }
 
-member-edit-form form, .user-profile-container form, .member-details-container form {
+member-edit-form form, 
+.user-profile-container form, 
+.member-details-container form,  
+.member-details-container payments-table div {
 	margin: 10px;
 	padding: 10px;
 }

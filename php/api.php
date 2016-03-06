@@ -299,7 +299,7 @@ function getMentors() {
 function saveMember() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	if ($this->isLogged($request)) {
+	if ($this->isLoggedAsAdmin($request)) {
 		@$firstName = $request->firstName;
 		@$lastName = $request->lastName;
 		$accessionDate = new DateTime(substr($request->accessionDate, 0, 23), new DateTimeZone('Poland'));
@@ -358,7 +358,7 @@ function saveMember() {
 function changeMember() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	if ($this->isLogged($request)) {
+	if ($this->isLoggedAsAdmin($request)) {
 		@$id = $request->id;
 		@$firstName = $request->firstName;
 		@$lastName = $request->lastName;
@@ -597,6 +597,28 @@ function getMemberDetails() {
 			$this->response($this->json(array('id' => $row["id"], 'firstName' => $row["firstName"], 'lastName' => $row["lastName"], 'accessionDate' => $row["accessionDate"], 'phone' => $row["phone"], 'privateEmail' => $row["privateEmail"], 'aegeeEmail' => $row["aegeeEmail"], 'birthDate' => $row["birthDate"], 'cardNumber' => $row["cardNumber"], 'declaration' => $row["declaration"], 'connectedToList' => $row["connectedToList"], 'mentorId' => $row['mentorId'], 'type' => $row["type"], 'old' => $row["old"], 'mentorFirstName' => $row["mentorFirstName"], 'mentorLastName' => $row["mentorLastName"])), 200);
 		} else {
 			$this->response('', 401);
+		}
+	}
+}
+
+function getPaymentsForMember() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$memberId = $request->memberId;
+		$toReturn = array();
+		$sql = "SELECT id, amount, paymentDate, expirationDate, type
+				FROM payments
+				WHERE memberId = '$memberId'
+				ORDER BY paymentDate DESC";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {					
+				$toReturn[] = array('id' => $row["id"], 'amount' => $row["amount"], 'paymentDate' => $row["paymentDate"], 'expirationDate' => $row["expirationDate"], 'type' => $row["type"]);
+			}
+			$this->response($this->json($toReturn), 200);
+		} else {
+			$this->response('', 204);
 		}
 	}
 }
