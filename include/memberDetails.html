@@ -1,4 +1,72 @@
-<title-toolbar title="Imię nazwisko" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<title-toolbar title="Szczegóły członka" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
 <div class="member-details-container" ng-controller="memberDetailsCtrl">
-
+	<form name="memberDetailsForm" autocomplete="off" class="md-whiteframe-z1">
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<label>Imię</label>
+			<label>{{member.firstName}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Nazwisko</label>
+			<label>{{member.lastName}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<label>Numer telefonu</label>
+			<label>{{member.phone}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Prywatny adres e-mail</label>
+			<label>{{member.privateEmail}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Numer karty członkowskiej</label>
+			<label>{{member.cardNumber}}</label>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<label>Data urodzenia</label>
+			<label>{{member.birthDate}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Data wstąpienia</label>
+			<label>{{member.accessionDate}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<label>Deklaracja</label>
+			<label>{{member.declaration}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Podłączenie do listy ogólnej</label>
+			<label>{{member.connectedToList}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Adres w domenie aegee-gliwice.org</label>
+			<label>{{member.aegeeEmail}}</label>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<label>Mentor</label>
+			<label>{{member.mentorFirstName + ' ' + member.mentorLastName}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<label>Typ członka</label>
+			<label>{{member.type}}</label>
+		</div>
+		<div class="md-block" flex-gt-sm>
+		</div>
+	</div>
+	<div class="actions-row" layout="row" layout-align="end center">
+		<md-button id="save" ui-sref="memberEdit({id: member.id})">Edytuj</md-button>
+	</div>
+</form>
 </div>

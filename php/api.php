@@ -517,6 +517,24 @@ function setNewPassword() {
 	}
 }
 
+function getMemberDetails() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$member_id = $request->member_id;
+		$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
+				FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
+				WHERE m.id = '$member_id'";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$this->response($this->json(array('id' => $row["id"], 'firstName' => $row["firstName"], 'lastName' => $row["lastName"], 'accessionDate' => $row["accessionDate"], 'phone' => $row["phone"], 'privateEmail' => $row["privateEmail"], 'aegeeEmail' => $row["aegeeEmail"], 'birthDate' => $row["birthDate"], 'cardNumber' => $row["cardNumber"], 'declaration' => $row["declaration"], 'connectedToList' => $row["connectedToList"], 'mentorId' => $row['mentorId'], 'type' => $row["type"], 'old' => $row["old"], 'mentorFirstName' => $row["mentorFirstName"], 'mentorLastName' => $row["mentorLastName"])), 200);
+		} else {
+			$this->response('', 401);
+		}
+	}
+}
+
 function removeUser(){
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
