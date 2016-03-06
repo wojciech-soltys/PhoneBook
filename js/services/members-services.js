@@ -15,6 +15,17 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
+	membersService.getMembersShortList = function() {
+		return $http({
+			method: 'post',
+			url: 'getMembersShortList',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+			}
+		});
+	};
+
 	membersService.setDeclaration = function(member) {
 		return $http({
 			method: 'post',
@@ -88,14 +99,30 @@ angular.module('main.membersFactory', [])
 	};
 
 
-	membersService.getMembersDetails = function(memberId) {
+	membersService.getMemberDetails = function(memberId) {
 		return $http({
 			method: 'post',
-			url: 'getMembersDetails',
+			url: 'getMemberDetails',
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
 				member_id: memberId
+			}
+		});
+	};
+
+	membersService.setNewPayment = function(payment) {
+		return $http({
+			method: 'post',
+			url: 'setNewPayment',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: payment.memberId,
+				paymentDate: payment.paymentDate,
+				type: payment.type,
+				expirationDate: payment.expirationDate,
+				amount: payment.amount
 			}
 		});
 	};
