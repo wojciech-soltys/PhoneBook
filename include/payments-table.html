@@ -1,0 +1,22 @@
+<div class="md-whiteframe-z1">
+	<table class="table table-hover">
+		<thead>
+			<th>#</th>
+			<th>Data płatności</th>
+			<th>Data ważności</th>
+			<th>Typ składki</th>
+			<th>Kwota</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="payment in paymentsList">
+				<th>{{$index + 1}}</th>
+				<td>{{::payment.paymentDate}}</td>
+				<td>{{::payment.expirationDate}}</td>
+				<td ng-if="payment.type === '1'">Semestr 1</td>
+				<td ng-if="payment.type === '2'">Semestr 2</td>
+				<td ng-if="payment.type === '3'">Rok</td>
+				<td>{{::payment.amount | number: 2}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
