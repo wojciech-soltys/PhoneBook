@@ -12,7 +12,7 @@ angular.module('main').directive('usersCard', function() {
 			$scope.userRole = localStorage.getItem('UserRole');
 			var isAdmin = function() {
 				if (angular.isDefined($scope.userRole)) {
-					if ($scope.userRole === 'H') {
+					if ($scope.userRole === 'Z') {
 						$scope.isAdmin = true;
 					} else {
 						$scope.isAdmin = false;

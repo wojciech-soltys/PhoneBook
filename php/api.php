@@ -105,7 +105,7 @@ private function isLoggedAsAdmin($request) {
 	@$username = $request->username;
 	$sql = "SELECT u.id, u.lastLogin
 		FROM users u JOIN members m ON u.memberId = m.id 
-		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='H'";
+		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='Z'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
