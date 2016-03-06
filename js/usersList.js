@@ -14,23 +14,22 @@ app.controller('usersListCtrl', ['$scope', '$rootScope', 'informService', 'users
 					$scope.itemsExists= true;
 				}
 			})
-			.error(function () {
+			.error(function (data, status) {
 				informService.showSimpleToast('Błąd pobrania listy użytkowników');
 				$scope.itemsExists = false;
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
 			});
 		};
 
 		getUsersList();
 		
-		$scope.$on('new.user', function() {
-			getUsersList();
-		});
-
-		$rootScope.$on('edit.user', function () {
+		$rootScope.$on('refresh.users.list', function () {
 			getUsersList();	
 		});
 
 		$scope.clearForm = function() {
-			$rootScope.$emit('clear.new.user', '');
+			$rootScope.$emit('clear.edit.user', '');
 		};
 	}]);

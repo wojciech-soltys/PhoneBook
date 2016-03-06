@@ -3,18 +3,20 @@ var myApp=angular.module('login', ['login.loginFactory'])
 	'use strict';
 	$scope.errorMessage = '';
 	function init() {
-		loginService.isUserLogged()
-		.success(function (data, status, headers, config) {
-			if(data.isLoggedIn) {
-				$window.location.href = data.url;
-			}
-		})
-		.error(function (data, status, headers, config) {
-			localStorage.removeItem('Username');
-			localStorage.removeItem('TimeStamp');
-			localStorage.removeItem('SessionID');
-			localStorage.removeItem('UserRole');
-		});
+		if (localStorage.getItem('Username') != null) {
+			loginService.isUserLogged()
+			.success(function (data, status, headers, config) {
+				if(data.isLoggedIn) {
+					$window.location.href = data.url;
+				}
+			})
+			.error(function (data, status, headers, config) {
+				localStorage.removeItem('Username');
+				localStorage.removeItem('TimeStamp');
+				localStorage.removeItem('SessionID');
+				localStorage.removeItem('UserRole');
+			});
+		}
 	};
 
 	init();

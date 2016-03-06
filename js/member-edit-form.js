@@ -1,4 +1,4 @@
-function memberEditController($scope, informService, membersService) {
+function memberEditController($scope, $rootScope, informService, membersService) {
 	$scope.member = null;
 	$scope.mentors = null;
 	var phoneRegex = new RegExp('[0-9]{9}');
@@ -39,8 +39,11 @@ function memberEditController($scope, informService, membersService) {
 				form.$setPristine();
 				form.$setUntouched();
 			})
-			.error(function () {
+			.error(function (data, status) {
 				informService.showAlert('Błąd', 'Zapis nie powiódł się.');
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
 			});
 		}
 	};
@@ -50,8 +53,11 @@ function memberEditController($scope, informService, membersService) {
 		.success(function (data) {
 			$scope.mentors = data;
 		})
-		.error(function () {
+		.error(function (data, status) {
 			informService.showSimpleToast('Błąd pobrania listy mentorów');
+			if (status === 401) {
+				$rootScope.$emit('session.timeout', '');
+			}
 		});
 	};
 

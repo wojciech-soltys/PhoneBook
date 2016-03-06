@@ -33,12 +33,16 @@ angular.module('main').directive('usersCard', function() {
 							usersService.removeUser(user)
 							.success(function () {
 								informService.showSimpleToast('Użykownik o nazwie ' + user.username + ' został usunięty');
+								$rootScope.$emit('refresh.users.list', '');
 							})
 							.error(function (data, status) {
 								if (status === 404) {
 									informService.showAlert('Błąd', 'Nie znaleziono użytkownika ' + user.username);
 								} else {
 									informService.showAlert('Błąd', 'Usunięcie użytkownika nie powiodło się');
+								}
+								if (status === 401) {
+									$rootScope.$emit('session.timeout', '');
 								}
 							});
 					});

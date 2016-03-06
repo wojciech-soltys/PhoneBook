@@ -26,7 +26,7 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			});
 		};
 		
-		var init = function() {
+		var checkSession = function() {
 			loginService.isUserLogged()
 			.success(function (data) {
 				if(data.isLoggedIn) {
@@ -40,10 +40,14 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			});
 		};
 
-		init();
+		checkSession();
 
 		$rootScope.$on('edit.profile', function (event, value) {
 			$scope.userInfo = value;
+		});
+
+		$rootScope.$on('session.timeout', function () {
+			checkSession();
 		});
 
 		$scope.closeLeft = function () {
@@ -123,7 +127,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/memberDetails?id',
 		views: {
 			'contentView': { templateUrl: 'include/memberDetails.html' },
-			'rightView': { templateUrl: 'include/empty.html' }
+			'rightView': { templateUrl: 'include/paymentNew.html' }
 		}
 	})
 	.state('oldMembersList', {
@@ -144,7 +148,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/usersList',
 		views: {
 			'contentView': { templateUrl: 'include/usersList.html' },
-			'rightView': { templateUrl: 'include/empty.html' }
+			'rightView': { templateUrl: 'include/userEdit.html' }
 		}
 	})
 	.state('userProfile', {

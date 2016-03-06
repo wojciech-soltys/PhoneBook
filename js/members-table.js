@@ -7,7 +7,7 @@ angular.module('main').directive('membersTable', function() {
 			old: '='
 		},
 		templateUrl : 'include/members-table.html',
-		controller: function($scope, $element, $location, membersService, informService) { 
+		controller: function($scope, $rootScope, $element, $location, membersService, informService) { 
 			$scope.checkExpirationDate = function(member) {
 				if ($scope.old || member.type === 'H') {
 					return false;
@@ -28,8 +28,11 @@ angular.module('main').directive('membersTable', function() {
 				.success(function () {
 					informService.showSimpleToast('Zmiana została zapisana');
 				})
-				.error(function () {
+				.error(function (data, status) {
 					informService.showSimpleToast('Błąd zapisu');
+					if (status === 401) {
+						$rootScope.$emit('session.timeout', '');
+					}
 				});
 			};
 
@@ -38,8 +41,11 @@ angular.module('main').directive('membersTable', function() {
 				.success(function () {
 					informService.showSimpleToast('Zmiana została zapisana');
 				})
-				.error(function () {
+				.error(function (data, status) {
 					informService.showSimpleToast('Błąd zapisu');
+					if (status === 401) {
+						$rootScope.$emit('session.timeout', '');
+					}
 				});
 			};
 
@@ -48,8 +54,11 @@ angular.module('main').directive('membersTable', function() {
 				.success(function () {
 					informService.showSimpleToast('Zmiana została zapisana');
 				})
-				.error(function () {
+				.error(function (data, status) {
 					informService.showSimpleToast('Błąd zapisu');
+					if (status === 401) {
+						$rootScope.$emit('session.timeout', '');
+					}
 				});
 			};
 		}
