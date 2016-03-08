@@ -40,6 +40,8 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			});
 		};
 
+		$scope.userRole = localStorage.getItem('UserRole');
+
 		checkSession();
 
 		$rootScope.$on('edit.profile', function (event, value) {

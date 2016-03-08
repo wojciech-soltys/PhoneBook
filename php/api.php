@@ -36,8 +36,8 @@ public function processApi(){
 function login(){
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	@$username = $request->username;
-	@$pass = $request->password;
+	@$username = mysql_real_escape_string($request->username);
+	@$pass = mysql_real_escape_string($request->password);
 	@$passw = md5($pass);
 	$sql = "SELECT u.id, u.username, u.lastLogin, m.type FROM users u JOIN members m ON u.memberId = m.id WHERE username = '$username' AND u.password = '$passw'";
 	$result = $this->mysqli->query($sql);
@@ -49,7 +49,12 @@ function login(){
 		$sql = "UPDATE users SET lastLogin = '$datetime', sessionId='".md5($ses)."' WHERE id = " .$row["id"];			
 		$result = $this->mysqli->query($sql);
 		if ($result) {	
-			$this->response($this->json(array('role' => $row['type'], 'session' => md5($ses), 'url' => 'index.html')), 200);
+			if ($row['type'] == 'Z') {
+				$role = 'ADM';
+			} else {
+				$role = null;
+			}
+			$this->response($this->json(array('role' => $role, 'session' => md5($ses), 'url' => 'index.html')), 200);
 		} else {
 			$this->response('', 400);
 		}
@@ -61,8 +66,8 @@ function login(){
 function logout(){
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	@$username = $request->username;
-	@$session_id = $request->session_id;
+	@$username = mysql_real_escape_string($request->username);
+	@$session_id = mysql_real_escape_string($request->session_id);
 	$sql = "SELECT id FROM users WHERE username = '$username' AND sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 
@@ -84,8 +89,8 @@ function logout(){
 function isUserLogged() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	@$session_id = $request->session_id;
-	@$username = $request->username;
+	@$session_id = mysql_real_escape_string($request->session_id);
+	@$username = mysql_real_escape_string($request->username);
 	$sql = "SELECT u.id, m.firstName, m.lastName, u.lastLogin FROM users u JOIN members m ON u.memberId = m.id WHERE u.username = '$username' AND u.sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
@@ -101,8 +106,8 @@ function isUserLogged() {
 }
 
 private function isLoggedAsAdmin($request) {
-	@$session_id = $request->session_id;
-	@$username = $request->username;
+	@$session_id = mysql_real_escape_string($request->session_id);
+	@$username = mysql_real_escape_string($request->username);
 	$sql = "SELECT u.id, u.lastLogin
 		FROM users u JOIN members m ON u.memberId = m.id 
 		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='Z'";
@@ -122,8 +127,8 @@ private function isLoggedAsAdmin($request) {
 }
 
 private function isLogged($request) {
-	@$session_id = $request->session_id;
-	@$username = $request->username;
+	@$session_id = mysql_real_escape_string($request->session_id);
+	@$username = mysql_real_escape_string($request->username);
 	$sql = "SELECT id, lastLogin FROM users WHERE username = '$username' AND sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
@@ -145,36 +150,40 @@ function getMembersList() {
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
 		$toReturn = array();
-		@$old = $request->old;
-		$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.type, (SELECT expirationDate
-								FROM payments p
-								WHERE p.memberId = m.id
-								ORDER BY p.expirationDate DESC
-								LIMIT 1
-								) as 'expirationDate'
-			FROM members m 
-			WHERE m.old = $old AND m.id > 0
-			ORDER BY m.lastName ASC";
-		$result = $this->mysqli->query($sql);
-		if (mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {					
-				$toReturn[] = array('id' => $row["id"],
-					'lastName' => $row["lastName"],
-					'firstName' => $row["firstName"], 
-					'phone' => $row["phone"], 
-					'privateEmail' => $row["privateEmail"], 
-					'birthDate' => $row["birthDate"], 
-					'cardNumber' => $row["cardNumber"], 
-					'declaration' => $row["declaration"], 
-					'aegeeEmail' => $row["aegeeEmail"], 
-					'connectedToList' => $row["connectedToList"],
-					'expirationDate' => $row["expirationDate"],
-					'type' => $row["type"]
-					);
+		@$old = mysql_real_escape_string($request->old);
+		if (is_numeric($old)) {
+			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.type, (SELECT expirationDate
+									FROM payments p
+									WHERE p.memberId = m.id
+									ORDER BY p.expirationDate DESC
+									LIMIT 1
+									) as 'expirationDate'
+				FROM members m 
+				WHERE m.old = $old AND m.id > 0
+				ORDER BY m.lastName ASC";
+			$result = $this->mysqli->query($sql);
+			if (mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {					
+					$toReturn[] = array('id' => $row["id"],
+						'lastName' => $row["lastName"],
+						'firstName' => $row["firstName"], 
+						'phone' => $row["phone"], 
+						'privateEmail' => $row["privateEmail"], 
+						'birthDate' => $row["birthDate"], 
+						'cardNumber' => $row["cardNumber"], 
+						'declaration' => $row["declaration"], 
+						'aegeeEmail' => $row["aegeeEmail"], 
+						'connectedToList' => $row["connectedToList"],
+						'expirationDate' => $row["expirationDate"],
+						'type' => $row["type"]
+						);
+				}
+				$this->response($this->json($toReturn), 200);
+			} else {
+				$this->response('', 204);
 			}
-			$this->response($this->json($toReturn), 200);
 		} else {
-			$this->response('', 204);
+			$this->response('', 306);
 		}
 	}
 }
@@ -184,20 +193,24 @@ function getMembersShortList() {
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
 		$toReturn = array();
-		@$old = $request->old;
-		$sql = "SELECT m.id, m.firstName, m.lastName
-			FROM members m LEFT JOIN users u ON m.id = u.memberId
-			WHERE m.old = 0 AND m.id > 0 and u.memberID IS NULL
-			ORDER BY m.lastName ASC";
-		$result = $this->mysqli->query($sql);
-		if (mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {					
-				$toReturn[] = array('id' => $row["id"],
-					'lastName' => $row["lastName"],
-					'firstName' => $row["firstName"]
-					);
+		@$old = mysql_real_escape_string($request->old);
+		if (is_numeric($old)) {
+			$sql = "SELECT m.id, m.firstName, m.lastName
+				FROM members m LEFT JOIN users u ON m.id = u.memberId
+				WHERE m.old = 0 AND m.id > 0 and u.memberID IS NULL
+				ORDER BY m.lastName ASC";
+			$result = $this->mysqli->query($sql);
+			if (mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {					
+					$toReturn[] = array('id' => $row["id"],
+						'lastName' => $row["lastName"],
+						'firstName' => $row["firstName"]
+						);
+				}
+				$this->response($this->json($toReturn), 200);
+			} else {
+				$this->response('', 204);
 			}
-			$this->response($this->json($toReturn), 200);
 		} else {
 			$this->response('', 204);
 		}
@@ -207,13 +220,13 @@ function getMembersShortList() {
 function setDeclaration() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	if ($this->isLogged($request)) {
-		@$id = $request->member_id;
-		@$declaration = $request->declaration;
+	if ($this->isLoggedAsAdmin($request)) {
+		@$id = mysql_real_escape_string($request->member_id);
+		@$declaration = mysql_real_escape_string($request->declaration);
 		if (!isset($declaration)) {
 			$declaration = 0;
 		}
-		if($id != null) {
+		if($id != null && is_numeric($id) && is_numeric($declaration)) {
 			$sql = "UPDATE members SET declaration = $declaration WHERE id = $id";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
@@ -231,12 +244,12 @@ function setAegeeEmail() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$id = $request->member_id;
-		@$aegeeEmail = $request->aegeeEmail;
+		@$id = mysql_real_escape_string($request->member_id);
+		@$aegeeEmail = mysql_real_escape_string($request->aegeeEmail);
 		if (!isset($aegeeEmail)) {
 			$aegeeEmail = 0;
 		}
-		if($id != null) {
+		if($id != null && is_numeric($id) && is_numeric($aegeeEmail)) {
 			$sql = "UPDATE members SET aegeeEmail = $aegeeEmail WHERE id = $id";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
@@ -254,12 +267,12 @@ function setConnectedToList() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$id = $request->member_id;
-		@$connectedToList = $request->connectedToList;
+		@$id = mysql_real_escape_string($request->member_id);
+		@$connectedToList = mysql_real_escape_string($request->connectedToList);
 		if (!isset($connectedToList)) {
 			$connectedToList = 0;
 		}
-		if($id != null) {
+		if($id != null && is_numeric($id) && is_numeric($connectedToList)) {
 			$sql = "UPDATE members SET connectedToList = $connectedToList WHERE id = $id";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
@@ -278,10 +291,10 @@ function getMentors() {
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
 		$toReturn = array();
-		$sql = "SELECT m.id, CONCAT(m.firstName, ' ', m.lastName) AS 'name'
-			FROM members m 
-			WHERE m.old = 0 AND m.mentorId = 0
-			ORDER BY m.lastName ASC";
+		$sql = "SELECT id, CONCAT(firstName, ' ', lastName) AS 'name'
+			FROM members 
+			WHERE old = 0 AND mentorId = 0
+			ORDER BY lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {					
@@ -300,40 +313,44 @@ function saveMember() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$firstName = $request->firstName;
-		@$lastName = $request->lastName;
+		@$firstName = mysql_real_escape_string($request->firstName);
+		@$lastName = mysql_real_escape_string($request->lastName);
 		$accessionDate = new DateTime(substr($request->accessionDate, 0, 23), new DateTimeZone('Poland'));
-		@$phone = $request->phone;
+		@$phone = mysql_real_escape_string($request->phone);
 		$phoneRegex = "/[0-9]{9}/";
-		@$privateEmail = $request->privateEmail;
-		@$aegeeEmail = $request->aegeeEmail;
+		@$privateEmail = mysql_real_escape_string($request->privateEmail);
+		@$aegeeEmail = mysql_real_escape_string($request->aegeeEmail);
 		if (!isset($aegeeEmail)) {
 			$aegeeEmail = 0;
 		}
 		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
-		@$cardNumber = $request->cardNumber;
+		@$cardNumber = mysql_real_escape_string($request->cardNumber);
 		$cardNumberRegex = "/[a-zA-Z0-9]{6}-[a-zA-Z0-9]{6}/";
-		@$declaration = $request->declaration;
+		@$declaration = mysql_real_escape_string($request->declaration);
 		if (!isset($declaration)) {
 			$declaration = 0;
 		}
-		@$connectedToList = $request->connectedToList;
+		@$connectedToList = mysql_real_escape_string($request->connectedToList);
 		if (!isset($connectedToList)) {
 			$connectedToList = 0;
 		}
-		@$mentorId = $request->mentorId;
-		@$type = $request->type;
+		@$mentorId = mysql_real_escape_string($request->mentorId);
+		@$type = mysql_real_escape_string($request->type);
 		if (!isset($type)) {
-			$type = 0;
+			$type = 'C';
 		}
 		if($firstName != null && strlen($firstName) < 255 && 
 			$lastName != null && strlen($lastName) < 255 &&
 			$accessionDate != null &&
-			$phone != null && preg_match($phoneRegex, $phone) &&
+			$phone != null && preg_match($phoneRegex, $phone) && is_numeric($phone) &&
 			$privateEmail != null && strlen($privateEmail) < 255 && filter_var($privateEmail, FILTER_VALIDATE_EMAIL) &&
+			is_numeric($aegeeEmail) &&
 			$birthDate != null &&
 			$cardNumber != null && strlen($cardNumber) < 20 && preg_match($cardNumberRegex, $cardNumber) &&
-			$mentorId != null) {
+			is_numeric($declaration) &&
+			is_numeric($connectedToList) &&
+			$mentorId != null && is_numeric($mentorId) &&
+			$type != null) {
 			$sql = "INSERT INTO members (firstName, lastName, accessionDate,
 				phone, privateEmail, aegeeEmail, birthDate, cardNumber, 
 				declaration, connectedToList, mentorId, type, old) 
@@ -359,42 +376,46 @@ function changeMember() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$id = $request->id;
-		@$firstName = $request->firstName;
-		@$lastName = $request->lastName;
+		@$id = mysql_real_escape_string($request->id);
+		@$firstName = mysql_real_escape_string($request->firstName);
+		@$lastName = mysql_real_escape_string($request->lastName);
 		$accessionDate = new DateTime(substr($request->accessionDate, 0, 23), new DateTimeZone('Poland'));
-		@$phone = $request->phone;
+		@$phone = mysql_real_escape_string($request->phone);
 		$phoneRegex = "/[0-9]{9}/";
-		@$privateEmail = $request->privateEmail;
-		@$aegeeEmail = $request->aegeeEmail;
+		@$privateEmail = mysql_real_escape_string($request->privateEmail);
+		@$aegeeEmail = mysql_real_escape_string($request->aegeeEmail);
 		if (!isset($aegeeEmail)) {
 			$aegeeEmail = 0;
 		}
 		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
-		@$cardNumber = $request->cardNumber;
+		@$cardNumber = mysql_real_escape_string($request->cardNumber);
 		$cardNumberRegex = "/[a-zA-Z0-9]{6}-[a-zA-Z0-9]{6}/";
-		@$declaration = $request->declaration;
+		@$declaration = mysql_real_escape_string($request->declaration);
 		if (!isset($declaration)) {
 			$declaration = 0;
 		}
-		@$connectedToList = $request->connectedToList;
+		@$connectedToList = mysql_real_escape_string($request->connectedToList);
 		if (!isset($connectedToList)) {
 			$connectedToList = 0;
 		}
-		@$mentorId = $request->mentorId;
-		@$type = $request->type;
+		@$mentorId = mysql_real_escape_string($request->mentorId);
+		@$type = mysql_real_escape_string($request->type);
 		if (!isset($type)) {
-			$type = 0;
+			$type = 'C';
 		}
-		if($id != null && 
+		if($id != null && is_numeric($id) &&
 			$firstName != null && strlen($firstName) < 255 && 
 			$lastName != null && strlen($lastName) < 255 &&
 			$accessionDate != null &&
-			$phone != null && preg_match($phoneRegex, $phone) &&
+			$phone != null && preg_match($phoneRegex, $phone) && is_numeric($phone) &&
 			$privateEmail != null && strlen($privateEmail) < 255 && filter_var($privateEmail, FILTER_VALIDATE_EMAIL) &&
+			is_numeric($aegeeEmail) &&
 			$birthDate != null &&
 			$cardNumber != null && strlen($cardNumber) < 20 && preg_match($cardNumberRegex, $cardNumber) &&
-			$mentorId != null) {
+			is_numeric($declaration) &&
+			is_numeric($connectedToList) &&
+			$mentorId != null && is_numeric($mentorId) &&
+			$type != null) {
 			$sql = "UPDATE members SET 
 						firstName = '$firstName',
 						lastName = '$lastName',
@@ -426,7 +447,6 @@ function getUsersList() {
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
 		$toReturn = array();
-		@$old = $request->old;
 		$sql = "SELECT u.id, m.firstName, m.lastName, m.privateEmail, u.username, u.memberId, u.lastLogin
 			FROM members m JOIN users u ON m.id = u.memberId
 			ORDER BY m.lastName ASC";
@@ -453,8 +473,8 @@ function getUserProfile() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$session_id = $request->session_id;
-		@$username = $request->username;
+		@$session_id = mysql_real_escape_string($request->session_id);
+		@$username = mysql_real_escape_string($request->username);
 		$sql = "SELECT u.id, u.username, m.firstName, m.lastName, m.privateEmail 
 				FROM users u JOIN members m ON u.memberId = m.id 
 				WHERE username = '$username' AND sessionId = '$session_id'";
@@ -472,10 +492,10 @@ function setUserProfile() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$session_id = $request->session_id;
-		@$username = $request->username;
+		@$session_id = mysql_real_escape_string($request->session_id);
+		@$username = mysql_real_escape_string($request->username);
 		$valid = true;
-		@$currentPassword = $request->currentPassword;
+		@$currentPassword = mysql_real_escape_string($request->currentPassword);
 		if (!isset($currentPassword) || strlen($currentPassword) < 5) {
 			$this->response($this->json(array('code' => 'currentPassword')), 306);
 			$valid = false;
@@ -492,7 +512,7 @@ function setUserProfile() {
 			}
 		}
 		
-		@$password = $request->password;
+		@$password = mysql_real_escape_string($request->password);
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
 			$valid = false;
@@ -518,13 +538,13 @@ function setNewUser() {
 	if ($this->isLoggedAsAdmin($request)) {
 		$valid = true;	
 
-		@$username = $request->_username;
+		@$username = mysql_real_escape_string($request->_username);
 		if (!isset($username) || strlen($username) < 5) {
 			$this->response($this->json(array('code' => 'username')), 306);
 			$valid = false;
 		}
 		
-		@$password = $request->password;
+		@$password = mysql_real_escape_string($request->password);
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
 			$valid = false;
@@ -532,8 +552,8 @@ function setNewUser() {
 			$password = md5($password);
 		}
 
-		@$memberId = $request->memberId;
-		if (!isset($memberId)) {
+		@$memberId = mysql_real_escape_string($request->memberId);
+		if (!isset($memberId) || !is_numeric($memberId)) {
 			$this->response($this->json(array('code' => 'memberId')), 306);
 			$valid = false;
 		}
@@ -557,13 +577,13 @@ function setNewPassword() {
 	if ($this->isLoggedAsAdmin($request)) {
 		$valid = true;	
 
-		@$memberId = $request->memberId;
-		if (!isset($memberId)) {
+		@$memberId = mysql_real_escape_string($request->memberId);
+		if (!isset($memberId) || !is_numeric($memberId)) {
 			$this->response($this->json(array('code' => 'memberId')), 306);
 			$valid = false;
 		}
 		
-		@$password = $request->password;
+		@$password = mysql_real_escape_string($request->password);
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
 			$valid = false;
@@ -587,16 +607,20 @@ function getMemberDetails() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$member_id = $request->member_id;
-		$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
-				FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
-				WHERE m.id = '$member_id'";
-		$result = $this->mysqli->query($sql);
-		if (mysqli_num_rows($result) > 0) {
-			$row = mysqli_fetch_assoc($result);
-			$this->response($this->json(array('id' => $row["id"], 'firstName' => $row["firstName"], 'lastName' => $row["lastName"], 'accessionDate' => $row["accessionDate"], 'phone' => $row["phone"], 'privateEmail' => $row["privateEmail"], 'aegeeEmail' => $row["aegeeEmail"], 'birthDate' => $row["birthDate"], 'cardNumber' => $row["cardNumber"], 'declaration' => $row["declaration"], 'connectedToList' => $row["connectedToList"], 'mentorId' => $row['mentorId'], 'type' => $row["type"], 'old' => $row["old"], 'mentorFirstName' => $row["mentorFirstName"], 'mentorLastName' => $row["mentorLastName"])), 200);
+		@$memberId = mysql_real_escape_string($request->member_id);
+		if (is_numeric($memberId)) {
+			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
+					FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
+					WHERE m.id = '$memberId'";
+			$result = $this->mysqli->query($sql);
+			if (mysqli_num_rows($result) > 0) {
+				$row = mysqli_fetch_assoc($result);
+				$this->response($this->json(array('id' => $row["id"], 'firstName' => $row["firstName"], 'lastName' => $row["lastName"], 'accessionDate' => $row["accessionDate"], 'phone' => $row["phone"], 'privateEmail' => $row["privateEmail"], 'aegeeEmail' => $row["aegeeEmail"], 'birthDate' => $row["birthDate"], 'cardNumber' => $row["cardNumber"], 'declaration' => $row["declaration"], 'connectedToList' => $row["connectedToList"], 'mentorId' => $row['mentorId'], 'type' => $row["type"], 'old' => $row["old"], 'mentorFirstName' => $row["mentorFirstName"], 'mentorLastName' => $row["mentorLastName"])), 200);
+			} else {
+				$this->response('', 401);
+			}
 		} else {
-			$this->response('', 401);
+			$this->response('', 306);
 		}
 	}
 }
@@ -605,21 +629,25 @@ function getPaymentsForMember() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$memberId = $request->memberId;
-		$toReturn = array();
-		$sql = "SELECT id, amount, paymentDate, expirationDate, type
-				FROM payments
-				WHERE memberId = '$memberId'
-				ORDER BY paymentDate DESC";
-		$result = $this->mysqli->query($sql);
-		if (mysqli_num_rows($result) > 0) {
-			while($row = mysqli_fetch_assoc($result)) {					
-				$toReturn[] = array('id' => $row["id"], 'amount' => $row["amount"], 'paymentDate' => $row["paymentDate"], 'expirationDate' => $row["expirationDate"], 'type' => $row["type"]);
+		@$memberId = mysql_real_escape_string($request->memberId);
+		if (is_numeric($memberId)) {
+			$toReturn = array();
+			$sql = "SELECT id, amount, paymentDate, expirationDate, type
+					FROM payments
+					WHERE memberId = '$memberId'
+					ORDER BY paymentDate DESC";
+			$result = $this->mysqli->query($sql);
+			if (mysqli_num_rows($result) > 0) {
+				while($row = mysqli_fetch_assoc($result)) {					
+					$toReturn[] = array('id' => $row["id"], 'amount' => $row["amount"], 'paymentDate' => $row["paymentDate"], 'expirationDate' => $row["expirationDate"], 'type' => $row["type"]);
+				}
+				$this->response($this->json($toReturn), 200);
+			} else {
+				$this->response('', 204);
 			}
-			$this->response($this->json($toReturn), 200);
 		} else {
-			$this->response('', 204);
-		}
+			$this->response('', 306);
+		}	
 	}
 }
 
@@ -627,21 +655,25 @@ function removeUser(){
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$id = $request->id;
-		@$username = $request->_username;
-		$sql = "SELECT * FROM users WHERE username = '$username' AND id = '$id'";
-		$result=$this->mysqli->query($sql);
-		if(mysqli_num_rows($result) == 0) {
-			$this->response('', 404);
-		} else {
-			$sql = "DELETE FROM users WHERE username = '$username' AND id = '$id'";
+		@$id = mysql_real_escape_string($request->id);
+		if (is_numeric($id)) {
+			@$username = mysql_real_escape_string($request->_username);
+			$sql = "SELECT * FROM users WHERE username = '$username' AND id = '$id'";
 			$result=$this->mysqli->query($sql);
-			if($result) {
-				$this->response('',200);
+			if(mysqli_num_rows($result) == 0) {
+				$this->response('', 404);
 			} else {
-				$this->response('', 400);
+				$sql = "DELETE FROM users WHERE username = '$username' AND id = '$id'";
+				$result=$this->mysqli->query($sql);
+				if($result) {
+					$this->response('',200);
+				} else {
+					$this->response('', 400);
+				}
 			}
-		}
+		} else {
+			$this->response('', 306);
+		}	
 	}
 }
 
@@ -651,13 +683,13 @@ function setNewPayment() {
 	if ($this->isLoggedAsAdmin($request)) {
 		$valid = true;	
 
-		@$memberId = $request->memberId;
-		if (!isset($memberId)) {
+		@$memberId = mysql_real_escape_string($request->memberId);
+		if (!isset($memberId) || !is_numeric($memberId)) {
 			$this->response($this->json(array('code' => 'memberId')), 306);
 			$valid = false;
 		}
 		
-		@$paymentDate = $request->paymentDate;
+		@$paymentDate = mysql_real_escape_string($request->paymentDate);
 		if (!isset($paymentDate)) {
 			$this->response($this->json(array('code' => 'paymentDate')), 306);
 			$valid = false;
@@ -665,13 +697,13 @@ function setNewPayment() {
 			$paymentDate = new DateTime(substr($request->paymentDate, 0, 23), new DateTimeZone('Poland'));
 		}
 
-		@$type = $request->type;
-		if (!isset($type)) {
+		@$type = mysql_real_escape_string($request->type);
+		if (!isset($type) || !is_numeric($type)) {
 			$this->response($this->json(array('code' => 'type')), 306);
 			$valid = false;
 		}
 
-		@$expirationDate = $request->expirationDate;
+		@$expirationDate = mysql_real_escape_string($request->expirationDate);
 		if (!isset($expirationDate)) {
 			$this->response($this->json(array('code' => 'expirationDate')), 306);
 			$valid = false;
@@ -679,18 +711,18 @@ function setNewPayment() {
 			$expirationDate = new DateTime(substr($request->expirationDate, 0, 23), new DateTimeZone('Poland'));
 		}
 
-		@$amount = $request->amount;
-		if (!isset($amount)) {
+		@$amount = mysql_real_escape_string($request->amount);
+		if (!isset($amount) || !is_numeric($amount)) {
 			$this->response($this->json(array('code' => 'amount')), 306);
 			$valid = false;
 		} else {
 			$amount = number_format($amount, 2);
 		}
 
-		@$session_id = $request->session_id;
-		@$username = $request->username;
+		@$sessionId = mysql_real_escape_string($request->session_id);
+		@$username = mysql_real_escape_string($request->username);
 		$sql = "SELECT m.id FROM users u JOIN members m ON u.memberId = m.id 
-			WHERE u.username = '$username' AND u.sessionId='$session_id'";
+			WHERE u.username = '$username' AND u.sessionId='$sessionId'";
 		$result = $this->mysqli->query($sql);
 		if(mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);

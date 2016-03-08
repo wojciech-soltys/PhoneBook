@@ -3,7 +3,8 @@ app.controller('usersListCtrl', ['$scope', '$rootScope', 'informService', 'users
 		$scope.itemsExists = true;
 		$scope.usersList = null;
 		$scope.query = '';
-
+		$scope.userRole = localStorage.getItem('UserRole');
+		
 		var getUsersList = function() {
 			usersService.getUsersList()
 			.success(function (data) {
