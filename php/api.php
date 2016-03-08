@@ -36,8 +36,8 @@ public function processApi(){
 function login(){
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	@$username = mysql_real_escape_string($request->username);
-	@$pass = mysql_real_escape_string($request->password);
+	@$username = mysql_escape_string($request->username);
+	@$pass = mysql_escape_string($request->password);
 	@$passw = md5($pass);
 	$sql = "SELECT u.id, u.username, u.lastLogin, m.type FROM users u JOIN members m ON u.memberId = m.id WHERE username = '$username' AND u.password = '$passw'";
 	$result = $this->mysqli->query($sql);
@@ -59,15 +59,15 @@ function login(){
 			$this->response('', 400);
 		}
 	} else {
-		$this->response('',400);
+		$this->response($this->json(array('role' => $username, 'passw' => $passw, 'pass' => $pass)),400);
 	}
 }
 
 function logout(){
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	@$username = mysql_real_escape_string($request->username);
-	@$session_id = mysql_real_escape_string($request->session_id);
+	@$username = mysql_escape_string($request->username);
+	@$session_id = mysql_escape_string($request->session_id);
 	$sql = "SELECT id FROM users WHERE username = '$username' AND sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 
@@ -89,8 +89,8 @@ function logout(){
 function isUserLogged() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	@$session_id = mysql_real_escape_string($request->session_id);
-	@$username = mysql_real_escape_string($request->username);
+	@$session_id = mysql_escape_string($request->session_id);
+	@$username = mysql_escape_string($request->username);
 	$sql = "SELECT u.id, m.firstName, m.lastName, u.lastLogin FROM users u JOIN members m ON u.memberId = m.id WHERE u.username = '$username' AND u.sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
@@ -106,8 +106,8 @@ function isUserLogged() {
 }
 
 private function isLoggedAsAdmin($request) {
-	@$session_id = mysql_real_escape_string($request->session_id);
-	@$username = mysql_real_escape_string($request->username);
+	@$session_id = mysql_escape_string($request->session_id);
+	@$username = mysql_escape_string($request->username);
 	$sql = "SELECT u.id, u.lastLogin
 		FROM users u JOIN members m ON u.memberId = m.id 
 		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='Z'";
@@ -127,8 +127,8 @@ private function isLoggedAsAdmin($request) {
 }
 
 private function isLogged($request) {
-	@$session_id = mysql_real_escape_string($request->session_id);
-	@$username = mysql_real_escape_string($request->username);
+	@$session_id = mysql_escape_string($request->session_id);
+	@$username = mysql_escape_string($request->username);
 	$sql = "SELECT id, lastLogin FROM users WHERE username = '$username' AND sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
@@ -150,7 +150,7 @@ function getMembersList() {
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
 		$toReturn = array();
-		@$old = mysql_real_escape_string($request->old);
+		@$old = mysql_escape_string($request->old);
 		if (is_numeric($old)) {
 			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.type, (SELECT expirationDate
 									FROM payments p
@@ -193,7 +193,7 @@ function getMembersShortList() {
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
 		$toReturn = array();
-		@$old = mysql_real_escape_string($request->old);
+		@$old = mysql_escape_string($request->old);
 		if (is_numeric($old)) {
 			$sql = "SELECT m.id, m.firstName, m.lastName
 				FROM members m LEFT JOIN users u ON m.id = u.memberId
@@ -221,8 +221,8 @@ function setDeclaration() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$id = mysql_real_escape_string($request->member_id);
-		@$declaration = mysql_real_escape_string($request->declaration);
+		@$id = mysql_escape_string($request->member_id);
+		@$declaration = mysql_escape_string($request->declaration);
 		if (!isset($declaration)) {
 			$declaration = 0;
 		}
@@ -244,8 +244,8 @@ function setAegeeEmail() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$id = mysql_real_escape_string($request->member_id);
-		@$aegeeEmail = mysql_real_escape_string($request->aegeeEmail);
+		@$id = mysql_escape_string($request->member_id);
+		@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
 		if (!isset($aegeeEmail)) {
 			$aegeeEmail = 0;
 		}
@@ -267,8 +267,8 @@ function setConnectedToList() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$id = mysql_real_escape_string($request->member_id);
-		@$connectedToList = mysql_real_escape_string($request->connectedToList);
+		@$id = mysql_escape_string($request->member_id);
+		@$connectedToList = mysql_escape_string($request->connectedToList);
 		if (!isset($connectedToList)) {
 			$connectedToList = 0;
 		}
@@ -313,29 +313,29 @@ function saveMember() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$firstName = mysql_real_escape_string($request->firstName);
-		@$lastName = mysql_real_escape_string($request->lastName);
+		@$firstName = mysql_escape_string($request->firstName);
+		@$lastName = mysql_escape_string($request->lastName);
 		$accessionDate = new DateTime(substr($request->accessionDate, 0, 23), new DateTimeZone('Poland'));
-		@$phone = mysql_real_escape_string($request->phone);
+		@$phone = mysql_escape_string($request->phone);
 		$phoneRegex = "/[0-9]{9}/";
-		@$privateEmail = mysql_real_escape_string($request->privateEmail);
-		@$aegeeEmail = mysql_real_escape_string($request->aegeeEmail);
+		@$privateEmail = mysql_escape_string($request->privateEmail);
+		@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
 		if (!isset($aegeeEmail)) {
 			$aegeeEmail = 0;
 		}
 		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
-		@$cardNumber = mysql_real_escape_string($request->cardNumber);
+		@$cardNumber = mysql_escape_string($request->cardNumber);
 		$cardNumberRegex = "/[a-zA-Z0-9]{6}-[a-zA-Z0-9]{6}/";
-		@$declaration = mysql_real_escape_string($request->declaration);
+		@$declaration = mysql_escape_string($request->declaration);
 		if (!isset($declaration)) {
 			$declaration = 0;
 		}
-		@$connectedToList = mysql_real_escape_string($request->connectedToList);
+		@$connectedToList = mysql_escape_string($request->connectedToList);
 		if (!isset($connectedToList)) {
 			$connectedToList = 0;
 		}
-		@$mentorId = mysql_real_escape_string($request->mentorId);
-		@$type = mysql_real_escape_string($request->type);
+		@$mentorId = mysql_escape_string($request->mentorId);
+		@$type = mysql_escape_string($request->type);
 		if (!isset($type)) {
 			$type = 'C';
 		}
@@ -376,30 +376,30 @@ function changeMember() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$id = mysql_real_escape_string($request->id);
-		@$firstName = mysql_real_escape_string($request->firstName);
-		@$lastName = mysql_real_escape_string($request->lastName);
+		@$id = mysql_escape_string($request->id);
+		@$firstName = mysql_escape_string($request->firstName);
+		@$lastName = mysql_escape_string($request->lastName);
 		$accessionDate = new DateTime(substr($request->accessionDate, 0, 23), new DateTimeZone('Poland'));
-		@$phone = mysql_real_escape_string($request->phone);
+		@$phone = mysql_escape_string($request->phone);
 		$phoneRegex = "/[0-9]{9}/";
-		@$privateEmail = mysql_real_escape_string($request->privateEmail);
-		@$aegeeEmail = mysql_real_escape_string($request->aegeeEmail);
+		@$privateEmail = mysql_escape_string($request->privateEmail);
+		@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
 		if (!isset($aegeeEmail)) {
 			$aegeeEmail = 0;
 		}
 		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
-		@$cardNumber = mysql_real_escape_string($request->cardNumber);
+		@$cardNumber = mysql_escape_string($request->cardNumber);
 		$cardNumberRegex = "/[a-zA-Z0-9]{6}-[a-zA-Z0-9]{6}/";
-		@$declaration = mysql_real_escape_string($request->declaration);
+		@$declaration = mysql_escape_string($request->declaration);
 		if (!isset($declaration)) {
 			$declaration = 0;
 		}
-		@$connectedToList = mysql_real_escape_string($request->connectedToList);
+		@$connectedToList = mysql_escape_string($request->connectedToList);
 		if (!isset($connectedToList)) {
 			$connectedToList = 0;
 		}
-		@$mentorId = mysql_real_escape_string($request->mentorId);
-		@$type = mysql_real_escape_string($request->type);
+		@$mentorId = mysql_escape_string($request->mentorId);
+		@$type = mysql_escape_string($request->type);
 		if (!isset($type)) {
 			$type = 'C';
 		}
@@ -473,8 +473,8 @@ function getUserProfile() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$session_id = mysql_real_escape_string($request->session_id);
-		@$username = mysql_real_escape_string($request->username);
+		@$session_id = mysql_escape_string($request->session_id);
+		@$username = mysql_escape_string($request->username);
 		$sql = "SELECT u.id, u.username, m.firstName, m.lastName, m.privateEmail 
 				FROM users u JOIN members m ON u.memberId = m.id 
 				WHERE username = '$username' AND sessionId = '$session_id'";
@@ -492,10 +492,10 @@ function setUserProfile() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$session_id = mysql_real_escape_string($request->session_id);
-		@$username = mysql_real_escape_string($request->username);
+		@$session_id = mysql_escape_string($request->session_id);
+		@$username = mysql_escape_string($request->username);
 		$valid = true;
-		@$currentPassword = mysql_real_escape_string($request->currentPassword);
+		@$currentPassword = mysql_escape_string($request->currentPassword);
 		if (!isset($currentPassword) || strlen($currentPassword) < 5) {
 			$this->response($this->json(array('code' => 'currentPassword')), 306);
 			$valid = false;
@@ -512,7 +512,7 @@ function setUserProfile() {
 			}
 		}
 		
-		@$password = mysql_real_escape_string($request->password);
+		@$password = mysql_escape_string($request->password);
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
 			$valid = false;
@@ -538,13 +538,13 @@ function setNewUser() {
 	if ($this->isLoggedAsAdmin($request)) {
 		$valid = true;	
 
-		@$username = mysql_real_escape_string($request->_username);
+		@$username = mysql_escape_string($request->_username);
 		if (!isset($username) || strlen($username) < 5) {
 			$this->response($this->json(array('code' => 'username')), 306);
 			$valid = false;
 		}
 		
-		@$password = mysql_real_escape_string($request->password);
+		@$password = mysql_escape_string($request->password);
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
 			$valid = false;
@@ -552,7 +552,7 @@ function setNewUser() {
 			$password = md5($password);
 		}
 
-		@$memberId = mysql_real_escape_string($request->memberId);
+		@$memberId = mysql_escape_string($request->memberId);
 		if (!isset($memberId) || !is_numeric($memberId)) {
 			$this->response($this->json(array('code' => 'memberId')), 306);
 			$valid = false;
@@ -577,13 +577,13 @@ function setNewPassword() {
 	if ($this->isLoggedAsAdmin($request)) {
 		$valid = true;	
 
-		@$memberId = mysql_real_escape_string($request->memberId);
+		@$memberId = mysql_escape_string($request->memberId);
 		if (!isset($memberId) || !is_numeric($memberId)) {
 			$this->response($this->json(array('code' => 'memberId')), 306);
 			$valid = false;
 		}
 		
-		@$password = mysql_real_escape_string($request->password);
+		@$password = mysql_escape_string($request->password);
 		if (!isset($password) || strlen($password) < 5) {
 			$this->response($this->json(array('code' => 'password')), 306);
 			$valid = false;
@@ -607,7 +607,7 @@ function getMemberDetails() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$memberId = mysql_real_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->member_id);
 		if (is_numeric($memberId)) {
 			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
 					FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
@@ -629,7 +629,7 @@ function getPaymentsForMember() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$memberId = mysql_real_escape_string($request->memberId);
+		@$memberId = mysql_escape_string($request->memberId);
 		if (is_numeric($memberId)) {
 			$toReturn = array();
 			$sql = "SELECT id, amount, paymentDate, expirationDate, type
@@ -655,9 +655,9 @@ function removeUser(){
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$id = mysql_real_escape_string($request->id);
+		@$id = mysql_escape_string($request->id);
 		if (is_numeric($id)) {
-			@$username = mysql_real_escape_string($request->_username);
+			@$username = mysql_escape_string($request->_username);
 			$sql = "SELECT * FROM users WHERE username = '$username' AND id = '$id'";
 			$result=$this->mysqli->query($sql);
 			if(mysqli_num_rows($result) == 0) {
@@ -683,13 +683,13 @@ function setNewPayment() {
 	if ($this->isLoggedAsAdmin($request)) {
 		$valid = true;	
 
-		@$memberId = mysql_real_escape_string($request->memberId);
+		@$memberId = mysql_escape_string($request->memberId);
 		if (!isset($memberId) || !is_numeric($memberId)) {
 			$this->response($this->json(array('code' => 'memberId')), 306);
 			$valid = false;
 		}
 		
-		@$paymentDate = mysql_real_escape_string($request->paymentDate);
+		@$paymentDate = mysql_escape_string($request->paymentDate);
 		if (!isset($paymentDate)) {
 			$this->response($this->json(array('code' => 'paymentDate')), 306);
 			$valid = false;
@@ -697,13 +697,13 @@ function setNewPayment() {
 			$paymentDate = new DateTime(substr($request->paymentDate, 0, 23), new DateTimeZone('Poland'));
 		}
 
-		@$type = mysql_real_escape_string($request->type);
+		@$type = mysql_escape_string($request->type);
 		if (!isset($type) || !is_numeric($type)) {
 			$this->response($this->json(array('code' => 'type')), 306);
 			$valid = false;
 		}
 
-		@$expirationDate = mysql_real_escape_string($request->expirationDate);
+		@$expirationDate = mysql_escape_string($request->expirationDate);
 		if (!isset($expirationDate)) {
 			$this->response($this->json(array('code' => 'expirationDate')), 306);
 			$valid = false;
@@ -711,7 +711,7 @@ function setNewPayment() {
 			$expirationDate = new DateTime(substr($request->expirationDate, 0, 23), new DateTimeZone('Poland'));
 		}
 
-		@$amount = mysql_real_escape_string($request->amount);
+		@$amount = mysql_escape_string($request->amount);
 		if (!isset($amount) || !is_numeric($amount)) {
 			$this->response($this->json(array('code' => 'amount')), 306);
 			$valid = false;
@@ -719,8 +719,8 @@ function setNewPayment() {
 			$amount = number_format($amount, 2);
 		}
 
-		@$sessionId = mysql_real_escape_string($request->session_id);
-		@$username = mysql_real_escape_string($request->username);
+		@$sessionId = mysql_escape_string($request->session_id);
+		@$username = mysql_escape_string($request->username);
 		$sql = "SELECT m.id FROM users u JOIN members m ON u.memberId = m.id 
 			WHERE u.username = '$username' AND u.sessionId='$sessionId'";
 		$result = $this->mysqli->query($sql);
