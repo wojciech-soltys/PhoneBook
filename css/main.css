@@ -11,6 +11,10 @@ body, html {
 	padding: 0;
 }
 
+h1, h2, h3, h4, h5, h6, p, div, body {
+	font-family: Lato !important;
+}
+
 body, p, div {
 	font-size: 13px;
 }
@@ -68,7 +72,6 @@ md-sidenav md-toolbar {
 md-toolbar .menu-header {
 	height: 37px;
 	width: auto;
-	font-family: 'Lato';
 }
 
 md-toolbar img {
@@ -143,10 +146,6 @@ md-menu-bar md-menu.md-open > button {
 
 .main-view .md-toolbar-tools {
 	width: 30%;
-}
-
-.right-view md-toolbar h1.md-toolbar-tools {
-	font-family: Lato;
 }
 
 md-toolbar.main-toolbar a.btn, md-toolbar.main-toolbar button.btn {
@@ -225,7 +224,6 @@ member-edit-form form md-input-container.md-input-has-value label:not(.md-no-flo
 }
 
 member-edit-form form h4 {
-	font-family: Lato;
 	font-weight: bold;
 	margin-left: -16px;
 }
@@ -340,7 +338,6 @@ form h4 {
 	color: rgba(0, 0, 0, 0.45);
 	font-size: 17px;
 	padding-left: 3px;
-	font-family: Lato;
 	font-weight: bold;
 }
 
@@ -355,11 +352,4 @@ form md-datepicker {
 .right-view form md-input-container, .right-view form .container {
 	margin-bottom: 14px;
 	margin-top: 14px;
-}
-
-.no-content {
-	text-align: center;
-	font-size: 25px;
-	color: rgba(0, 0, 0, 0.6);
-	margin-top: 8%;
 }

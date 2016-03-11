@@ -222,13 +222,13 @@ function setDeclaration() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$id = mysql_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->memberId);
 		@$declaration = mysql_escape_string($request->declaration);
 		if (!isset($declaration)) {
 			$declaration = 0;
 		}
-		if($id != null && is_numeric($id) && is_numeric($declaration)) {
-			$sql = "UPDATE members SET declaration = $declaration WHERE id = $id";
+		if($memberId != null && is_numeric($memberId) && is_numeric($declaration)) {
+			$sql = "UPDATE members SET declaration = $declaration WHERE id = $memberId";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -245,13 +245,13 @@ function setAegeeEmail() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$id = mysql_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->memberId);
 		@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
 		if (!isset($aegeeEmail)) {
 			$aegeeEmail = 0;
 		}
-		if($id != null && is_numeric($id) && is_numeric($aegeeEmail)) {
-			$sql = "UPDATE members SET aegeeEmail = $aegeeEmail WHERE id = $id";
+		if($memberId != null && is_numeric($memberId) && is_numeric($aegeeEmail)) {
+			$sql = "UPDATE members SET aegeeEmail = $aegeeEmail WHERE id = $memberId";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -268,13 +268,13 @@ function setConnectedToList() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$id = mysql_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->memberId);
 		@$connectedToList = mysql_escape_string($request->connectedToList);
 		if (!isset($connectedToList)) {
 			$connectedToList = 0;
 		}
-		if($id != null && is_numeric($id) && is_numeric($connectedToList)) {
-			$sql = "UPDATE members SET connectedToList = $connectedToList WHERE id = $id";
+		if($memberId != null && is_numeric($memberId) && is_numeric($connectedToList)) {
+			$sql = "UPDATE members SET connectedToList = $connectedToList WHERE id = $memberId";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -353,24 +353,26 @@ function saveMember() {
 			$mentorId != null && is_numeric($mentorId) &&
 			$type != null) {
 			$sql = "INSERT INTO members (firstName, lastName, accessionDate,
-		phone, privateEmail, aegeeEmail, birthDate, cardNumber, 
-		declaration, connectedToList, mentorId, type, old) 
-		VALUES ('$firstName', '$lastName', '"
-		.$accessionDate->format('Y-m-d').
-		"', '$phone', '$privateEmail', $aegeeEmail, '"
-		.$birthDate->format('Y-m-d').
-		"', '$cardNumber', $declaration, $connectedToList, 
-		$mentorId, '$type', 0)";
-		$result = $this->mysqli->query($sql);
-		if ($result) {
-			$this->response('', 200);
+				phone, privateEmail, aegeeEmail, birthDate, cardNumber, 
+				declaration, connectedToList, mentorId, type, old) 
+				VALUES ('$firstName', '$lastName', '"
+					.$accessionDate->format('Y-m-d').
+					"', '$phone', '$privateEmail', $aegeeEmail, '"
+					.$birthDate->format('Y-m-d').
+					"', '$cardNumber', $declaration, $connectedToList, 
+					$mentorId, '$type', 0)";
+				$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
+			}
 		} else {
 			$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
 		}
 	} else {
 		$this->response($this->json(array('message'=>'Nie wszystkie pola zostały wypełnione')), 400);
 	}
-}
 }
 
 function changeMember() {
@@ -418,29 +420,31 @@ function changeMember() {
 			$mentorId != null && is_numeric($mentorId) &&
 			$type != null) {
 			$sql = "UPDATE members SET 
-		firstName = '$firstName',
-		lastName = '$lastName',
-		accessionDate = '".$accessionDate->format('Y-m-d')."',
-		phone = '$phone',
-		privateEmail = '$privateEmail',
-		aegeeEmail = $aegeeEmail,
-		birthDate = '".$birthDate->format('Y-m-d')."',
-		cardNumber = '$cardNumber',
-		declaration = $declaration,
-		connectedToList = $connectedToList,
-		mentorId = $mentorId,
-		type = '$type'
-		WHERE id = $id";
-		$result = $this->mysqli->query($sql);
-		if ($result) {
-			$this->response('', 200);
+						firstName = '$firstName',
+						lastName = '$lastName',
+						accessionDate = '".$accessionDate->format('Y-m-d')."',
+						phone = '$phone',
+						privateEmail = '$privateEmail',
+						aegeeEmail = $aegeeEmail,
+						birthDate = '".$birthDate->format('Y-m-d')."',
+						cardNumber = '$cardNumber',
+						declaration = $declaration,
+						connectedToList = $connectedToList,
+						mentorId = $mentorId,
+						type = '$type'
+					WHERE id = $id";
+				$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
+			}
 		} else {
 			$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
 		}
 	} else {
 		$this->response($this->json(array('message'=>'Nie wszystkie pola zostały wypełnione')), 400);
 	}
-}
 }
 
 function getUsersList() {
@@ -561,7 +565,7 @@ function setNewUser() {
 
 		if ($valid) {
 			$sql = "INSERT INTO users (username, password, memberId) 
-			VALUES ('$username', '$password', $memberId)";
+				VALUES ('$username', '$password', $memberId)";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -608,11 +612,11 @@ function getMemberDetails() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$memberId = mysql_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->memberId);
 		if (is_numeric($memberId)) {
 			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
-			FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
-			WHERE m.id = '$memberId'";
+					FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
+					WHERE m.id = '$memberId'";
 			$result = $this->mysqli->query($sql);
 			if (mysqli_num_rows($result) > 0) {
 				$row = mysqli_fetch_assoc($result);
@@ -634,9 +638,9 @@ function getPaymentsForMember() {
 		if (is_numeric($memberId)) {
 			$toReturn = array();
 			$sql = "SELECT id, amount, paymentDate, expirationDate, type
-			FROM payments
-			WHERE memberId = '$memberId'
-			ORDER BY paymentDate DESC";
+					FROM payments
+					WHERE memberId = '$memberId'
+					ORDER BY paymentDate DESC";
 			$result = $this->mysqli->query($sql);
 			if (mysqli_num_rows($result) > 0) {
 				while($row = mysqli_fetch_assoc($result)) {					
@@ -723,7 +727,7 @@ function setNewPayment() {
 		@$sessionId = mysql_escape_string($request->session_id);
 		@$username = mysql_escape_string($request->username);
 		$sql = "SELECT m.id FROM users u JOIN members m ON u.memberId = m.id 
-		WHERE u.username = '$username' AND u.sessionId='$sessionId'";
+			WHERE u.username = '$username' AND u.sessionId='$sessionId'";
 		$result = $this->mysqli->query($sql);
 		if(mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);
@@ -800,6 +804,44 @@ function getStatistics() {
 			$this->response($this->json(array('membersCount' => $membersCount, 'membersCountWithPayment' => $membersCountWithPayment, 'membersAegeeMail' => $membersAegeeMail, 'membersDeclaration' => $membersDeclaration, 'membersConnectedToList' => $membersConnectedToList, 'mentorsCount' => $mentorsCount)), 200);
 		} else {
 			$this->response('', 401);
+		}
+	}
+}
+
+function moveToOld() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		@$memberId = mysql_escape_string($request->memberId);
+		if($memberId != null && is_numeric($memberId)) {
+			$sql = "UPDATE members SET old = 1 WHERE id = $memberId";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 400);
+			}
+		} else {
+			$this->response('', 400);
+		}
+	}
+}
+
+function moveToCurrent() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		@$memberId = mysql_escape_string($request->memberId);
+		if($memberId != null && is_numeric($memberId)) {
+			$sql = "UPDATE members SET old = 0 WHERE id = $memberId";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 400);
+			}
+		} else {
+			$this->response('', 400);
 		}
 	}
 }
