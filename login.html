@@ -3,47 +3,34 @@
 <head>
 	<meta charset="UTF-8">
 	<script src="js/libs/angular.min.js"></script>
-	<script src="js/libs/angular-animate.min.js"></script>
-	<script src="js/libs/angular-ui-router.min.js"></script>
-	<script src="js/libs/angular-aria.min.js"></script>
-	<script src="js/libs/angular-messages.min.js"></script>
-	<script src="js/libs/angular-material.min.js"></script>
-	<script src="js/libs/ui-bootstrap-tpls.min.js"></script>
 	<script src="js/login.js"></script>
 	<script src="js/services/login-services.js"></script>
 	<title>Logowanie</title>
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/login.css">
 </head>
 <body class="login">
-	<div id="login" ng-controller="loginCtrl" ng-cloak>
-		<div class="title"><h3>Portal członków</h3><h4>Europejskie Forum Studentów AEGEE-Gliwice</h4></div>
+	<div id="login" ng-controller="loginCtrl">
+		<div class="title">Portal członków Europejskie Forum Studentów AEGEE-Gliwice</div>
 		<div class="form">
-			<div layout-gt-sm="row">
-				<md-input-container class="md-block" flex-gt-sm>
-					<label>Nazwa użytkownika</label>
-					<input id="username" name="username" ng-model="user.username" required autocomplete="off">
-				</md-input-container>
+			<div class="form-group">
+				<label>Nazwa użytkownika
+					<br />
+					<input type="text" id="username" name="username" ng-model="user.username"/>
+				</label>
 			</div>
-
-			<div layout-gt-sm="row">
-				<md-input-container class="md-block" flex-gt-sm>
-					<label>Hasło</label>
-					<input my-enter="login()" type="password" id="password" name="password" ng-model="user.password" required autocomplete="off">
-				</md-input-container>
+			<div class="form-group">
+				<label>Hasło</label>
+				<input my-enter="login()" type="password" id="password" name="password" ng-model="user.password"/>
 			</div>
-			
 			<div class="error-message" ng-show="errorMessage != ''">
-				<h4>Błąd</h4>
+				<strong>Błąd</strong>
 				<div>
 					{{errorMessage}}
-				</div>
+			</div>
 			</div>
 			<div class="submit-group">
-				<md-button id="submit" ng-click="login()">Zaloguj się</md-button>
+				<button id="submit" ng-click="login()">Zaloguj się</button>
 			</div>
 		</div>
 	</div>

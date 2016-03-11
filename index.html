@@ -24,7 +24,6 @@
 	<script src="js/userEdit.js"></script>
 	<script src="js/userProfile.js"></script>
 	<script src="js/users-card.js"></script>
-	<script src="js/reports.js"></script>
 	<script src="js/services/login-services.js"></script>
 	<script src="js/services/inform-services.js"></script>
 	<script src="js/services/members-services.js"></script>
@@ -53,7 +52,7 @@
 					</li>
 
 					<li>
-						<md-button ui-sref="memberEdit" ng-show="userRole === 'ADM'" ng-class="{active: isActive('/memberEdit')}">
+						<md-button ui-sref="memberEdit" ng-class="{active: isActive('/memberEdit')}">
 							Dodaj członka
 						</md-button>
 					</li>
@@ -63,14 +62,14 @@
 							Lista byłych członków
 						</md-button>
 					</li>
-
+<!--
 					<li>
 						<md-button ui-sref="reports" ng-class="{active: isActive('/reports')}">
 							Raporty
 						</md-button>
 					</li>
 
-<!--					<li>
+					<li>
 						<md-button ui-sref="statistics" ng-class="{active: isActive('/statistics')}">
 							Statystyki
 						</md-button>

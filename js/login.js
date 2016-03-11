@@ -1,4 +1,4 @@
-var myApp=angular.module('login', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'login.loginFactory']) 
+var myApp=angular.module('login', ['login.loginFactory'])
 .controller('loginCtrl', ['$scope', '$http', '$window', 'loginService', function ($scope, $http, $window, loginService) {
 	'use strict';
 	$scope.errorMessage = '';
