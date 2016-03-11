@@ -96,7 +96,7 @@ function isUserLogged() {
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
 		if (time() - strtotime($row['lastLogin']) < 1800) {
-		$this->response($this->json(array('firstName' => $row['firstName'], 'lastName' => $row['lastName'], 'url' => 'index.html', 'isLoggedIn' => true)), 200);
+			$this->response($this->json(array('firstName' => $row['firstName'], 'lastName' => $row['lastName'], 'url' => 'index.html', 'isLoggedIn' => true)), 200);
 		} else {
 			$this->response('', 401);
 		}
@@ -109,8 +109,8 @@ private function isLoggedAsAdmin($request) {
 	@$session_id = mysql_escape_string($request->session_id);
 	@$username = mysql_escape_string($request->username);
 	$sql = "SELECT u.id, u.lastLogin
-		FROM users u JOIN members m ON u.memberId = m.id 
-		WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='Z'";
+	FROM users u JOIN members m ON u.memberId = m.id 
+	WHERE u.username = '$username' AND u.sessionId='$session_id' AND m.type='Z'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
@@ -152,12 +152,13 @@ function getMembersList() {
 		$toReturn = array();
 		@$old = mysql_escape_string($request->old);
 		if (is_numeric($old)) {
-			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.type, (SELECT expirationDate
-									FROM payments p
-									WHERE p.memberId = m.id
-									ORDER BY p.expirationDate DESC
-									LIMIT 1
-									) as 'expirationDate'
+			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.type, 
+					(SELECT expirationDate
+					FROM payments p
+					WHERE p.memberId = m.id
+					ORDER BY p.expirationDate DESC
+					LIMIT 1
+					) AS 'expirationDate'
 				FROM members m 
 				WHERE m.old = $old AND m.id > 0
 				ORDER BY m.lastName ASC";
@@ -196,9 +197,9 @@ function getMembersShortList() {
 		@$old = mysql_escape_string($request->old);
 		if (is_numeric($old)) {
 			$sql = "SELECT m.id, m.firstName, m.lastName
-				FROM members m LEFT JOIN users u ON m.id = u.memberId
-				WHERE m.old = 0 AND m.id > 0 and u.memberID IS NULL
-				ORDER BY m.lastName ASC";
+			FROM members m LEFT JOIN users u ON m.id = u.memberId
+			WHERE m.old = 0 AND m.id > 0 and u.memberID IS NULL
+			ORDER BY m.lastName ASC";
 			$result = $this->mysqli->query($sql);
 			if (mysqli_num_rows($result) > 0) {
 				while($row = mysqli_fetch_assoc($result)) {					
@@ -292,9 +293,9 @@ function getMentors() {
 	if ($this->isLogged($request)) {
 		$toReturn = array();
 		$sql = "SELECT id, CONCAT(firstName, ' ', lastName) AS 'name'
-			FROM members 
-			WHERE old = 0 AND mentorId = 0
-			ORDER BY lastName ASC";
+		FROM members 
+		WHERE old = 0 AND mentorId = 0
+		ORDER BY lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {					
@@ -352,24 +353,24 @@ function saveMember() {
 			$mentorId != null && is_numeric($mentorId) &&
 			$type != null) {
 			$sql = "INSERT INTO members (firstName, lastName, accessionDate,
-				phone, privateEmail, aegeeEmail, birthDate, cardNumber, 
-				declaration, connectedToList, mentorId, type, old) 
-				VALUES ('$firstName', '$lastName', '"
-					.$accessionDate->format('Y-m-d').
-					"', '$phone', '$privateEmail', $aegeeEmail, '"
-					.$birthDate->format('Y-m-d').
-					"', '$cardNumber', $declaration, $connectedToList, 
-					$mentorId, '$type', 0)";
-				$result = $this->mysqli->query($sql);
-			if ($result) {
-				$this->response('', 200);
-			} else {
-				$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
-			}
+		phone, privateEmail, aegeeEmail, birthDate, cardNumber, 
+		declaration, connectedToList, mentorId, type, old) 
+		VALUES ('$firstName', '$lastName', '"
+		.$accessionDate->format('Y-m-d').
+		"', '$phone', '$privateEmail', $aegeeEmail, '"
+		.$birthDate->format('Y-m-d').
+		"', '$cardNumber', $declaration, $connectedToList, 
+		$mentorId, '$type', 0)";
+		$result = $this->mysqli->query($sql);
+		if ($result) {
+			$this->response('', 200);
 		} else {
-			$this->response($this->json(array('message'=>'Nie wszystkie pola zostały wypełnione')), 400);
+			$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
 		}
+	} else {
+		$this->response($this->json(array('message'=>'Nie wszystkie pola zostały wypełnione')), 400);
 	}
+}
 }
 
 function changeMember() {
@@ -417,29 +418,29 @@ function changeMember() {
 			$mentorId != null && is_numeric($mentorId) &&
 			$type != null) {
 			$sql = "UPDATE members SET 
-						firstName = '$firstName',
-						lastName = '$lastName',
-						accessionDate = '".$accessionDate->format('Y-m-d')."',
-						phone = '$phone',
-						privateEmail = '$privateEmail',
-						aegeeEmail = $aegeeEmail,
-						birthDate = '".$birthDate->format('Y-m-d')."',
-						cardNumber = '$cardNumber',
-						declaration = $declaration,
-						connectedToList = $connectedToList,
-						mentorId = $mentorId,
-						type = '$type'
-					WHERE id = $id";
-				$result = $this->mysqli->query($sql);
-			if ($result) {
-				$this->response('', 200);
-			} else {
-				$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
-			}
+		firstName = '$firstName',
+		lastName = '$lastName',
+		accessionDate = '".$accessionDate->format('Y-m-d')."',
+		phone = '$phone',
+		privateEmail = '$privateEmail',
+		aegeeEmail = $aegeeEmail,
+		birthDate = '".$birthDate->format('Y-m-d')."',
+		cardNumber = '$cardNumber',
+		declaration = $declaration,
+		connectedToList = $connectedToList,
+		mentorId = $mentorId,
+		type = '$type'
+		WHERE id = $id";
+		$result = $this->mysqli->query($sql);
+		if ($result) {
+			$this->response('', 200);
 		} else {
-			$this->response($this->json(array('message'=>'Nie wszystkie pola zostały wypełnione')), 400);
+			$this->response($this->json(array('message'=>'Błąd zapisu danych')), 400);
 		}
+	} else {
+		$this->response($this->json(array('message'=>'Nie wszystkie pola zostały wypełnione')), 400);
 	}
+}
 }
 
 function getUsersList() {
@@ -448,8 +449,8 @@ function getUsersList() {
 	if ($this->isLogged($request)) {
 		$toReturn = array();
 		$sql = "SELECT u.id, m.firstName, m.lastName, m.privateEmail, u.username, u.memberId, u.lastLogin
-			FROM members m JOIN users u ON m.id = u.memberId
-			ORDER BY m.lastName ASC";
+		FROM members m JOIN users u ON m.id = u.memberId
+		ORDER BY m.lastName ASC";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {					
@@ -476,8 +477,8 @@ function getUserProfile() {
 		@$session_id = mysql_escape_string($request->session_id);
 		@$username = mysql_escape_string($request->username);
 		$sql = "SELECT u.id, u.username, m.firstName, m.lastName, m.privateEmail 
-				FROM users u JOIN members m ON u.memberId = m.id 
-				WHERE username = '$username' AND sessionId = '$session_id'";
+		FROM users u JOIN members m ON u.memberId = m.id 
+		WHERE username = '$username' AND sessionId = '$session_id'";
 		$result = $this->mysqli->query($sql);
 		if (mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);
@@ -560,7 +561,7 @@ function setNewUser() {
 
 		if ($valid) {
 			$sql = "INSERT INTO users (username, password, memberId) 
-				VALUES ('$username', '$password', $memberId)";
+			VALUES ('$username', '$password', $memberId)";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -610,8 +611,8 @@ function getMemberDetails() {
 		@$memberId = mysql_escape_string($request->member_id);
 		if (is_numeric($memberId)) {
 			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
-					FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
-					WHERE m.id = '$memberId'";
+			FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
+			WHERE m.id = '$memberId'";
 			$result = $this->mysqli->query($sql);
 			if (mysqli_num_rows($result) > 0) {
 				$row = mysqli_fetch_assoc($result);
@@ -633,9 +634,9 @@ function getPaymentsForMember() {
 		if (is_numeric($memberId)) {
 			$toReturn = array();
 			$sql = "SELECT id, amount, paymentDate, expirationDate, type
-					FROM payments
-					WHERE memberId = '$memberId'
-					ORDER BY paymentDate DESC";
+			FROM payments
+			WHERE memberId = '$memberId'
+			ORDER BY paymentDate DESC";
 			$result = $this->mysqli->query($sql);
 			if (mysqli_num_rows($result) > 0) {
 				while($row = mysqli_fetch_assoc($result)) {					
@@ -722,7 +723,7 @@ function setNewPayment() {
 		@$sessionId = mysql_escape_string($request->session_id);
 		@$username = mysql_escape_string($request->username);
 		$sql = "SELECT m.id FROM users u JOIN members m ON u.memberId = m.id 
-			WHERE u.username = '$username' AND u.sessionId='$sessionId'";
+		WHERE u.username = '$username' AND u.sessionId='$sessionId'";
 		$result = $this->mysqli->query($sql);
 		if(mysqli_num_rows($result) > 0) {
 			$row = mysqli_fetch_assoc($result);
@@ -740,6 +741,65 @@ function setNewPayment() {
 			}
 		} else {
 			$this->response($this->json(array('code' => 'username')), 306);
+		}
+	}
+}
+
+function getStatistics() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		$sql = "SELECT count(id) AS 'membersCount' FROM `members` WHERE id > 0 AND old = 0";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$membersCount = $row['membersCount'];
+		}
+		date_default_timezone_set('UTC');
+		$currentDate = date("Y-m-d");
+
+		$sql = "SELECT count(id) AS 'membersCountWithPayment' FROM `members` WHERE id > 0 AND old = '0' AND id IN (
+				SELECT memberId
+				FROM `payments`
+				WHERE expirationDate >= STR_TO_DATE('$currentDate', '%Y-%m-%d'))";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$membersCountWithPayment = $row['membersCountWithPayment'];
+		}
+
+		$sql = "SELECT count(id) AS 'membersAegeeMail' FROM `members` WHERE id > 0 AND old = 0 AND aegeeEmail = 1";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$membersAegeeMail = $row['membersAegeeMail'];
+		}
+
+		$sql = "SELECT count(id) AS 'membersDeclaration' FROM `members` WHERE id > 0 AND old = 0 AND declaration = 1";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$membersDeclaration = $row['membersDeclaration'];
+		}
+
+		$sql = "SELECT count(id) AS 'membersConnectedToList' FROM `members` WHERE id > 0 AND old = 0 AND connectedToList = 1";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$membersConnectedToList = $row['membersConnectedToList'];
+		}
+
+		$sql = "SELECT count(id) AS 'mentorsCount' FROM `members` WHERE id > 0 AND old = '0' AND mentorId = 0";
+		$result = $this->mysqli->query($sql);
+		if (mysqli_num_rows($result) > 0) {
+			$row = mysqli_fetch_assoc($result);
+			$mentorsCount = $row['mentorsCount'];
+		}
+
+		if ($membersCount != null && $membersCountWithPayment != null && $membersAegeeMail != null && $membersDeclaration!= null && $membersConnectedToList != null && $mentorsCount != null) {
+			$this->response($this->json(array('membersCount' => $membersCount, 'membersCountWithPayment' => $membersCountWithPayment, 'membersAegeeMail' => $membersAegeeMail, 'membersDeclaration' => $membersDeclaration, 'membersConnectedToList' => $membersConnectedToList, 'mentorsCount' => $mentorsCount)), 200);
+		} else {
+			$this->response('', 401);
 		}
 	}
 }

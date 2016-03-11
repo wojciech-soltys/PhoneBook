@@ -163,5 +163,16 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
+	membersService.getStatistics = function() {
+		return $http({
+			method: 'post',
+			url: 'getStatistics',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID')
+			}
+		});
+	};
+
 	return membersService;
 }]);
