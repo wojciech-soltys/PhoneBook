@@ -34,6 +34,7 @@ app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'in
 			membersService.moveToOld($scope.memberId)
 			.success(function () {
 				informService.showSimpleToast('Przeniesiono członka do byłych członków');
+				$scope.member.old = 1;
 			})
 			.error(function (data, status) {
 				informService.showSimpleToast('Błąd zapisu');
@@ -47,6 +48,7 @@ app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'in
 			membersService.moveToCurrent($scope.memberId)
 			.success(function () {
 				informService.showSimpleToast('Przeniesiono członka do aktualnych członków');
+				$scope.member.old = 0;
 			})
 			.error(function (data, status) {
 				informService.showSimpleToast('Błąd zapisu');
