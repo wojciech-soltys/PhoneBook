@@ -747,7 +747,7 @@ function setNewPayment() {
 function moveToOld() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	if ($this->isLogged($request)) {
+	if ($this->isLoggedAsAdmin($request)) {
 		@$memberId = mysql_escape_string($request->memberId);
 		if($memberId != null && is_numeric($memberId)) {
 			$sql = "UPDATE members SET old = 1 WHERE id = $memberId";
@@ -766,7 +766,7 @@ function moveToOld() {
 function moveToCurrent() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	if ($this->isLogged($request)) {
+	if ($this->isLoggedAsAdmin($request)) {
 		@$memberId = mysql_escape_string($request->memberId);
 		if($memberId != null && is_numeric($memberId)) {
 			$sql = "UPDATE members SET old = 0 WHERE id = $memberId";
