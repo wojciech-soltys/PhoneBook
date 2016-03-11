@@ -73,7 +73,9 @@
 			</div>
 		</div>
 		<div class="actions-row" ng-show="userRole === 'ADM'" layout="row" layout-align="end center">
-			<md-button id="save" ui-sref="memberEdit({id: member.id})">Edytuj</md-button>
+			<md-button ng-show="member.old === '0'" ng-click="moveToOld()">Przenieś do byłych członków</md-button>
+			<md-button ng-show="member.old === '1'" ng-click="moveToCurrent()">Przywróć członka</md-button>
+			<md-button ui-sref="memberEdit({id: member.id})">Edytuj</md-button>
 		</div>
 	</form>
 	<payments-table></payments-table>

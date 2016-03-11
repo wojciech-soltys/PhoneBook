@@ -221,13 +221,13 @@ function setDeclaration() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLoggedAsAdmin($request)) {
-		@$id = mysql_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->memberId);
 		@$declaration = mysql_escape_string($request->declaration);
 		if (!isset($declaration)) {
 			$declaration = 0;
 		}
-		if($id != null && is_numeric($id) && is_numeric($declaration)) {
-			$sql = "UPDATE members SET declaration = $declaration WHERE id = $id";
+		if($memberId != null && is_numeric($memberId) && is_numeric($declaration)) {
+			$sql = "UPDATE members SET declaration = $declaration WHERE id = $memberId";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -244,13 +244,13 @@ function setAegeeEmail() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$id = mysql_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->memberId);
 		@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
 		if (!isset($aegeeEmail)) {
 			$aegeeEmail = 0;
 		}
-		if($id != null && is_numeric($id) && is_numeric($aegeeEmail)) {
-			$sql = "UPDATE members SET aegeeEmail = $aegeeEmail WHERE id = $id";
+		if($memberId != null && is_numeric($memberId) && is_numeric($aegeeEmail)) {
+			$sql = "UPDATE members SET aegeeEmail = $aegeeEmail WHERE id = $memberId";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -267,13 +267,13 @@ function setConnectedToList() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$id = mysql_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->memberId);
 		@$connectedToList = mysql_escape_string($request->connectedToList);
 		if (!isset($connectedToList)) {
 			$connectedToList = 0;
 		}
-		if($id != null && is_numeric($id) && is_numeric($connectedToList)) {
-			$sql = "UPDATE members SET connectedToList = $connectedToList WHERE id = $id";
+		if($memberId != null && is_numeric($memberId) && is_numeric($connectedToList)) {
+			$sql = "UPDATE members SET connectedToList = $connectedToList WHERE id = $memberId";
 			$result = $this->mysqli->query($sql);
 			if ($result) {
 				$this->response('', 200);
@@ -607,7 +607,7 @@ function getMemberDetails() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	if ($this->isLogged($request)) {
-		@$memberId = mysql_escape_string($request->member_id);
+		@$memberId = mysql_escape_string($request->memberId);
 		if (is_numeric($memberId)) {
 			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
 					FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
@@ -740,6 +740,44 @@ function setNewPayment() {
 			}
 		} else {
 			$this->response($this->json(array('code' => 'username')), 306);
+		}
+	}
+}
+
+function moveToOld() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$memberId = mysql_escape_string($request->memberId);
+		if($memberId != null && is_numeric($memberId)) {
+			$sql = "UPDATE members SET old = 1 WHERE id = $memberId";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 400);
+			}
+		} else {
+			$this->response('', 400);
+		}
+	}
+}
+
+function moveToCurrent() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$memberId = mysql_escape_string($request->memberId);
+		if($memberId != null && is_numeric($memberId)) {
+			$sql = "UPDATE members SET old = 0 WHERE id = $memberId";
+			$result = $this->mysqli->query($sql);
+			if ($result) {
+				$this->response('', 200);
+			} else {
+				$this->response('', 400);
+			}
+		} else {
+			$this->response('', 400);
 		}
 	}
 }

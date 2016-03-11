@@ -16,15 +16,43 @@ app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'in
 			.success(function (data) {
 				$scope.member = data;
 			})
-			.error(function () {
+			.error(function (data, status) {
 				informService.showSimpleToast('Błąd pobrania szczegółów członka');
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
 			});
 		};
 		getMembersDetails();
 
 		$scope.clearForm = function() {
 			$rootScope.$emit('clear.new.payments', $scope.memberId);
-		}
-		
+		};
+
+		$scope.moveToOld = function() {
+			membersService.moveToOld($scope.memberId)
+			.success(function () {
+				informService.showSimpleToast('Przeniesiono członka do byłych członków');
+			})
+			.error(function (data, status) {
+				informService.showSimpleToast('Błąd zapisu');
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
+			});
+		};
+
+		$scope.moveToCurrent = function() {
+			membersService.moveToCurrent($scope.memberId)
+			.success(function () {
+				informService.showSimpleToast('Przeniesiono członka do aktualnych członków');
+			})
+			.error(function (data, status) {
+				informService.showSimpleToast('Błąd zapisu');
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
+			});
+		};		
 
 	}]);
