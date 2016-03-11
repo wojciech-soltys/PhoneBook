@@ -17,7 +17,7 @@
 		</md-card-title-text>
 	</md-card-title>
 	<md-card-actions layout="row" layout-align="end center">
-		<md-button ng-show="userRole === 'ADM'" ng-disabled="(user.username === userLogged)" ng-click="editUser(user)">Edytuj</md-button>
-		<md-button ng-show="userRole === 'ADM'" ng-disabled="(user.username === userLogged)" ng-click="removeUser(user)">Usuń</md-button>
+		<md-button ng-show="isAdmin" ng-disabled="(user.username === userLogged)" ng-click="editUser(user)">Edytuj</md-button>
+		<md-button ng-show="isAdmin" ng-disabled="(user.username === userLogged)" ng-click="removeUser(user)">Usuń</md-button>
 	</md-card-actions>
 </md-card>
