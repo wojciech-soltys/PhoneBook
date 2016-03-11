@@ -89,8 +89,8 @@ function logout(){
 function isUserLogged() {
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
-	@$session_id = mysql_escape_string($request->session_id);
-	@$username = mysql_escape_string($request->username);
+	@$session_id = $request->session_id;
+	@$username = $request->username;
 	$sql = "SELECT u.id, m.firstName, m.lastName, u.lastLogin FROM users u JOIN members m ON u.memberId = m.id WHERE u.username = '$username' AND u.sessionId='$session_id'";
 	$result = $this->mysqli->query($sql);
 	if (mysqli_num_rows($result) > 0) {

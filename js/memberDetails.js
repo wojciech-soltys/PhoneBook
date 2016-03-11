@@ -1,6 +1,7 @@
 app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'informService', 'membersService', 
 	function ($scope, $rootScope, $stateParams, informService, membersService) {
-		$scope.member = {};
+		'use strict';
+		$scope.member = null;
 		$scope.memberId = $stateParams.id;
 		$scope.userRole = localStorage.getItem('UserRole');
 
