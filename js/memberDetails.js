@@ -1,8 +1,8 @@
 app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'informService', 'membersService', 
 	function ($scope, $rootScope, $stateParams, informService, membersService) {
-
-		$scope.member = null;
+		$scope.member = {};
 		$scope.memberId = $stateParams.id;
+		$scope.userRole = localStorage.getItem('UserRole');
 
 		$scope.types = [
 		{id: 'C', name: 'Członek zwyczajny'},

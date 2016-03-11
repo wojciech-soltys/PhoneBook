@@ -72,12 +72,12 @@
 			<div class="md-block" flex-gt-sm>
 			</div>
 		</div>
-		<div class="actions-row" layout="row" layout-align="end center">
+		<div class="actions-row" ng-show="userRole === 'ADM'" layout="row" layout-align="end center">
 			<md-button id="save" ui-sref="memberEdit({id: member.id})">Edytuj</md-button>
 		</div>
 	</form>
 	<payments-table></payments-table>
-	<div class="lock-size" layout="row" layout-align="center center">
+	<div ng-show="userRole === 'ADM'" class="lock-size" layout="row" layout-align="center center">
 		<md-fab-speed-dial ng-click="clearForm(); toggleRight()" ng-hide="isOpenRight()" class="md-fab-bottom-right">
 			<md-fab-trigger>
 				<md-button aria-label="menu" class="md-fab">

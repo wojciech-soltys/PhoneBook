@@ -40,6 +40,8 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			});
 		};
 
+		$scope.userRole = localStorage.getItem('UserRole');
+
 		checkSession();
 
 		$rootScope.$on('edit.profile', function (event, value) {
@@ -155,6 +157,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/userProfile',
 		views: {
 			'contentView': { templateUrl: 'include/userProfile.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
+	.state('reports', {
+		url: '/reports',
+		views: {
+			'contentView': { templateUrl: 'include/reports.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	});
