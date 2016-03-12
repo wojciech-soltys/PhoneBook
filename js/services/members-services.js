@@ -33,7 +33,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
+				memberId: member.id,
 				declaration: member.declaration
 			}
 		});
@@ -46,7 +46,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
+				memberId: member.id,
 				aegeeEmail: member.aegeeEmail
 			}
 		});
@@ -59,7 +59,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: member.id,
+				memberId: member.id,
 				connectedToList: member.connectedToList
 			}
 		});
@@ -130,7 +130,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				member_id: memberId
+				memberId: memberId
 			}
 		});
 	};
@@ -159,6 +159,43 @@ angular.module('main.membersFactory', [])
 				type: payment.type,
 				expirationDate: payment.expirationDate,
 				amount: payment.amount
+			}
+		});
+	};
+
+	membersService.moveToOld = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'moveToOld',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId,
+				old: 1
+			}
+		});
+	};
+
+	membersService.moveToCurrent = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'moveToCurrent',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId,
+				old: 0
+			}
+		});
+	};
+	
+	membersService.getStatistics = function() {
+		return $http({
+			method: 'post',
+			url: 'getStatistics',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID')
 			}
 		});
 	};

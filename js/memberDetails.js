@@ -1,6 +1,7 @@
 app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'informService', 'membersService', 
 	function ($scope, $rootScope, $stateParams, informService, membersService) {
-		$scope.member = {};
+		'use strict';
+		$scope.member = null;
 		$scope.memberId = $stateParams.id;
 		$scope.userRole = localStorage.getItem('UserRole');
 
@@ -16,15 +17,45 @@ app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'in
 			.success(function (data) {
 				$scope.member = data;
 			})
-			.error(function () {
+			.error(function (data, status) {
 				informService.showSimpleToast('Błąd pobrania szczegółów członka');
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
 			});
 		};
 		getMembersDetails();
 
 		$scope.clearForm = function() {
 			$rootScope.$emit('clear.new.payments', $scope.memberId);
-		}
-		
+		};
+
+		$scope.moveToOld = function() {
+			membersService.moveToOld($scope.memberId)
+			.success(function () {
+				informService.showSimpleToast('Przeniesiono członka do byłych członków');
+				$scope.member.old = 1;
+			})
+			.error(function (data, status) {
+				informService.showSimpleToast('Błąd zapisu');
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
+			});
+		};
+
+		$scope.moveToCurrent = function() {
+			membersService.moveToCurrent($scope.memberId)
+			.success(function () {
+				informService.showSimpleToast('Przeniesiono członka do aktualnych członków');
+				$scope.member.old = 0;
+			})
+			.error(function (data, status) {
+				informService.showSimpleToast('Błąd zapisu');
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
+			});
+		};		
 
 	}]);

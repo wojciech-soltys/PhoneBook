@@ -11,6 +11,10 @@ body, html {
 	padding: 0;
 }
 
+h1, h2, h3, h4, h5, h6, p, div, body {
+	font-family: Lato !important;
+}
+
 body, p, div {
 	font-size: 13px;
 }
@@ -28,10 +32,6 @@ form h4.filled {
 	padding-left: 0px;
 }
 
-.table {
-	margin-bottom: 5px !important;
-}
-
 md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar), 
 md-fab-speed-dial.md-fab-bottom-right button,  md-fab-speed-dial.md-fab-bottom-center md-fab-trigger button {
 	background-color: #1468b3!important;
@@ -41,8 +41,6 @@ md-fab-speed-dial.md-fab-bottom-right button,  md-fab-speed-dial.md-fab-bottom-c
 md-input-container input, md-input-container label, md-input-container md-select{
 	font-size: 17px;
 }
-
-
 
 .main-menu, .md-sidenav-left {
 	background-color: #1468b3 !important;
@@ -74,7 +72,6 @@ md-sidenav md-toolbar {
 md-toolbar .menu-header {
 	height: 37px;
 	width: auto;
-	font-family: 'Lato';
 }
 
 md-toolbar img {
@@ -151,10 +148,6 @@ md-menu-bar md-menu.md-open > button {
 	width: 30%;
 }
 
-.right-view md-toolbar h1.md-toolbar-tools {
-	font-family: Lato;
-}
-
 md-toolbar.main-toolbar a.btn, md-toolbar.main-toolbar button.btn {
 	min-width: 150px;
 	padding: 0px 8px;
@@ -186,17 +179,6 @@ md-toolbar.main-toolbar button.open-menu {
 	color: rgba(255,255,255,0.89) !important;
 } 
 
-
-.md-sidenav-left md-toolbar hr {
-	width: 90%;
-	margin: 4px 12px;
-	border-top: 1px solid rgba(255,255,255,0.89);
-}
-
-md-menu-bar {
-	padding: 0px;
-}
-
 div.main-view {
 	padding: 0px;
 }
@@ -220,13 +202,13 @@ md-fab-actions button md-icon {
 	color: rgba(0,0,0,0.54) !important;
 }
 
-
 .members-list-container md-checkbox {
 	margin-bottom: 0px;
 }
 
 .members-list-container table {
 	font-size: 14px;
+	margin-bottom: 5px !important;
 }
 
 member-edit-form form md-input-container.list {
@@ -242,7 +224,6 @@ member-edit-form form md-input-container.md-input-has-value label:not(.md-no-flo
 }
 
 member-edit-form form h4 {
-	font-family: Lato;
 	font-weight: bold;
 	margin-left: -16px;
 }
@@ -255,7 +236,8 @@ member-edit-form form h4.filled {
 member-edit-form form, 
 .user-profile-container form, 
 .member-details-container form,  
-.member-details-container payments-table div {
+.member-details-container payments-table div,
+.statistics-container {
 	margin: 10px;
 	padding: 10px;
 }
@@ -332,6 +314,22 @@ md-card.search-container md-input-container {
 	margin-bottom: 20px;
 }
 
+.statistics-container div.title {
+	font-weight: normal;
+	font-size: 17px;
+}
+
+.statistics-container div.content {
+	font-weight: normal;
+	font-size: 20px;
+	line-height: 10px;
+	margin-bottom: 20px;
+}
+
+.statistics-container div {
+	margin-bottom: 10px;
+}
+
 form div.actions-row {
 	width: 100%;
 }
@@ -340,7 +338,6 @@ form h4 {
 	color: rgba(0, 0, 0, 0.45);
 	font-size: 17px;
 	padding-left: 3px;
-	font-family: Lato;
 	font-weight: bold;
 }
 
@@ -355,11 +352,4 @@ form md-datepicker {
 .right-view form md-input-container, .right-view form .container {
 	margin-bottom: 14px;
 	margin-top: 14px;
-}
-
-.no-content {
-	text-align: center;
-	font-size: 25px;
-	color: rgba(0, 0, 0, 0.6);
-	margin-top: 8%;
 }

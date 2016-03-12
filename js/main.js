@@ -40,8 +40,6 @@ app.controller('navigationCtrl', ['$scope', '$rootScope', '$http', '$timeout',
 			});
 		};
 
-		$scope.userRole = localStorage.getItem('UserRole');
-
 		checkSession();
 
 		$rootScope.$on('edit.profile', function (event, value) {
@@ -132,6 +130,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'rightView': { templateUrl: 'include/paymentNew.html' }
 		}
 	})
+	.state('memberEdit', {
+		url: '/memberEdit?id',
+		views: {
+			'contentView': { templateUrl: 'include/memberEdit.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
 	.state('oldMembersList', {
 		url: '/oldMembersList',
 		views: {
@@ -139,10 +144,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
-	.state('memberEdit', {
-		url: '/memberEdit?id',
+	.state('statistics', {
+		url: '/statistics',
 		views: {
-			'contentView': { templateUrl: 'include/memberEdit.html' },
+			'contentView': { templateUrl: 'include/statistics.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
@@ -157,13 +162,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
 		url: '/userProfile',
 		views: {
 			'contentView': { templateUrl: 'include/userProfile.html' },
-			'rightView': { templateUrl: 'include/empty.html' }
-		}
-	})
-	.state('reports', {
-		url: '/reports',
-		views: {
-			'contentView': { templateUrl: 'include/reports.html' },
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	});

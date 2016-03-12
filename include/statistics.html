@@ -1,0 +1,51 @@
+<title-toolbar title="Statystyki" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<div class="statistics-container md-whiteframe-z1" ng-controller="statisticsCtrl">
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Liczba członków w antenie</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="content">{{::statistics.membersCount}}</div>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Liczba członków z aktualnie opłaconą składką</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="content">{{::statistics.membersCountWithPayment}}</div>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Liczba członków posiadających adres w domenie aegee-gliwice.org</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="content">{{::statistics.membersAegeeMail}}</div>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Liczba członków, którzy wypełnili deklarację członkowską</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="content">{{::statistics.membersDeclaration}}</div>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Liczba członków podłączonych do listy ogólnej AEGEE Gliwice</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="content">{{::statistics.membersConnectedToList}}</div>
+		</div>
+	</div>
+	<div layout-gt-sm="row">
+		<div class="md-block" flex-gt-sm>
+			<div class="title">Liczba mentorów</div>
+		</div>
+		<div class="md-block" flex-gt-sm>
+			<div class="content">{{::statistics.mentorsCount}}</div>
+		</div>
+	</div>
+</div>

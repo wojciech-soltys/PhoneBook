@@ -1,6 +1,9 @@
+h1, h2, h3, h4, h5, h6, p, div, body {
+	font-family: Lato !important;
+}
+
 .login {
 	background-color: #F7F7F7;
-	font-family: 'Lato', sans-serif;
 }
 
 #login {
@@ -22,12 +25,10 @@
 
 .login .form {
 	margin-left: 0;
-	padding: 30px 25px 50px;
+	padding: 30px 25px 80px;
 	background: #fff;
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.13);
 	box-shadow: 0 1px 3px rgba(0,0,0,.13);
-	width: 350px;
-	height: 290px;
 }
 
 .login .form md-input-container label,
@@ -44,8 +45,9 @@
 .login .form .submit-group #submit {
 	float: right;
 	font-size: 16px;
-	font-family: Lato;
 	padding: 5px 15px;
+	background-color: #1468b3 !important;
+	color: #fff;
 }
 
 .login .form .error-message {

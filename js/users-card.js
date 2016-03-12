@@ -7,8 +7,21 @@ angular.module('main').directive('usersCard', function() {
 		},
 		templateUrl : 'include/users-card.html',
 		controller: function($scope, $rootScope, $element, $location, $mdDialog, usersService, informService) { 
+			$scope.isAdmin = false;
 			$scope.userLogged = localStorage.getItem('Username');
 			$scope.userRole = localStorage.getItem('UserRole');
+			var isAdmin = function() {
+				if (angular.isDefined($scope.userRole)) {
+					if ($scope.userRole === 'Z') {
+						$scope.isAdmin = true;
+					} else {
+						$scope.isAdmin = false;
+					}
+				} else {
+					$scope.isAdmin = false;
+				}
+			};
+			isAdmin();
 
 			$scope.removeUser = function(user){
 				if(user.username === $scope.userLogged || $scope.userRole !== 'H') {
