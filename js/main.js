@@ -144,6 +144,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			'rightView': { templateUrl: 'include/empty.html' }
 		}
 	})
+	.state('reports', {
+		url: '/reports',
+		views: {
+			'contentView': { templateUrl: 'include/reports.html' },
+			'rightView': { templateUrl: 'include/empty.html' }
+		}
+	})
 	.state('statistics', {
 		url: '/statistics',
 		views: {
