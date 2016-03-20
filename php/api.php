@@ -856,7 +856,7 @@ function getReportData() {
 			date_default_timezone_set('UTC');
 			$currentDate = date("Y-m-d");
 
-			$sql = "SELECT id, firstName, lastName, accessionDate, phone, privateEmail, birthDate, cardNumber, declaration
+			$sql = "SELECT firstName, lastName, accessionDate, phone, privateEmail, birthDate, cardNumber, declaration
 					FROM members
 					WHERE id > 0 AND old = 0 AND id IN (
 					SELECT memberId
@@ -864,7 +864,7 @@ function getReportData() {
 					WHERE expirationDate >= STR_TO_DATE('$currentDate', '%Y-%m-%d'))";
 			$result = $this->mysqli->query($sql);
 		} else {
-			$sql = "SELECT id, firstName, lastName, accessionDate, phone, privateEmail, birthDate, cardNumber, declaration
+			$sql = "SELECT firstName, lastName, accessionDate, phone, privateEmail, birthDate, cardNumber, declaration
 				FROM members
 				WHERE id > 0 AND old = 0";
 			$result = $this->mysqli->query($sql);
@@ -872,15 +872,14 @@ function getReportData() {
 		
 		if (mysqli_num_rows($result) > 0) {
 			while($row = mysqli_fetch_assoc($result)) {					
-				$toReturn[] = array('id' => $row["id"],
-					'firstName' => $row["firstName"], 
+				$toReturn[] = array('firstName' => $row["firstName"],
 					'lastName' => $row["lastName"],
 					'accessionDate' => $row["accessionDate"],
 					'phone' => $row["phone"],
 					'privateEmail' => $row["privateEmail"],
 					'birthDate' => $row["birthDate"],
 					'cardNumber' => $row["cardNumber"],
-					'declaration' => $row["declaration"],
+					'declaration' => $row["declaration"]
 					);
 			}
 			$this->response($this->json($toReturn), 200);
