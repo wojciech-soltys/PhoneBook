@@ -846,6 +846,49 @@ function moveToCurrent() {
 	}
 }
 
+function getReportData() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLogged($request)) {
+		@$onlyWithPaidContribution = mysql_escape_string($request->onlyWithPaidContribution);
+		
+		if (strcmp($onlyWithPaidContribution, "1") === 0) {
+			date_default_timezone_set('UTC');
+			$currentDate = date("Y-m-d");
+
+			$sql = "SELECT firstName, lastName, accessionDate, phone, privateEmail, birthDate, cardNumber, declaration
+					FROM members
+					WHERE id > 0 AND old = 0 AND id IN (
+					SELECT memberId
+					FROM payments
+					WHERE expirationDate >= STR_TO_DATE('$currentDate', '%Y-%m-%d'))";
+			$result = $this->mysqli->query($sql);
+		} else {
+			$sql = "SELECT firstName, lastName, accessionDate, phone, privateEmail, birthDate, cardNumber, declaration
+				FROM members
+				WHERE id > 0 AND old = 0";
+			$result = $this->mysqli->query($sql);
+		}
+		
+		if (mysqli_num_rows($result) > 0) {
+			while($row = mysqli_fetch_assoc($result)) {					
+				$toReturn[] = array('firstName' => $row["firstName"],
+					'lastName' => $row["lastName"],
+					'accessionDate' => $row["accessionDate"],
+					'phone' => $row["phone"],
+					'privateEmail' => $row["privateEmail"],
+					'birthDate' => $row["birthDate"],
+					'cardNumber' => $row["cardNumber"],
+					'declaration' => $row["declaration"]
+					);
+			}
+			$this->response($this->json($toReturn), 200);
+		} else {
+			$this->response('', 204);
+		}
+	}
+}
+
 /*
 * Encode array into JSON
 */

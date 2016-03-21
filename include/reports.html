@@ -1,0 +1,55 @@
+<title-toolbar title="Raporty" toggle-left="toggleLeft()" user-info="userInfo" logout="logout()"></title-toolbar>
+<div class="member-details-container" ng-controller="reportsCtrl">
+	<form name="reportsForm" autocomplete="off" class="md-whiteframe-z1">
+
+		<div layout-gt-sm="row">
+<!-- 			<div class="container md-block" flex-gt-sm>
+				<h4>Lp.</h4>
+				<md-checkbox ng-model="reportStructure.lp" aria-label="Lp." ng-true-value="'1'" ng-false-value="'0'"></md-checkbox> 
+			</div>
+			<div class="container md-block" flex-gt-sm>
+				<h4>Imię</h4>
+				<md-checkbox ng-model="reportStructure.firstName" aria-label="Imię" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</div>
+			<div class="container md-block" flex-gt-sm>
+				<h4>Nazwisko</h4>
+				<md-checkbox ng-model="reportStructure.lastName" aria-label="Nazwisko" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</div>
+		</div>
+
+		<div layout-gt-sm="row">
+			<div class="container md-block" flex-gt-sm>
+				<h4>Data wstąpienia</h4>
+				<md-checkbox ng-model="reportStructure.accessionDate" aria-label="Data wstąpienia" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox> 
+			</div>
+			<div class="container md-block" flex-gt-sm>
+				<h4>Numer telefonu</h4>
+				<md-checkbox ng-model="reportStructure.phone" aria-label="Numer telefonu" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</div>
+			<div class="container md-block" flex-gt-sm>
+				<h4>Prywatny adres e-mail</h4>
+				<md-checkbox ng-model="reportStructure.privateEmail" aria-label="Prywatny adres e-mail" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</div>
+		</div>
+
+		<div layout-gt-sm="row">
+			<div class="container md-block" flex-gt-sm>
+				<h4>Numer karty członkowskiej</h4>
+				<md-checkbox ng-model="reportStructure.cardNumber" aria-label="Numer karty członkowskiej" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox> 
+			</div>
+ 			<div class="container md-block" flex-gt-sm>
+				<h4>Składki</h4>
+				<md-checkbox ng-model="reportStructure.includeContributions" aria-label="Składki" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</div> -->
+			<div class="container md-block" flex-gt-sm>
+				<h4>Wyłącznie członkowie z opłaconą składką</h4>
+				<md-checkbox ng-model="reportStructure.onlyWithPaidContribution" aria-label="Wyłącznie członkowie z opłaconą składką" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
+			</div>
+		</div>
+
+		<div class="actions-row" layout="row" layout-align="end center">
+			<md-button id="generateReport" ng-click="generateReport()">Generuj</md-button>
+		</div>
+	</form>
+
+</div>

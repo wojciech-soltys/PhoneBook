@@ -200,5 +200,17 @@ angular.module('main.membersFactory', [])
 		});
 	};
 
+	membersService.getReportData = function(onlyWithPaidContribution) {
+		return $http({
+			method: 'post',
+			url: 'getReportData',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				onlyWithPaidContribution: onlyWithPaidContribution
+			}
+		});
+	};
+
 	return membersService;
 }]);
