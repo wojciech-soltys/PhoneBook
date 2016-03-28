@@ -3,7 +3,7 @@
 	<form name="reportsForm" autocomplete="off" class="md-whiteframe-z1">
 
 		<div layout-gt-sm="row">
-<!-- 			<div class="container md-block" flex-gt-sm>
+ 			<div class="container md-block" flex-gt-sm>
 				<h4>Lp.</h4>
 				<md-checkbox ng-model="reportStructure.lp" aria-label="Lp." ng-true-value="'1'" ng-false-value="'0'"></md-checkbox> 
 			</div>
@@ -34,10 +34,20 @@
 
 		<div layout-gt-sm="row">
 			<div class="container md-block" flex-gt-sm>
+				<h4>Data urodzenia</h4>
+				<md-checkbox ng-model="reportStructure.birthDate" aria-label="Data urodzenia" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox> 
+			</div>
+			<div class="container md-block" flex-gt-sm>
 				<h4>Numer karty członkowskiej</h4>
 				<md-checkbox ng-model="reportStructure.cardNumber" aria-label="Numer karty członkowskiej" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox> 
 			</div>
- 			<div class="container md-block" flex-gt-sm>
+			<div class="container md-block" flex-gt-sm>
+				<h4>Deklaracja</h4>
+				<md-checkbox ng-model="reportStructure.declaration" aria-label="Deklaracja" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox> 
+			</div>
+
+		</div>
+			<!--  			<div class="container md-block" flex-gt-sm>
 				<h4>Składki</h4>
 				<md-checkbox ng-model="reportStructure.includeContributions" aria-label="Składki" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
 			</div> -->
@@ -45,7 +55,9 @@
 				<h4>Wyłącznie członkowie z opłaconą składką</h4>
 				<md-checkbox ng-model="reportStructure.onlyWithPaidContribution" aria-label="Wyłącznie członkowie z opłaconą składką" ng-true-value="'1'" ng-false-value="'0'"></md-checkbox>
 			</div>
-		</div>
+		<div layout-gt-sm="row">
+
+		</div>		
 
 		<div class="actions-row" layout="row" layout-align="end center">
 			<md-button id="generateReport" ng-click="generateReport()">Generuj</md-button>
