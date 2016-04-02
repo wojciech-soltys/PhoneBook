@@ -170,8 +170,7 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				memberId: memberId,
-				old: 1
+				memberId: memberId
 			}
 		});
 	};
@@ -183,8 +182,19 @@ angular.module('main.membersFactory', [])
 			data: {
 				username: localStorage.getItem('Username'),
 				session_id: localStorage.getItem('SessionID'),
-				memberId: memberId,
-				old: 0
+				memberId: memberId
+			}
+		});
+	};
+
+	membersService.deleteMember = function(memberId) {
+		return $http({
+			method: 'post',
+			url: 'deleteMember',
+			data: {
+				username: localStorage.getItem('Username'),
+				session_id: localStorage.getItem('SessionID'),
+				memberId: memberId
 			}
 		});
 	};

@@ -1,5 +1,5 @@
-app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'informService', 'membersService', 
-	function ($scope, $rootScope, $stateParams, informService, membersService) {
+app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', '$location', 'informService', 'membersService', 
+	function ($scope, $rootScope, $stateParams, $location, informService, membersService) {
 		'use strict';
 		$scope.member = null;
 		$scope.memberId = $stateParams.id;
@@ -51,11 +51,25 @@ app.controller('memberDetailsCtrl', ['$scope', '$rootScope', '$stateParams', 'in
 				$scope.member.old = 0;
 			})
 			.error(function (data, status) {
+				informService.showSimpleToast('Błąd usuwania');
+				if (status === 401) {
+					$rootScope.$emit('session.timeout', '');
+				}
+			});
+		};
+
+		$scope.deleteMember = function() {
+			membersService.deleteMember($scope.memberId)
+			.success(function () {
+				informService.showSimpleToast('Usunięto członka');
+				$location.path('/membersList');
+			})
+			.error(function (data, status) {
 				informService.showSimpleToast('Błąd zapisu');
 				if (status === 401) {
 					$rootScope.$emit('session.timeout', '');
 				}
 			});
-		};		
+		};	
 
 	}]);
