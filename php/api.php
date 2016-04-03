@@ -320,19 +320,23 @@ function saveMember() {
 		@$phone = mysql_escape_string($request->phone);
 		$phoneRegex = "/[0-9]{9}/";
 		@$privateEmail = mysql_escape_string($request->privateEmail);
-		@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
-		if (!isset($aegeeEmail)) {
+		if (isset($aegeeEmail)) {
+			@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
+		} else {
 			$aegeeEmail = 0;
 		}
 		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
 		@$cardNumber = mysql_escape_string($request->cardNumber);
 		$cardNumberRegex = "/[a-zA-Z0-9]{6}-[a-zA-Z0-9]{6}/";
 		@$declaration = mysql_escape_string($request->declaration);
-		if (!isset($declaration)) {
+		if (isset($declaration)) {
+			@$declaration = mysql_escape_string($request->declaration);
+		} else {
 			$declaration = 0;
 		}
-		@$connectedToList = mysql_escape_string($request->connectedToList);
-		if (!isset($connectedToList)) {
+		if (isset($connectedToList)) {
+			@$connectedToList = mysql_escape_string($request->connectedToList);
+		} else {
 			$connectedToList = 0;
 		}
 		@$mentorId = mysql_escape_string($request->mentorId);
