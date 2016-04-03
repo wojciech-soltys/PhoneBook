@@ -75,6 +75,7 @@
 		<div class="actions-row" ng-show="userRole === 'ADM'" layout="row" layout-align="end center">
 			<md-button ng-show="member.old == 0" ng-click="moveToOld()">Przenieś do byłych członków</md-button>
 			<md-button ng-show="member.old == 1" ng-click="moveToCurrent()">Przywróć członka</md-button>
+			<md-button ng-show="member.allowToDelete" ng-click="deleteMember()">Usuń</md-button>
 			<md-button ui-sref="memberEdit({id: member.id})">Edytuj</md-button>
 		</div>
 	</form>

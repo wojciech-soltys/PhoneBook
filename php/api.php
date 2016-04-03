@@ -320,19 +320,23 @@ function saveMember() {
 		@$phone = mysql_escape_string($request->phone);
 		$phoneRegex = "/[0-9]{9}/";
 		@$privateEmail = mysql_escape_string($request->privateEmail);
-		@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
-		if (!isset($aegeeEmail)) {
+		if (isset($aegeeEmail)) {
+			@$aegeeEmail = mysql_escape_string($request->aegeeEmail);
+		} else {
 			$aegeeEmail = 0;
 		}
 		$birthDate = new DateTime(substr($request->birthDate, 0, 23), new DateTimeZone('Poland'));
 		@$cardNumber = mysql_escape_string($request->cardNumber);
 		$cardNumberRegex = "/[a-zA-Z0-9]{6}-[a-zA-Z0-9]{6}/";
 		@$declaration = mysql_escape_string($request->declaration);
-		if (!isset($declaration)) {
+		if (isset($declaration)) {
+			@$declaration = mysql_escape_string($request->declaration);
+		} else {
 			$declaration = 0;
 		}
-		@$connectedToList = mysql_escape_string($request->connectedToList);
-		if (!isset($connectedToList)) {
+		if (isset($connectedToList)) {
+			@$connectedToList = mysql_escape_string($request->connectedToList);
+		} else {
 			$connectedToList = 0;
 		}
 		@$mentorId = mysql_escape_string($request->mentorId);
@@ -614,13 +618,18 @@ function getMemberDetails() {
 	if ($this->isLogged($request)) {
 		@$memberId = mysql_escape_string($request->memberId);
 		if (is_numeric($memberId)) {
-			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName
+			$sql = "SELECT m.id, m.firstName, m.lastName, m.accessionDate, m.phone, m.privateEmail, m.aegeeEmail, m.birthDate, m.cardNumber, m.declaration, m.connectedToList, m.mentorId, m.type, m.old, m2.firstName AS mentorFirstName, m2.lastName AS mentorLastName,
+				(CASE
+					WHEN (EXISTS (SELECT 1 FROM payments WHERE memberId = m.id LIMIT 1))
+    					THEN 0
+    				ELSE 1
+				END) AS allowToDelete
 					FROM members m LEFT JOIN members m2 ON m.mentorId = m2.id
 					WHERE m.id = '$memberId'";
 			$result = $this->mysqli->query($sql);
 			if (mysqli_num_rows($result) > 0) {
 				$row = mysqli_fetch_assoc($result);
-				$this->response($this->json(array('id' => $row["id"], 'firstName' => $row["firstName"], 'lastName' => $row["lastName"], 'accessionDate' => $row["accessionDate"], 'phone' => $row["phone"], 'privateEmail' => $row["privateEmail"], 'aegeeEmail' => $row["aegeeEmail"], 'birthDate' => $row["birthDate"], 'cardNumber' => $row["cardNumber"], 'declaration' => $row["declaration"], 'connectedToList' => $row["connectedToList"], 'mentorId' => $row['mentorId'], 'type' => $row["type"], 'old' => $row["old"], 'mentorFirstName' => $row["mentorFirstName"], 'mentorLastName' => $row["mentorLastName"])), 200);
+				$this->response($this->json(array('id' => $row["id"], 'firstName' => $row["firstName"], 'lastName' => $row["lastName"], 'accessionDate' => $row["accessionDate"], 'phone' => $row["phone"], 'privateEmail' => $row["privateEmail"], 'aegeeEmail' => $row["aegeeEmail"], 'birthDate' => $row["birthDate"], 'cardNumber' => $row["cardNumber"], 'declaration' => $row["declaration"], 'connectedToList' => $row["connectedToList"], 'mentorId' => $row['mentorId'], 'type' => $row["type"], 'old' => $row["old"], 'mentorFirstName' => $row["mentorFirstName"], 'mentorLastName' => $row["mentorLastName"], 'allowToDelete' => $row["allowToDelete"] ? true : false)), 200);
 			} else {
 				$this->response('', 401);
 			}
@@ -840,6 +849,44 @@ function moveToCurrent() {
 			} else {
 				$this->response('', 400);
 			}
+		} else {
+			$this->response('', 400);
+		}
+	}
+}
+
+function deleteMember() {
+	$postdata = file_get_contents("php://input");
+	$request = json_decode($postdata);
+	if ($this->isLoggedAsAdmin($request)) {
+		@$memberId = mysql_escape_string($request->memberId);
+		if($memberId != null && is_numeric($memberId)) {
+
+			$sql = "SELECT (CASE
+							WHEN (EXISTS (SELECT 1 FROM payments WHERE memberId = $memberId LIMIT 1))
+    							THEN 0
+    						ELSE 1
+							END) AS allowToDelete";
+
+			$result = $this->mysqli->query($sql);
+			if (mysqli_num_rows($result) > 0) {
+				$row = mysqli_fetch_assoc($result);
+				$allowToDelete = $row['allowToDelete'] ? true : false;
+			}
+
+			if(isset($allowToDelete) && $allowToDelete) {
+				$sql = "DELETE FROM members WHERE id = $memberId";
+				$result = $this->mysqli->query($sql);
+				if ($result) {
+					$this->response('', 200);
+				} else {
+					$this->response('', 400);
+				}
+			} else {
+				$this->response('', 400);
+			}
+
+
 		} else {
 			$this->response('', 400);
 		}
